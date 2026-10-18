@@ -1,2 +1,2 @@
 # blog
-Blog do meu site pessoal: jairjr.com.br
+Blog for my personal website: blog.jairjr.com.br
