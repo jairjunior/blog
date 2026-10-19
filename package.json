@@ -1,0 +1,35 @@
+{
+  "name": "blog-jairjr",
+  "version": "1.0.0",
+  "description": "Blog for my personal website www.jairjr.com.br using node.js.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jairjunior/blog.git"
+  },
+  "keywords": [
+    "blog",
+    "jairjr",
+    "jairjr.com.br",
+    "node",
+    "node.js"
+  ],
+  "author": "Jair Dias de Oliveira Junior",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jairjunior/blog/issues"
+  },
+  "homepage": "https://github.com/jairjunior/blog#readme",
+  "dependencies": {
+    "body-parser": "^2.3.0",
+    "express": "^5.3.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}
