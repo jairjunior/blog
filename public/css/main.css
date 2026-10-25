@@ -60,7 +60,7 @@ h1 {
 
 .blog-title {
     font-family: 'Outfit', sans-serif;
-    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    font-size: clamp(2rem, 3vw, 2.9rem);
     font-weight: 800;
     letter-spacing: -0.03em;
     margin: 0;
@@ -223,10 +223,15 @@ h1 {
 .category-navbar {
     border-top: 1px solid #e2e8f0;
     background-color: #ffffff;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .category-navbar ul {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     width: 100%;
@@ -241,7 +246,7 @@ h1 {
     color: #1d4ed8;
     border: 1px solid #bfdbfe;
     padding: 6px 14px;
-    border-radius: 9999px; /* Formato de pílula */
+    border-radius: 9999px;
     font-weight: 500;
 }
 
@@ -249,7 +254,7 @@ h1 {
     background-color: #1e293b;
     color: #ffffff;
     padding: 6px 14px;
-    border-radius: 6px; Bordas levemente arredondadas
+    border-radius: 6px;
     font-weight: 500;
 } */
 
@@ -257,7 +262,7 @@ h1 {
     background-color: transparent;
     color: #0f172a;
     font-weight: 600;
-    border-bottom: 3px solid #3b82f6; /* Linha de destaque embaixo
+    border-bottom: 3px solid #3b82f6;
     padding-bottom: 4px;
 } */
 
@@ -465,6 +470,12 @@ h1 {
 /****************************************************************************** 
 / Tablets 
 ******************************************************************************/
+@media (min-width: 576px) { 
+
+
+}
+
+
 @media (min-width: 768px) { 
     .posts-grid {
         display: grid;
@@ -472,7 +483,13 @@ h1 {
         gap: 40px 3%;
         align-items: stretch;
     }
+}
 
+
+
+
+
+@media (min-width: 950px) { 
     .menu-toggle {
         display: none;
     }
@@ -490,21 +507,22 @@ h1 {
     .top-navbar ul {
         flex-direction: row;
         align-items: center;
-        gap: 30px;
+        gap: 40px;
     }
 
     .top-navbar a {
-        font-size: 1rem;
+        font-size: 1.15rem;
         font-weight: 500;
+    }
+
+    .top-navbar a.btn-login {
+        margin: 0;
     }
 
     .top-navbar span.buscar-text {
         display: none;
     }
 
-    .top-navbar a.btn-login {
-        margin: 0;
-    }
 }
 
 
