@@ -1,0 +1,45 @@
+{
+  "name": "blog-jairjr",
+  "version": "1.0.0",
+  "description": "Blog for my personal website www.jairjr.com.br using node.js.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jairjunior/blog.git"
+  },
+  "keywords": [
+    "blog",
+    "personal",
+    "content",
+    "jairjr",
+    "nodejs",
+    "express",
+    "mysql",
+    "ejs",
+    "jwt",
+    "bcryptjs"
+  ],
+  "author": "Jair Dias de Oliveira Junior",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jairjunior/blog/issues"
+  },
+  "homepage": "https://github.com/jairjunior/blog#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.3.0",
+    "dotenv": "^18.0.8",
+    "ejs": "^7.0.2",
+    "express": "^5.3.0",
+    "jsonwebtoken": "^9.0.3",
+    "mysql2": "^3.24.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

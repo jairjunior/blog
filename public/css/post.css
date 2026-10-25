@@ -1,0 +1,142 @@
+/* Estilização da Página Individual do Post */
+
+.single-post {
+    max-width: 1100px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+/* Container e Imagem de Capa Centralizada */
+.post-cover-wrapper {
+    width: 100%;
+    margin-bottom: 30px;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.post-cover-featured {
+    width: 100%;
+    max-height: 420px;
+    object-fit: cover;
+    display: block;
+    margin: 0 auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Cabeçalho do Post e Metadados */
+.post-header {
+    text-align: center;
+    margin-bottom: 35px;
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 25px;
+}
+
+.post-single-title {
+    font-size: 2.2rem;
+    color: #111827;
+    line-height: 1.3;
+    margin-bottom: 15px;
+    font-weight: 800;
+}
+
+.post-meta {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    color: #6b7280;
+    font-size: 0.95rem;
+    flex-wrap: wrap;
+}
+
+.post-meta-divider {
+    color: #cbd5e1;
+}
+
+/* Formatação do Conteúdo Interno (post-body) */
+.post-body {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #374151;
+}
+
+.post-body p {
+    margin-bottom: 20px;
+}
+
+.post-body h2 {
+    font-size: 1.6rem;
+    color: #1f2937;
+    margin: 35px 0 15px 0;
+    font-weight: 700;
+}
+
+.post-body h3 {
+    font-size: 1.3rem;
+    color: #1f2937;
+    margin: 25px 0 12px 0;
+    font-weight: 600;
+}
+
+.post-body ul, 
+.post-body ol {
+    margin: 20px 0 25px 25px;
+}
+
+.post-body li {
+    margin-bottom: 8px;
+}
+
+.post-body blockquote {
+    border-left: 4px solid #2563eb;
+    background-color: #f8fafc;
+    padding: 18px 24px;
+    margin: 30px 0;
+    font-style: italic;
+    color: #4b5563;
+    border-radius: 0 8px 8px 0;
+}
+
+.post-body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin: 25px auto;
+    display: block;
+}
+
+.post-body table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 30px 0;
+}
+
+.post-body th, 
+.post-body td {
+    border: 1px solid #e2e8f0;
+    padding: 12px 15px;
+}
+
+.post-body th {
+    background-color: #f1f5f9;
+}
+
+/* Responsividade para telas menores */
+@media (max-width: 768px) {
+    .single-post {
+        padding: 20px;
+    }
+
+    .post-single-title {
+        font-size: 1.6rem;
+    }
+
+    .post-cover-featured {
+        max-height: 260px;
+    }
+}

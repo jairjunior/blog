@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Jair Junior</title>
+    <!-- Link para o arquivo CSS estático -->
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+    <!-- Cabeçalho Principal -->
+    <header class="site-header">
+        <div class="container header-top">
+            <h1 class="blog-title"><a href="/">Blog Jair Junior</a></h1>
+            <a href="/login" class="login-btn">Entrar</a>
+        </div>
+
+        <!-- Menu Horizontal de Categorias -->
+        <nav class="category-nav">
+            <div class="container">
+                <ul>
+                    <li class="active">Home</li>
+                    <li><a href="/posts">Todos os Posts</a></li>
+                    <li><a href="/posts/engenharia-de-software">Engenharia de Software</a></li>
+                    <li><a href="/posts/inteligencia-artificial">Inteligência Artificial</a></li>
+                    <li><a href="/posts/ciberseguranca">Cibersegurança</a></li>
+                    <li><a href="/posts/cloud-devops">Cloud & DevOps</a></li>
+                    <li><a href="/posts/infraestrutura-de-ti">Infraestrutura de TI</a></li>
+                    <li><a href="/posts/noticias-tech">Notícias Tech</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Conteúdo Principal -->
+    <main class="container main-content">
+
+        <!-- Breadcrumb de Navegação -->
+        <nav class="breadcrumb" aria-label="breadcrumb">
+            <ol class="breadcrumb-list">
+                <li class="breadcrumb-separator">/</li>
+                <li class="breadcrumb-item">
+                    Início
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Seção para mostrar os posts da categoria -->
+        <section class="posts-section">
+            <h2>Últimas Postagens</h2>
+
+            <div class="posts-grid">
+                <!-- O Servidor injeta os posts dinamicamente usando EJS -->
+                <% if (latestPosts && latestPosts.length > 0) { %>
+                    <% latestPosts.forEach(post => { %>
+                        <article class="post-card">
+                            <% if (post.cover_image) { %>
+                                <img src="/img/<%= post.cover_image %>" alt="Imagem representativa do post <%= post.title %>" class="post-cover">
+                            <% } %>
+                            <div class="post-info">
+                                <span class="post-date">
+                                    <%= new Date(post.published_at).toLocaleDateString('pt-BR') %>
+                                </span>
+                                <h3><a href="/posts/<%= post.category_slug %>/<%= post.slug %>"><%= post.title %></a></h3>
+                                <p class="post-summary"><%= post.summary || 'Leia o artigo completo...' %></p>
+                                <p class="post-author">Por <%= post.author_name %></p>
+                                <a href="/posts/<%= post.category_slug %>/<%= post.slug %>" class="read-more">Ler artigo &rarr;</a>
+                            </div>
+                        </article>
+                    <% }) %>
+                <% } else { %>
+                    <p class="no-posts">Nenhum post encontrado no momento.</p>
+                <% } %>
+            </div>
+        </section>
+    </main>
+
+    <!-- Rodapé -->
+    <footer class="site-footer">
+        <div class="container footer-content">
+            <p>&copy; 2026 Blog Jair Junior. Todos os direitos reservados.</p>
+            <div class="footer-links">
+                <a href="/sobre">Sobre</a>
+                <a href="/contato">Contato</a>
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

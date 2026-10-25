@@ -1,0 +1,300 @@
+/* Reset Básico e Variáveis */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background-color: #f4f6f8;
+    color: #333;
+    line-height: 1.6;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+
+
+/* Centralizador padrão */
+.container {
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+
+
+/* Cabeçalho */
+.site-header {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    margin-bottom: 30px;
+}
+
+.header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+}
+
+.blog-title {
+    font-size: 1.8rem;
+    color: #1a202c;
+    font-weight: 700;
+}
+
+.login-btn {
+    text-decoration: none;
+    background-color: #2563eb;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.login-btn:hover {
+    background-color: #1d4ed8;
+}
+
+
+
+/* Menu de Categorias */
+.category-nav {
+    border-top: 1px solid #e2e8f0;
+    background-color: #ffffff;
+}
+
+.category-nav ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    display: flex;
+    list-style: none;
+    overflow-x: auto;
+    gap: 35px;
+    padding: 12px 0;
+}
+
+.category-nav li.active {
+    background-color: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+    padding: 6px 14px;
+    border-radius: 9999px; /* Formato de pílula */
+    font-weight: 500;
+}
+
+/* .category-nav li.active {
+    background-color: #1e293b;
+    color: #ffffff;
+    padding: 6px 14px;
+    border-radius: 6px; Bordas levemente arredondadas
+    font-weight: 500;
+} */
+
+/* .category-nav li.active {
+    background-color: transparent;
+    color: #0f172a;
+    font-weight: 600;
+    border-bottom: 3px solid #3b82f6; /* Linha de destaque embaixo
+    padding-bottom: 4px;
+} */
+
+.category-nav a {
+    text-decoration: none;
+    color: #4b5563;
+    font-size: 1.08rem;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color 0.2s;
+}
+
+.category-nav a:hover {
+    color: #2563eb;
+}
+
+
+
+/* Estilização do Breadcrumb */
+.breadcrumb {
+    margin-bottom: 20px;
+    font-size: 0.9rem;
+    color: #64748b;
+}
+
+.breadcrumb-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+}
+
+.breadcrumb-item a {
+    color: #3b82f6;
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+.breadcrumb-item a:hover {
+    color: #1d4ed8;
+    text-decoration: underline;
+}
+
+.breadcrumb-separator {
+    color: #cbd5e1;
+}
+
+.breadcrumb-item.active {
+    color: #475569;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 300px; /* Evita que títulos muito longos quebrem o layout mobile */
+}
+
+
+
+/* Conteúdo Principal (Main) */
+.main-content {
+    flex: 1;
+    padding-bottom: 50px;
+}
+
+.posts-section h2 {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    color: #1f2937;
+}
+
+
+
+/* Grade de Posts (Grid Responsivo) */
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
+    gap: 30px;
+}
+
+.post-card {
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    transition: transform 0.2s, box-shadow 0.2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.post-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+}
+
+.post-cover {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+.post-info {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.post-date {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-bottom: 8px;
+}
+
+.post-info h3 {
+    font-size: 1.25rem;
+    margin-bottom: 10px;
+}
+
+.post-info h3 a {
+    text-decoration: none;
+    color: #111827;
+    transition: color 0.2s;
+}
+
+.post-info h3 a:hover {
+    color: #2563eb;
+}
+
+.post-summary {
+    font-size: 0.95rem;
+    color: #4b5563;
+    margin-bottom: 20px;
+    flex: 1;
+}
+
+.read-more {
+    text-decoration: none;
+    color: #2563eb;
+    font-weight: 600;
+    font-size: 1.0rem;
+    align-self: flex-start;
+}
+
+.read-more:hover {
+    text-decoration: underline;
+}
+
+.post-author {
+    font-size: 0.9rem;
+}
+
+.no-posts {
+    color: #6b7280;
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 40px;
+}
+
+
+
+/* Rodapé */
+.site-footer {
+    background-color: #1f2937;
+    color: #9ca3af;
+    padding: 25px 0;
+    margin-top: auto;
+}
+
+.footer-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    font-size: 0.9rem;
+}
+
+.footer-links {
+    display: flex;
+    gap: 20px;
+}
+
+.footer-links a {
+    color: #9ca3af;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-links a:hover {
+    color: #ffffff;
+}
