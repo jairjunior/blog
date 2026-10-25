@@ -38,11 +38,11 @@ const renderHomePage = async (req, res) => {
 / Por padrão, os posts serão renderizados do mais recente para o mais antigo.
 / Para modificar esse comportamento, utiliza-se a query string "filter" na URL.
 /*****************************************************************************/
-const renderAllPostsPage = async (req, res) => {
+const renderArticlesPage = async (req, res) => {
     try {
         const numberOfPosts = 18;
         const posts = await postModel.getLatestPosts(numberOfPosts);
-        const categoryName = 'Todos os Posts';
+        const categoryName = 'Artigos';
         res.render('category', { posts, categoryName });
 
     } catch (error) {
@@ -114,7 +114,7 @@ const renderPostBySlug = async (req, res) => {
 module.exports = {
     getLoginPage,
     renderHomePage,
-    renderAllPostsPage,
+    renderArticlesPage,
     renderCategoryPage,
     renderPostBySlug
 };
