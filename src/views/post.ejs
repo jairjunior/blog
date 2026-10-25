@@ -10,30 +10,58 @@
     <!-- CSS principal do site e estilo específico do post -->
     <link rel="stylesheet" href="/css/main.css">
     <link rel="stylesheet" href="/css/post.css">
+
+    <!-- Importação da fonte Outfit do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;750;800&display=swap" rel="stylesheet">
 </head>
 <body>
 
     <!-- Cabeçalho Principal (idêntico ao index.ejs) -->
     <header class="site-header">
         <div class="container header-top">
-            <h1 class="blog-title"><a href="/">Blog Jair Junior</a></h1>
-            <a href="/login" class="login-btn">Entrar</a>
+            <h1 class="blog-title"><a href="/">jjOutOfBounds</a></h1>
+
+            <!-- Botão Hamburger (Visível apenas em mobile) -->
+            <button class="menu-toggle" aria-label="Abrir Menu" aria-expanded="false">
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+                <span class="hamburger-bar"></span>
+            </button>
+
+            <!-- Menu Superior (Alinhado à direita) -->
+            <nav class="top-navbar">
+                <ul>
+                    <li><a href="#"><span class="buscar-text">Buscar</span> &#x1F50D;</a></li>
+                    <li><a href="/posts">Artigos</a></li>
+                    <li><a href="#">Sobre</a></li>
+                    <li><a href="#">Contato</a></li>
+                    <li><a href="#">Newsletter</a></li>
+                    <li>
+                        <a class="btn-login" href="/login">
+                            <span>Entrar</span>
+                            <svg class="login-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="5" y1="12" x2="19" y2="12"></line>
+                                <polyline points="12 5 19 12 12 19"></polyline>
+                            </svg>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
 
         <!-- Menu Horizontal de Categorias -->
-        <nav class="category-nav">
-            <div class="container">
-                <ul>
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/posts">Todos os Posts</a></li>
-                    <li><a href="/posts/engenharia-de-software">Engenharia de Software</a></li>
-                    <li><a href="/posts/inteligencia-artificial">Inteligência Artificial</a></li>
-                    <li><a href="/posts/ciberseguranca">Cibersegurança</a></li>
-                    <li><a href="/posts/cloud-devops">Cloud & DevOps</a></li>
-                    <li><a href="/posts/infraestrutura-de-ti">Infraestrutura de TI</a></li>
-                    <li><a href="/posts/noticias-tech">Notícias Tech</a></li>
-                </ul>
-            </div>
+        <nav class="category-navbar container">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/posts/engenharia-de-software">Engenharia de Software</a></li>
+                <li><a href="/posts/inteligencia-artificial">Inteligência Artificial</a></li>
+                <li><a href="/posts/ciberseguranca">Cibersegurança</a></li>
+                <li><a href="/posts/cloud-devops">Cloud & DevOps</a></li>
+                <li><a href="/posts/infraestrutura-de-ti">Infraestrutura de TI</a></li>
+                <li><a href="/posts/noticias-tech">Notícias Tech</a></li>
+            </ul>
         </nav>
     </header>
 

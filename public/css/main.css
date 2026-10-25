@@ -42,7 +42,7 @@ h1 {
 
 
 /****************************************************************************** 
-/ Cabeçalho do site
+/ Título do Blog
 ******************************************************************************/
 .site-header {
     background-color: #ffffff;
@@ -55,27 +55,164 @@ h1 {
     justify-content: space-between;
     align-items: center;
     padding: 20px 20px;
+    position: relative;
 }
 
 .blog-title {
-    font-size: 1.8rem;
-    color: #1a202c;
-    font-weight: 700;
+    font-family: 'Outfit', sans-serif;
+    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0;
 }
 
-.login-btn {
+.blog-title a {
+    color: #111827;
     text-decoration: none;
-    background-color: #2563eb;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 6px;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: background-color 0.2s;
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s ease;
 }
 
-.login-btn:hover {
+.blog-title a:hover {
+    color: #2563eb; /* Um azul vibrante (ou mude para a cor principal da sua marca) */
+}
+
+/* Efeito 2: Linha decorativa animada sob o texto */
+.blog-title a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: -4px;
+    left: 0;
+    background-color: #2563eb;
+    
+    /* Configuração para a linha começar invisível e encolhida */
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+
+/* Quando passa o mouse, a linha desliza elegantemente da esquerda para a direita */
+.blog-title a:hover::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+
+/****************************************************************************** 
+/ Menu superior
+******************************************************************************/
+.menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001; /* Fica acima do menu lateral */
+}
+
+.hamburger-bar {
+    display: block;
+    width: 100%;
+    height: 3px;
+    background-color: #111827;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.top-navbar {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 280px;
+    height: 100vh;
+    background-color: #ffffff;
+    box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+    padding: 80px 30px 30px 30px;
+    transition: right 0.35s cubic-bezier(0.77, 0, 0.175, 1);
+    z-index: 1000;
+}
+
+.top-navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.top-navbar a {
+    text-decoration: none;
+    color: #111827;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: block;
+    transition: color 0.2s;
+}
+
+.top-navbar a:hover {
+    color: #2563eb;
+}
+
+.top-navbar span.buscar-text {
+    margin-right: 10px;
+}
+
+.top-navbar a.btn-login {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background-color: #316be7;
+    color: #ffffff !important;
+    padding: 8px 12px;
+    margin-top: 10px;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.top-navbar a.btn-login:hover {
     background-color: #1d4ed8;
+    transform: translateY(-1px);
+}
+
+.top-navbar a.btn-login .login-arrow {
+    width: 18px;
+    height: 18px;
+    transition: transform 0.2s ease;
+}
+
+.top-navbar a.btn-login:hover .login-arrow {
+    transform: translateX(4px);
+}
+
+
+
+
+/* Classe ativada pelo JS para abrir o menu lateral */
+.header-top.menu-open .top-navbar {
+    right: 0; /* Desliza para dentro da tela */
+}
+
+/* Animação do botão hamburger virando um "X" quando aberto */
+.header-top.menu-open .menu-toggle .hamburger-bar:nth-child(1) {
+    transform: translateY(9.5px) rotate(45deg);
+}
+.header-top.menu-open .menu-toggle .hamburger-bar:nth-child(2) {
+    opacity: 0;
+}
+.header-top.menu-open .menu-toggle .hamburger-bar:nth-child(3) {
+    transform: translateY(-9.5px) rotate(-45deg);
 }
 
 
@@ -83,12 +220,12 @@ h1 {
 /****************************************************************************** 
 / Menu de Categorias
 ******************************************************************************/
-.category-nav {
+.category-navbar {
     border-top: 1px solid #e2e8f0;
     background-color: #ffffff;
 }
 
-.category-nav ul {
+.category-navbar ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -99,7 +236,7 @@ h1 {
     padding: 12px 0;
 }
 
-.category-nav li.active {
+.category-navbar li.active {
     background-color: #eff6ff;
     color: #1d4ed8;
     border: 1px solid #bfdbfe;
@@ -108,7 +245,7 @@ h1 {
     font-weight: 500;
 }
 
-/* .category-nav li.active {
+/* .category-navbar li.active {
     background-color: #1e293b;
     color: #ffffff;
     padding: 6px 14px;
@@ -116,7 +253,7 @@ h1 {
     font-weight: 500;
 } */
 
-/* .category-nav li.active {
+/* .category-navbar li.active {
     background-color: transparent;
     color: #0f172a;
     font-weight: 600;
@@ -124,16 +261,16 @@ h1 {
     padding-bottom: 4px;
 } */
 
-.category-nav a {
+.category-navbar a {
     text-decoration: none;
     color: #4b5563;
-    font-size: 1.08rem;
+    font-size: 1rem;
     font-weight: 500;
     white-space: nowrap;
     transition: color 0.2s;
 }
 
-.category-nav a:hover {
+.category-navbar a:hover {
     color: #2563eb;
 }
 
@@ -335,6 +472,39 @@ h1 {
         gap: 40px 3%;
         align-items: stretch;
     }
+
+    .menu-toggle {
+        display: none;
+    }
+
+    .top-navbar {
+        position: static;
+        width: auto;
+        height: auto;
+        background-color: transparent;
+        box-shadow: none;
+        padding: 0;
+        transition: none;
+    }
+
+    .top-navbar ul {
+        flex-direction: row;
+        align-items: center;
+        gap: 30px;
+    }
+
+    .top-navbar a {
+        font-size: 1rem;
+        font-weight: 500;
+    }
+
+    .top-navbar span.buscar-text {
+        display: none;
+    }
+
+    .top-navbar a.btn-login {
+        margin: 0;
+    }
 }
 
 
@@ -342,6 +512,14 @@ h1 {
 / Desktops e TVs 
 *********************************************************************/
 @media (min-width: 1200px) {
+    .top-navbar ul {
+        gap: 45px;
+    }
+
+    .top-navbar a {
+        font-size: 1.2rem;
+    }
+    
     .posts-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 40px 3%;
