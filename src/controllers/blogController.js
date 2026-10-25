@@ -3,16 +3,6 @@ const postModel = require('../models/postModel');
 const categoryModel = require('../models/categoryModel');
 
 
-/* O campo "status" da tabela post pode assumir os seguintes valores:
- * "published": O post está finalizado, aprovado e liberado para o público
- * "draft": O artigo ainda está sendo escrito ou revisado pelo autor.
- * "archived": Para posts antigos que você não quer mais exibir publicamente,
- *             mas também não quer deletar do banco de dados.
- * "scheduled": Para posts que vão ao ar automaticamente em uma data futura
- *              (trabalhando em conjunto com o campo published_at) - Opcional.
-*/
-
-
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/login'
 / Apenas devolve ao usuário a página de login, que é um arquivo estático.

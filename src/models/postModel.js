@@ -1,5 +1,13 @@
 const databasePool = require('../config/database');
 
+/* O campo "status" da tabela post pode assumir os seguintes valores:
+ * "published": O post está finalizado, aprovado e liberado para o público
+ * "draft": O artigo ainda está sendo escrito ou revisado pelo autor.
+ * "archived": Para posts antigos que você não quer mais exibir publicamente,
+ *             mas também não quer deletar do banco de dados.
+ * "scheduled": Para posts que vão ao ar automaticamente em uma data futura
+ *              (trabalhando em conjunto com o campo published_at) - Opcional.
+*/
 
 /*****************************************************************************
 / Buscar todos os posts de uma categoria específica
