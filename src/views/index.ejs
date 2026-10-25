@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog Jair Junior</title>
     <!-- Link para o arquivo CSS estático -->
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" href="/css/main.css">
 </head>
 <body>
 
@@ -51,7 +51,6 @@
             <h2>Últimas Postagens</h2>
 
             <div class="posts-grid">
-                <!-- O Servidor injeta os posts dinamicamente usando EJS -->
                 <% if (latestPosts && latestPosts.length > 0) { %>
                     <% latestPosts.forEach(post => { %>
                         <article class="post-card">

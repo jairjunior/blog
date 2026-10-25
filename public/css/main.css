@@ -1,4 +1,12 @@
-/* Reset Básico e Variáveis */
+/****************************************************************************** 
+/ Reset de variáveis
+******************************************************************************/
+:root {
+    /* O tamanho da fonte cresce fluidamente entre o mobile e o desktop/TV, mas tem travas */
+    --font-title: clamp(1.5rem, 2vw + 1rem, 2.5rem); 
+    --spacing-container: clamp(16px, 5vw, 80px);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -15,19 +23,27 @@ body {
     min-height: 100vh;
 }
 
-
-
-/* Centralizador padrão */
-.container {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0 20px;
+h1 {
+    font-size: var(--font-title);
 }
 
 
 
-/* Cabeçalho */
+/****************************************************************************** 
+/ Container padrão
+******************************************************************************/
+.container {
+    width: 100%;
+    max-width: 1500px;
+    margin: 0 auto;
+    padding: 0 30px;
+}
+
+
+
+/****************************************************************************** 
+/ Cabeçalho do site
+******************************************************************************/
 .site-header {
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -64,7 +80,9 @@ body {
 
 
 
-/* Menu de Categorias */
+/****************************************************************************** 
+/ Menu de Categorias
+******************************************************************************/
 .category-nav {
     border-top: 1px solid #e2e8f0;
     background-color: #ffffff;
@@ -72,10 +90,9 @@ body {
 
 .category-nav ul {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
-    display: flex;
     list-style: none;
     overflow-x: auto;
     gap: 35px;
@@ -121,8 +138,9 @@ body {
 }
 
 
-
-/* Estilização do Breadcrumb */
+/****************************************************************************** 
+/ Breadcrumb
+******************************************************************************/
 .breadcrumb {
     margin-bottom: 20px;
     font-size: 0.9rem;
@@ -160,12 +178,14 @@ body {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 300px; /* Evita que títulos muito longos quebrem o layout mobile */
+    max-width: 300px;
 }
 
 
 
-/* Conteúdo Principal (Main) */
+/****************************************************************************** 
+/ Conteúdo principal (Main)
+******************************************************************************/
 .main-content {
     flex: 1;
     padding-bottom: 50px;
@@ -177,13 +197,14 @@ body {
     color: #1f2937;
 }
 
-
-
-/* Grade de Posts (Grid Responsivo) */
 .posts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(430px, 1fr));
-    gap: 30px;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
 }
 
 .post-card {
@@ -266,8 +287,9 @@ body {
 }
 
 
-
-/* Rodapé */
+/****************************************************************************** 
+/ Rodapé
+******************************************************************************/
 .site-footer {
     background-color: #1f2937;
     color: #9ca3af;
@@ -297,4 +319,31 @@ body {
 
 .footer-links a:hover {
     color: #ffffff;
+}
+
+
+
+
+
+/****************************************************************************** 
+/ Tablets 
+******************************************************************************/
+@media (min-width: 768px) { 
+    .posts-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr); 
+        gap: 40px 3%;
+        align-items: stretch;
+    }
+}
+
+
+/******************************************************************** 
+/ Desktops e TVs 
+*********************************************************************/
+@media (min-width: 1200px) {
+    .posts-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 40px 3%;
+    }
 }
