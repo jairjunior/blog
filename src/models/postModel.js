@@ -70,7 +70,7 @@ const getPostByCategoryAndSlug = async (categorySlug, postSlug) => {
     try {
         const query = `
             SELECT 
-                p.title, p.slug, p.summary, p.content, p.cover_image, p.published_at,
+                p.id, p.title, p.slug, p.summary, p.content, p.cover_image, p.published_at,
                 c.name          AS category_name,
                 c.slug          AS category_slug,
                 a.display_name  AS author_name, 
