@@ -18,6 +18,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+// Intercepta o favicon antes do authMiddleware
+app.get('/favicon.ico', (req, res) => res.status(204).end());
+// Ignora a requisição automática do Chrome DevTools
+app.use('/.well-known/appspecific/com.chrome.devtools.json', (req, res) => {
+    res.status(204).end();
+});
+// Meu middleware de autenticação de usuários
 app.use(authMiddleware);
 
 
