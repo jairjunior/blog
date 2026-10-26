@@ -118,9 +118,25 @@
             </div>
 
         </article>
+
+        <!-- Seção sobre o Autor -->
+        <section class="author-section">
+            <h2>Sobre o autor</h2>
+            <div class="author-box">
+                <div class="author-avatar-wrapper">
+                    <img class="author-avatar" src="/img/profiles/<%= post.author_avatar %>" alt="Foto de perfil do autor <%= post.author_name %>">
+                </div>
+                <div class="author-info">
+                    <h3 class="author-name"><%= post.author_name %></h3>
+                    <p class="author-member-since">Membro desde <%= new Date(post.author_created_at).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }) %></p>
+                    <p class="author-bio"><%= post.author_bio %></p>
+                </div>
+            </div>
+        </section>
+
     </main>
 
-    <!-- Rodapé (idêntico ao index.ejs) -->
+    <!-- Rodapé -->
     <footer class="site-footer">
         <div class="container footer-content">
             <p>&copy; 2026 Blog Jair Junior. Todos os direitos reservados.</p>

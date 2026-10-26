@@ -54,7 +54,7 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 20px;
+    padding: 20px 30px;
     position: relative;
 }
 
@@ -279,6 +279,10 @@ h1 {
     color: #2563eb;
 }
 
+.category-navbar li.active a {
+    font-weight: 700;
+}
+
 
 /****************************************************************************** 
 / Breadcrumb
@@ -484,9 +488,6 @@ h1 {
         align-items: stretch;
     }
 }
-
-
-
 
 
 @media (min-width: 950px) { 

@@ -126,6 +126,96 @@
     background-color: #f1f5f9;
 }
 
+
+
+/****************************************************************************** 
+/ Caixa sobre o Autor do post
+******************************************************************************/
+.author-section{
+    max-width: 1100px;
+    margin: 0 auto;
+    margin-top: 45px;
+}
+
+.author-section h2 {
+    text-align: center;
+}
+
+.author-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    background-color: #f9fafb;
+    border: 1px solid #e5e7eb;
+    text-align: justify;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+.author-avatar-wrapper {
+    min-width: 20%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.author-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.author-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 4px 0;
+}
+
+.author-member-since {
+    font-size: 0.875rem;
+    color: #6b7280;
+    margin: 0 0 12px 0;
+}
+
+.author-bio {
+    font-size: 1rem;
+    color: #374151;
+    line-height: 1.5;
+    margin: 0;
+    font-weight: normal;
+}
+
+
+/* Responsivo para celulares */
+@media (min-width: 768px) {
+    .author-section h2 {
+        text-align: justify;
+    }
+
+    .author-box {
+        flex-direction: row;
+    }
+}
+
+
+@media (min-width: 950px) {
+    .author-avatar-wrapper {
+        min-width: 15%;
+    }
+}
+
+
+
+
+
+
+/****************************************************************************** 
+/ Responsividade
+******************************************************************************/
 /* Responsividade para telas menores */
 @media (max-width: 768px) {
     .single-post {

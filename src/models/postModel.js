@@ -71,12 +71,19 @@ const getPostByCategoryAndSlug = async (categorySlug, postSlug) => {
         const query = `
             SELECT 
                 p.title, p.slug, p.summary, p.content, p.cover_image, p.published_at,
-                c.name AS category_name, c.slug AS category_slug,
-                CONCAT(u.first_name, ' ', u.last_name) AS author_name
+                c.name          AS category_name,
+                c.slug          AS category_slug,
+                a.display_name  AS author_name, 
+                a.bio           AS author_bio,
+                a.created_at    AS author_created_at,
+                u.avatar        AS author_avatar
             FROM posts p
             INNER JOIN categories c ON p.category_id = c.id
-            INNER JOIN users u ON p.author_id = u.id
-            WHERE c.slug = ? AND p.slug = ? AND p.status = 'published'
+            INNER JOIN authors a ON p.author_id = a.user_id
+            INNER JOIN users u ON u.id = a.user_id
+            WHERE c.slug = ? 
+                AND p.slug = ? 
+                AND p.status = 'published'
             LIMIT 1;
         `;
         const [rows] = await databasePool.query(query, [categorySlug, postSlug]);
