@@ -38,7 +38,7 @@ const renderHomePage = async (req, res) => {
 / Por padrão, os posts serão renderizados do mais recente para o mais antigo.
 / Para modificar esse comportamento, utiliza-se a query string "filter" na URL.
 /*****************************************************************************/
-const renderArticlesPage = async (req, res) => {
+const renderPostsPage = async (req, res) => {
     try {
         const numberOfPosts = 18;
         const posts = await postModel.getLatestPosts(numberOfPosts);
@@ -46,7 +46,7 @@ const renderArticlesPage = async (req, res) => {
         res.render('category', { posts, categoryName });
 
     } catch (error) {
-        console.error('ERROR in blogController.renderHomePage():\n', error);
+        console.error('ERROR in blogController.renderPostsPage():\n', error);
         res.status(500).json({ 
             success: false,
             message: 'Internal server error. Contact the administrator.'
@@ -71,7 +71,7 @@ const renderCategoryPage = async (req, res) => {
         res.render('category', { posts, categoryName });
 
     } catch (error) {
-        console.error('ERROR in blogController.renderPostsByCategory():\n', error);
+        console.error('ERROR in blogController.renderCategoryPage():\n', error);
         res.status(500).json({ 
             success: false,
             message: 'Internal server error. Contact the administrator.'
@@ -96,7 +96,8 @@ const renderPostBySlug = async (req, res) => {
                 message: 'Post not found.'
             });
         }
-        res.render('post', { post });
+        const comments = [];
+        res.render('post', { post, comments });
 
     } catch (error) {
         console.error('ERROR in blogController.renderPostBySlug():\n', error);
@@ -114,7 +115,7 @@ const renderPostBySlug = async (req, res) => {
 module.exports = {
     getLoginPage,
     renderHomePage,
-    renderArticlesPage,
+    renderPostsPage,
     renderCategoryPage,
     renderPostBySlug
 };

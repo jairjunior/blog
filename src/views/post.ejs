@@ -88,6 +88,7 @@
             </ol>
         </nav>
 
+        <!-- Conteúdo do post -->
         <article class="single-post">
             
             <!-- Imagem de Capa Centralizada (exibida apenas se existir) -->
@@ -119,6 +120,7 @@
 
         </article>
 
+
         <!-- Seção sobre o Autor -->
         <section class="author-section">
             <h2>Sobre o autor</h2>
@@ -134,7 +136,59 @@
             </div>
         </section>
 
+
+        <!-- Seção de comentários do post -->
+        <section class="comments-section" id="comments">
+            <h2>Comentários</h2>
+
+            <!-- Área de envio: Exibe o formulário se o usuário estiver logado, ou aviso caso contrário -->
+            <% if (isLoggedIn) { %>
+                <form class="comment-form" action="/posts/<%= post.id %>/comments" method="POST">
+                <div class="form-group">
+                    <label for="content" class="sr-only">Escreva seu comentário</label>
+                    <textarea 
+                        id="content" 
+                        name="content" 
+                        rows="3" 
+                        placeholder="O que você achou deste artigo?" 
+                        required
+                    ></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Comentar</button>
+                </form>
+            <% } else { %>
+                <div class="auth-prompt">
+                <p>Você precisa <a href="/login">fazer login</a> para deixar um comentário.</p>
+                </div>
+            <% } %>
+
+            <!-- Lista de Comentários -->
+            <div class="comments-list">
+                <% if (comments && comments.length > 0) { %>
+                <% comments.forEach(function(comment) { %>
+                    <div class="comment-item">
+                    <img 
+                        src="/images/avatars/<%= comment.avatar || 'default-avatar.jpeg' %>" 
+                        alt="Avatar de <%= comment.author_name %>" 
+                        class="comment-avatar"
+                    />
+                    <div class="comment-body">
+                        <div class="comment-meta">
+                        <span class="comment-author"><%= comment.author_name %></span>
+                        <span class="comment-date"><%= comment.created_at %></span>
+                        </div>
+                        <p class="comment-text"><%= comment.content %></p>
+                    </div>
+                    </div>
+                <% }); %>
+                <% } else { %>
+                <p class="no-comments">Ainda não existem comentários neste post. Seja o primeiro a comentar!</p>
+                <% } %>
+            </div>
+        </section>
+
     </main>
+
 
     <!-- Rodapé -->
     <footer class="site-footer">

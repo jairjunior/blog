@@ -134,7 +134,7 @@
 .author-section{
     max-width: 1100px;
     margin: 0 auto;
-    margin-top: 45px;
+    margin-top: 2rem;
 }
 
 .author-section h2 {
@@ -187,6 +187,173 @@
     line-height: 1.5;
     margin: 0;
     font-weight: normal;
+}
+
+
+/****************************************************************************** 
+/ Caixa de comentários
+******************************************************************************/
+.comments-section {
+    max-width: 1100px;
+    margin: 0 auto;
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eaeaea;
+    font-family: inherit;
+}
+
+.comments-section h2 {
+    margin-bottom: 1.5rem;
+}
+
+/* -------------------------------------- */
+/* Formulário de Comentário */
+.comment-form {
+    margin-bottom: 2rem;
+}
+
+.comment-form .form-group {
+    margin-bottom: 0.75rem;
+}
+
+.comment-form textarea {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    resize: vertical;
+    min-height: 90px;
+    transition: border-color 0.2s ease;
+}
+
+.comment-form textarea:focus {
+    outline: none;
+    border-color: #0066cc;
+    box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1);
+}
+
+.btn-submit {
+    background-color: #0066cc;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: #0052a3;
+}
+
+/* -------------------------------------- */
+/* Aviso para usuário deslogado */
+.auth-prompt {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 0.95rem;
+    color: #555;
+}
+
+.auth-prompt a {
+    color: #0066cc;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.auth-prompt a:hover {
+    text-decoration: underline;
+}
+
+
+/* -------------------------------------- */
+/* Lista de Comentários */
+.comments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.comment-item {
+    display: flex;
+    gap: 0.85rem;
+    align-items: flex-start;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.comment-item:last-child {
+    border-bottom: none;
+}
+
+.comment-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+    background-color: #e0e0e0;
+}
+
+.comment-body {
+    flex-grow: 1;
+}
+
+.comment-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.35rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.comment-author {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+.comment-date {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.comment-text {
+    font-size: 0.95rem;
+    color: #444;
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.no-comments {
+    color: #666;
+    font-size: 0.95rem;
+    font-style: italic;
+    text-align: center;
+    padding: 1.5rem 0;
+    background-color: #fafafa;
+    border-radius: 8px;
+}
+
+/* Classe utilitária de acessibilidade para ocultar rótulos visualmente */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
 }
 
 
