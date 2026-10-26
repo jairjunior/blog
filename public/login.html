@@ -18,6 +18,7 @@
 			font-family: system-ui, sans-serif;
 		}
 		h1 { margin: 0 0 2rem; text-align: center; }
+		h1 a { text-decoration: none; }
 		main {
 			width: min(100%, 24rem);
 			margin: auto;
@@ -35,6 +36,9 @@
 			border-radius: 0.4rem;
 			font: inherit;
 		}
+		.error-message {
+			color: red;
+		}
 		button {
 			width: 100%;
 			margin-top: 1.25rem;
@@ -50,19 +54,25 @@
 	</style>
 </head>
 <body>
-	<h1><a href="/">Blog Jair Junior</a></h1>
+	<h1><a href="/">jjOutOfBounds</a></h1>
+	
 	<main>
 		<h2>Log in</h2>
-		<form action="/login" method="post">
-			<label for="email">Email</label>
+		<form id="loginForm">
+			<label for="email">E-mail</label>
 			<input id="email" name="email" type="email" autocomplete="email" required>
 
-			<label for="password">Password</label>
+			<label for="password">Senha</label>
 			<input id="password" name="password" type="password" autocomplete="current-password" required>
 
-			<button type="submit">Log in</button>
+			<p id="responseMessage" class="error-message"></p>
+
+			<button type="submit">Entrar</button>
 		</form>
-		<p class="recovery"><a href="/forgot-password">Forgot your password?</a></p>
+		<p class="recovery"><a href="/forgot-password">Esqueceu a senha?</a></p>
 	</main>
+
+	<script src="/js/login.js"></script>
+
 </body>
 </html>

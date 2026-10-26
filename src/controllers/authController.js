@@ -78,7 +78,7 @@ exports.login = async (req, res) => {
         }
 
         // Gera um token JWT para o usuário autenticado
-        const token = jwt.sign({ 
+        const jwtToken = jwt.sign({ 
                 id: user.id, 
                 email: user.email,
                 first_name: user.first_name,
@@ -89,10 +89,14 @@ exports.login = async (req, res) => {
         );
 
         // Retorna o token JWT para o cliente
+        res.cookie('token', jwtToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000
+        });
         res.status(200).json({
-            success: true, 
-            message: 'Login successful.', 
-            token: token
+            success: true,
+            message: 'Login successful.'
         });
 
     } catch (error) {
