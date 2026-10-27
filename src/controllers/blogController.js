@@ -96,7 +96,7 @@ const renderPostBySlugs = async (req, res) => {
                 message: 'Post not found.'
             });
         }
-        const comments = [];
+        const comments = await postModel.getComments(post.id);
         res.render('post', { post, comments });
 
     } catch (error) {

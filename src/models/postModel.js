@@ -97,7 +97,7 @@ const getPostBySlugs = async (categorySlug, postSlug) => {
 
 
 /*****************************************************************************
-/ Cria um comentário
+/ Busca apenas o ID de um post pelas suas slugs (categoria e nome do post).
 /*****************************************************************************/
 const getPostIdBySlugs = async (categorySlug, postSlug) => {
     try {
@@ -121,7 +121,7 @@ const getPostIdBySlugs = async (categorySlug, postSlug) => {
 
 
 /*****************************************************************************
-/ Cria um comentário
+/ Cria um comentário atrelado a um determinado post
 /*****************************************************************************/
 const createComment = async (postId, userId, commentContent) => {
     try {
@@ -139,6 +139,33 @@ const createComment = async (postId, userId, commentContent) => {
 
 
 /*****************************************************************************
+/ Cria um comentário atrelado a um determinado post
+/*****************************************************************************/
+const getComments = async (postId) => {
+    try {
+        const query = `
+            SELECT 
+                c.id,
+                c.content,
+                c.created_at,
+                CONCAT(u.first_name, ' ', u.last_name) AS user_name
+            FROM comments c
+            INNER JOIN users u ON c.user_id = u.id
+            WHERE c.post_id = ?
+            ORDER BY c.created_at ASC
+            LIMIT 20;
+        `;
+        const [rows] = await databasePool.query(query, [postId]);
+        return rows;
+
+    } catch(error){
+        console.error(`Error in postModel.getComments() when retrieving comment for post with ID [${postId}]:\n`, error);
+        throw error;
+    }
+}
+
+
+/*****************************************************************************
 / Exporta as funções para serem utilizadas pela aplicação fora deste arquivo.
 /*****************************************************************************/
 module.exports = {
@@ -146,5 +173,6 @@ module.exports = {
     getPostsByCategory,
     getPostBySlugs,
     getPostIdBySlugs,
-    createComment
+    createComment,
+    getComments
 };
