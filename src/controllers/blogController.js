@@ -86,10 +86,10 @@ const renderCategoryPage = async (req, res) => {
 / O conteúdo do post é recuperado por meio dos parâmetros "category" e "slug"
 / que são passados pela URL.
 /*****************************************************************************/
-const renderPostBySlug = async (req, res) => {
+const renderPostBySlugs = async (req, res) => {
     try {
         const { categorySlug, postSlug } = req.params;
-        const post = await postModel.getPostByCategoryAndSlug(categorySlug, postSlug);
+        const post = await postModel.getPostBySlugs(categorySlug, postSlug);
         if(!post){
             res.status(404).json({ 
                 success: false,
@@ -100,12 +100,56 @@ const renderPostBySlug = async (req, res) => {
         res.render('post', { post, comments });
 
     } catch (error) {
-        console.error('ERROR in blogController.renderPostBySlug():\n', error);
+        console.error('ERROR in blogController.renderPostBySlugs():\n', error);
         res.status(500).json({ 
             success: false,
             message: 'Internal server error. Contact the administrator.'
         });
     }
+}
+
+
+
+/*****************************************************************************
+/ Função para tratar requisições POST no caminho 
+/ '/posts/:categorySlug/:postSlug/comments'
+/ 
+/*****************************************************************************/
+const postComment = async (req, res) => {
+    try{ 
+        const { categorySlug, postSlug } = req.params;
+        const { commentContent } = req.body;
+        const userId = res.locals.currentUser.id;
+
+        if (!commentContent || commentContent.trim() === ''){
+            return res.status(400).json({
+                success: false,
+                message: 'Comments cannot be empty.'
+            });
+        }
+
+        const { id: postId } = await postModel.getPostIdBySlugs(categorySlug, postSlug);
+        if(!postId){
+            res.status(404).json({ 
+                success: false,
+                message: 'Post ID not found.'
+            });
+        }
+
+        await postModel.createComment(postId, userId, commentContent);
+        return res.status(201).json({
+            success: true,
+            message: 'Comment successfully added.'
+        });
+
+    } catch(error) {
+        console.error('ERROR in blogController.postComment():\n', error);
+        res.status(500).json({ 
+            success: false,
+            message: 'Internal server error. Contact the administrator.'
+        });
+    }
+
 }
 
 
@@ -117,5 +161,6 @@ module.exports = {
     renderHomePage,
     renderPostsPage,
     renderCategoryPage,
-    renderPostBySlug
+    renderPostBySlugs,
+    postComment
 };
