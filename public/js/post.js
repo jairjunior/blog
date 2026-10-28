@@ -29,7 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 } else { // Outros erros
                     console.error('ERROR: ', responseData.messageEn);
-                    document.getElementById('commentResponseMessage').textContent = responseData.messagePt;
+                    document.getElementById('commentResponseMessage').innerHTML = `
+                        <span class="comment-alert-icon">&#x26A0;</span> ${responseData.messagePt}
+                    `;
                 }
 
             } catch (error) {
@@ -65,9 +67,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (retryHttpResponse.ok) { // Comentário postado com sucesso
                         closeLoginModal();
                         location.reload();
-                    } else { // Erro ao postar comentário
+                    } else { // Autenticou corretamente, porém teve erro ao postar comentário
                         console.error('ERROR: ', retryResponseData.messageEn);
-                        document.getElementById('commentResponseMessage').textContent = retryResponseData.messagePt;
+                        document.getElementById('commentResponseMessage').innerHTML = `
+                            <span class="comment-alert-icon">&#x26A0;</span> ${retryResponseData.messagePt}
+                        `;
                         closeLoginModal();
                     }
 
@@ -84,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /****************************************************************************** 
-/ Faz requisição POST com fetch e registrar o comentário
+/ Faz requisição POST com fetch e registrar o comentário.
 ******************************************************************************/
 async function postHttpRequest(url, content){
     return await fetch(url, {
@@ -124,7 +128,7 @@ function closeLoginModal() {
 
 
 /****************************************************************************** 
-/ Fecha o modal de login ao pressionar a tecla ESC
+/ Fecha o modal de login ao pressionar a tecla ESC.
 ******************************************************************************/
 window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
@@ -134,7 +138,7 @@ window.addEventListener('keydown', (event) => {
 
 
 /****************************************************************************** 
-/ Fecha o modal de login ao clicar fora da caixa (no fundo escuro)
+/ Fecha o modal de login ao clicar fora da caixa (no fundo escuro).
 ******************************************************************************/
 window.addEventListener('click', (event) => {
     const loginModal = document.getElementById('loginModal');
