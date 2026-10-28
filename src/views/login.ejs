@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Log in | Jair Jr. Blog</title>
+	<title>Log in | jjOutOfBounds</title>
 	<style>
 		* { box-sizing: border-box; }
 		body {
@@ -38,6 +38,7 @@
 		}
 		.error-message {
 			color: red;
+			margin-bottom: 0;
 		}
 		button {
 			width: 100%;
@@ -50,15 +51,22 @@
 			font: inherit;
 			cursor: pointer;
 		}
-		.recovery { margin: 1rem 0 0; text-align: center; }
+		.recovery { 
+			margin: 1rem 0 0; 
+			text-align: center;
+		}
 	</style>
 </head>
+
+
 <body>
 	<h1><a href="/">jjOutOfBounds</a></h1>
 	
 	<main>
 		<h2>Log in</h2>
 		<form id="loginForm">
+			<input id="redirectTo" name="redirectTo" type="hidden" value="<%= redirectTo %>">
+
 			<label for="email">E-mail</label>
 			<input id="email" name="email" type="email" autocomplete="email" required>
 

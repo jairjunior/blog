@@ -9,8 +9,12 @@ const categoryModel = require('../models/categoryModel');
 /
 / Apenas devolve ao usuário a página de login, que é um arquivo estático.
 /*****************************************************************************/
-const getLoginPage = async (req, res) => {
-    res.sendFile(path.join(__dirname, '../../public/login.html'));
+const renderLoginPage = async (req, res) => {
+    //res.sendFile(path.join(__dirname, '../../public/login.html'));
+
+    const redirectTo = req.query.redirect || '/';
+    res.render('login', { redirectTo });
+    
 }
 
 
@@ -23,7 +27,11 @@ const renderHomePage = async (req, res) => {
     try {
         const numberOfPosts = 3;
         const latestPosts = await postModel.getLatestPosts(numberOfPosts);
-        res.render('index', { latestPosts });
+        const currentUrl = req.originalUrl;
+        res.render('index', { 
+            latestPosts,
+            currentUrl
+        });
 
     } catch (error) {
         console.error('ERROR in blogController.renderHomePage():\n', error);
@@ -47,7 +55,12 @@ const renderPostsPage = async (req, res) => {
         const numberOfPosts = 18;
         const posts = await postModel.getLatestPosts(numberOfPosts);
         const categoryName = 'Artigos';
-        res.render('category', { posts, categoryName });
+        const currentUrl = req.originalUrl;
+        res.render('category', { 
+            posts,
+            categoryName,
+            currentUrl
+        });
 
     } catch (error) {
         console.error('ERROR in blogController.renderPostsPage():\n', error);
@@ -72,7 +85,12 @@ const renderCategoryPage = async (req, res) => {
         const categorySlug = req.params.categorySlug;
         const posts = await postModel.getPostsByCategory(categorySlug);
         const category = await categoryModel.getCategoryBySlug(categorySlug);
-        res.render('category', { posts, categoryName: category.name });
+        const currentUrl = req.originalUrl;
+        res.render('category', {
+            posts,
+            categoryName: category.name,
+            currentUrl
+        });
 
     } catch (error) {
         console.error('ERROR in blogController.renderCategoryPage():\n', error);
@@ -104,7 +122,12 @@ const renderPostBySlugs = async (req, res) => {
             });
         }
         const comments = await commentModel.getComments(post.id);
-        res.render('post', { post, comments });
+        const currentUrl = req.originalUrl;
+        res.render('post', {
+            post,
+            comments,
+            currentUrl
+        });
 
     } catch (error) {
         console.error('ERROR in blogController.renderPostBySlugs():\n', error);
@@ -121,7 +144,7 @@ const renderPostBySlugs = async (req, res) => {
 / Exporta as funções para serem utilizadas pela aplicação.
 /*****************************************************************************/
 module.exports = {
-    getLoginPage,
+    renderLoginPage,
     renderHomePage,
     renderPostsPage,
     renderCategoryPage,

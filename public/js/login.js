@@ -8,21 +8,21 @@ document.addEventListener('DOMContentLoaded', () => {
             event.preventDefault();
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const redirectTo = document.getElementById('redirectTo').value;
 
             try {
-                const loginResponse = await fetch('/api/auth/login', {
+                const loginHttpResponse = await fetch('/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email, password })
+                    body: JSON.stringify({ email, password, redirectTo })
                 });
-
-                if (loginResponse.ok) {
-                    window.location.href = '/';
+                const loginResponseData = await loginHttpResponse.json();
+                if (loginHttpResponse.ok) {
+                    window.location.href = loginResponseData.redirectUrl;
                 } else {
-                    const responseData = await loginResponse.json();
-                    console.error('Login error: ', responseData.message);
-                    const messageField = document.getElementById('responseMessage')
-                    messageField.textContent = 'Usuário e/ou senha inválidos.';
+                    console.error('ERROR: ', loginResponseData.messageEn);
+                    const messageField = document.getElementById('responseMessage');
+                    messageField.textContent = loginResponseData.messagePt;
                 }
                 
             } catch (error) {

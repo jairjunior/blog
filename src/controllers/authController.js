@@ -51,7 +51,7 @@ exports.register = async (req, res) => {
 /*****************************************************************************/
 exports.login = async (req, res) => {
     
-    const { email, password } = req.body;
+    const { email, password, redirectTo } = req.body;
     if(!email || !password) {
         return res.status(400).json({ 
             success: false,
@@ -97,10 +97,13 @@ exports.login = async (req, res) => {
             secure: process.env.NODE_ENV === 'production',
             maxAge: 24 * 60 * 60 * 1000
         });
-        res.status(200).json({
+        
+        const safeRedirect = redirectTo && redirectTo.startsWith('/') ? redirectTo : '/';
+        return res.status(200).json({
             success: true,
             messageEn: 'Login successful.',
-            messagePt: 'Login realizado com sucesso.'
+            messagePt: 'Login realizado com sucesso.',
+            redirectUrl: safeRedirect
         });
 
     } catch (error) {

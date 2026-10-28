@@ -1,5 +1,5 @@
 /****************************************************************************** 
-/ Função para colapsar/mostrar o menu superior do site
+/ Função para colapsar/mostrar o menu superior do site.
 ******************************************************************************/
 document.addEventListener("DOMContentLoaded", () => {
     const headerTop = document.querySelector(".header-top");
@@ -28,7 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 /****************************************************************************** 
-/ Função para destacar a categoria selecionada
+/ Função para destacar a categoria selecionada.
 ******************************************************************************/
 document.addEventListener("DOMContentLoaded", () => {
     const currentPath = window.location.pathname;
