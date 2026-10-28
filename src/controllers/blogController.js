@@ -1,4 +1,3 @@
-const path = require('path');
 const postModel = require('../models/postModel');
 const commentModel = require('../models/commentModel');
 const categoryModel = require('../models/categoryModel');
@@ -7,14 +6,15 @@ const categoryModel = require('../models/categoryModel');
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/login'
 /
-/ Apenas devolve ao usuário a página de login, que é um arquivo estático.
+/ Pega o parâmetro 'redirectTo' que é passado na URL como uma query string.
+/ Esse parâmetro vai dizer para onde o usuário deve ser redirecionado após
+/ efetuar o login com sucesso.
+/ Esse caminho é exatamente de onde o usuário veio e é para onde ele deve 
+/ voltar.
 /*****************************************************************************/
 const renderLoginPage = async (req, res) => {
-    //res.sendFile(path.join(__dirname, '../../public/login.html'));
-
     const redirectTo = req.query.redirect || '/';
     res.render('login', { redirectTo });
-    
 }
 
 
@@ -25,12 +25,12 @@ const renderLoginPage = async (req, res) => {
 /*****************************************************************************/
 const renderHomePage = async (req, res) => {
     try {
-        const numberOfPosts = 3;
-        const latestPosts = await postModel.getLatestPosts(numberOfPosts);
-        const currentUrl = req.originalUrl;
+        const NUMBER_OF_LATEST_POSTS = 3;
+        const latestPosts = await postModel.getLatestPosts(NUMBER_OF_LATEST_POSTS);
         res.render('index', { 
             latestPosts,
-            currentUrl
+            user: res.locals.currentUser,
+            currentUrl: req.originalUrl
         });
 
     } catch (error) {
@@ -55,11 +55,11 @@ const renderPostsPage = async (req, res) => {
         const numberOfPosts = 18;
         const posts = await postModel.getLatestPosts(numberOfPosts);
         const categoryName = 'Artigos';
-        const currentUrl = req.originalUrl;
         res.render('category', { 
             posts,
             categoryName,
-            currentUrl
+            user: res.locals.currentUser,
+            currentUrl: req.originalUrl
         });
 
     } catch (error) {
@@ -85,11 +85,11 @@ const renderCategoryPage = async (req, res) => {
         const categorySlug = req.params.categorySlug;
         const posts = await postModel.getPostsByCategory(categorySlug);
         const category = await categoryModel.getCategoryBySlug(categorySlug);
-        const currentUrl = req.originalUrl;
         res.render('category', {
             posts,
             categoryName: category.name,
-            currentUrl
+            user: res.locals.currentUser,
+            currentUrl: req.originalUrl
         });
 
     } catch (error) {
@@ -122,11 +122,11 @@ const renderPostBySlugs = async (req, res) => {
             });
         }
         const comments = await commentModel.getComments(post.id);
-        const currentUrl = req.originalUrl;
         res.render('post', {
             post,
             comments,
-            currentUrl
+            user: res.locals.currentUser,
+            currentUrl: req.originalUrl
         });
 
     } catch (error) {
