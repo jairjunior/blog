@@ -10,21 +10,21 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = document.getElementById('password').value;
 
             try {
-                const response = await fetch('/api/auth/login', {
+                const loginResponse = await fetch('/api/auth/login', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password })
                 });
-                if (response.ok) {
+
+                if (loginResponse.ok) {
                     window.location.href = '/';
                 } else {
-                    const responseData = await response.json();
+                    const responseData = await loginResponse.json();
                     console.error('Login error: ', responseData.message);
                     const messageField = document.getElementById('responseMessage')
                     messageField.textContent = 'Usuário e/ou senha inválidos.';
                 }
+                
             } catch (error) {
                 console.error('Erro na requisição:\n', error);
             }
