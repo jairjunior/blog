@@ -10,7 +10,7 @@ const databasePool = require('../config/database');
 */
 
 /*****************************************************************************
-/ Buscar todos os posts de uma categoria específica
+/ Buscar todos os últimos posts publicados
 /*****************************************************************************/
 const getLatestPosts = async (numberOfPosts) => {
 
@@ -30,7 +30,7 @@ const getLatestPosts = async (numberOfPosts) => {
         return rows;
 
     } catch (error) {
-        console.error(`Error in postModel.getLatestPosts() when retrieving latest posts.\n`, error);
+        console.error(`Error in postModel.getLatestPosts() when retrieving latest posts.`);
         throw error;
     }
 
@@ -57,14 +57,14 @@ const getPostsByCategory = async (categorySlug) => {
         return rows;
 
     } catch(error) {
-        console.error(`Error in postModel.getPostsByCategory() when retrieving posts from category [${categorySlug}]:\n`, error);
+        console.error(`Error in postModel.getPostsByCategory() when retrieving posts from category [${categorySlug}].`);
         throw error;
     }
 };
 
 
 /*****************************************************************************
-/ Busca post individual por Categoria + Slug
+/ Busca post individual pelas suas slugs (Categoria + Título).
 /*****************************************************************************/
 const getPostBySlugs = async (categorySlug, postSlug) => {
     try {
@@ -90,14 +90,14 @@ const getPostBySlugs = async (categorySlug, postSlug) => {
         return rows[0];
 
     } catch(error) {
-        console.error(`Error in postModel.getPostBySlugs() when retrieving the post [${categorySlug}/${postSlug}]:\n`, error);
+        console.error(`Error in postModel.getPostBySlugs() when retrieving the post [${categorySlug}/${postSlug}].`);
         throw error;
     }
 };
 
 
 /*****************************************************************************
-/ Busca apenas o ID de um post pelas suas slugs (categoria e nome do post).
+/ Busca apenas o ID de um post pelas suas slugs (Categoria + Título).
 /*****************************************************************************/
 const getPostIdBySlugs = async (categorySlug, postSlug) => {
     try {
@@ -113,55 +113,10 @@ const getPostIdBySlugs = async (categorySlug, postSlug) => {
         return rows[0];
 
     } catch(error) {
-        console.error(`Error in postModel.getPostIdBySlugs() when retrieving ID of the post [${categorySlug}/${postSlug}]:\n`, error);
+        console.error(`Error in postModel.getPostIdBySlugs() when retrieving ID of the post [${categorySlug}/${postSlug}].`);
         throw error;
     }
 
-}
-
-
-/*****************************************************************************
-/ Cria um comentário atrelado a um determinado post
-/*****************************************************************************/
-const createComment = async (postId, userId, commentContent) => {
-    try {
-        const query = `
-            INSERT INTO comments (post_id, user_id, content) VALUES (?, ?, ?)
-        `;
-        const [rows] = await databasePool.query(query, [postId, userId, commentContent]);
-        return rows[0];
-
-    } catch(error) {
-        console.error(`Error in postModel.createComment() when creating comment for post with ID [${postId}]:\n`, error);
-        throw error;
-    }
-}
-
-
-/*****************************************************************************
-/ Cria um comentário atrelado a um determinado post
-/*****************************************************************************/
-const getComments = async (postId) => {
-    try {
-        const query = `
-            SELECT 
-                c.id,
-                c.content,
-                c.created_at,
-                CONCAT(u.first_name, ' ', u.last_name) AS user_name
-            FROM comments c
-            INNER JOIN users u ON c.user_id = u.id
-            WHERE c.post_id = ?
-            ORDER BY c.created_at ASC
-            LIMIT 20;
-        `;
-        const [rows] = await databasePool.query(query, [postId]);
-        return rows;
-
-    } catch(error){
-        console.error(`Error in postModel.getComments() when retrieving comment for post with ID [${postId}]:\n`, error);
-        throw error;
-    }
 }
 
 
@@ -172,7 +127,5 @@ module.exports = {
     getLatestPosts,
     getPostsByCategory,
     getPostBySlugs,
-    getPostIdBySlugs,
-    createComment,
-    getComments
+    getPostIdBySlugs
 };

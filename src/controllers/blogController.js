@@ -1,5 +1,6 @@
 const path = require('path');
 const postModel = require('../models/postModel');
+const commentModel = require('../models/commentModel');
 const categoryModel = require('../models/categoryModel');
 
 
@@ -102,7 +103,7 @@ const renderPostBySlugs = async (req, res) => {
                 messagePt: 'Post não encontrado.'
             });
         }
-        const comments = await postModel.getComments(post.id);
+        const comments = await commentModel.getComments(post.id);
         res.render('post', { post, comments });
 
     } catch (error) {
@@ -116,72 +117,6 @@ const renderPostBySlugs = async (req, res) => {
 }
 
 
-
-/*****************************************************************************
-/ Função para tratar requisições POST no caminho 
-/ '/posts/:categorySlug/:postSlug/comments'
-/ 
-/ Registra um novo comentário no post especificado na URL.
-/ Verifica se o token está válido, senão, solicita novo login do usuário.
-/*****************************************************************************/
-const postComment = async (req, res) => {
-    
-    if(res.locals.tokenExpired === true){
-        return res.status(401).json({
-            success: false,
-            messageEn: 'Expired token. Please log in again to submit your comment.',
-            messagePt: 'Token expirado. Por favor, realize o login novamente para submeter seu comentário.'
-        });
-    }
-    if(res.locals.isLoggedIn === false){
-        return res.status(401).json({
-            success: false,
-            messageEn: 'You need to be logged in to comment.',
-            messagePt: 'Você precisa estar logado para comentar.'
-        });
-    }
-    
-    try{
-        const { categorySlug, postSlug } = req.params;
-        const { commentContent } = req.body;
-        const userId = res.locals.currentUser.id;
-
-        if (!commentContent || commentContent.trim() === ''){
-            return res.status(400).json({
-                success: false,
-                messageEn: 'Comments cannot be empty.',
-                messagePt: 'Comentários não podem estar vazios.'
-            });
-        }
-
-        const { id: postId } = await postModel.getPostIdBySlugs(categorySlug, postSlug);
-        if(!postId){
-            res.status(404).json({ 
-                success: false,
-                messageEn: 'Post not found.',
-                messagePt: 'Post não encontrado.'
-            });
-        }
-
-        await postModel.createComment(postId, userId, commentContent);
-        return res.status(201).json({
-            success: true,
-            messageEn: 'Comment successfully added.',
-            messagePt: 'Comentário adicionado com sucesso.'
-        });
-
-    } catch(error) {
-        console.error('ERROR in blogController.postComment():\n', error);
-        res.status(500).json({ 
-            success: false,
-            messageEn: 'Internal server error. Contact the administrator.',
-            messagePt: 'Erro no servidor. Entre em contato com o administrador.'
-        });
-    }
-
-}
-
-
 /*****************************************************************************
 / Exporta as funções para serem utilizadas pela aplicação.
 /*****************************************************************************/
@@ -191,5 +126,4 @@ module.exports = {
     renderPostsPage,
     renderCategoryPage,
     renderPostBySlugs,
-    postComment
 };
