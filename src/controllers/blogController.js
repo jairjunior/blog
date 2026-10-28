@@ -5,6 +5,7 @@ const categoryModel = require('../models/categoryModel');
 
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/login'
+/
 / Apenas devolve ao usuário a página de login, que é um arquivo estático.
 /*****************************************************************************/
 const getLoginPage = async (req, res) => {
@@ -14,6 +15,7 @@ const getLoginPage = async (req, res) => {
 
 /*****************************************************************************
 / Função para tratar requisições GET no caminho raiz '/'
+/
 / Renderiza a página principal do blog utilizando template EJS.
 /*****************************************************************************/
 const renderHomePage = async (req, res) => {
@@ -34,6 +36,7 @@ const renderHomePage = async (req, res) => {
 
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/posts'
+/
 / Renderiza a página que exibe todos os posts do blog utilizando template EJS.
 / Por padrão, os posts serão renderizados do mais recente para o mais antigo.
 / Para modificar esse comportamento, utiliza-se a query string "filter" na URL.
@@ -57,6 +60,7 @@ const renderPostsPage = async (req, res) => {
 
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/posts/:category'
+/
 / Renderiza a página que exibe todos os posts de uma determinada categoria
 / do blog utilizando template EJS.
 / Os posts são recuperados por meio do parâmetro "category" que é passado 
@@ -67,8 +71,7 @@ const renderCategoryPage = async (req, res) => {
         const categorySlug = req.params.categorySlug;
         const posts = await postModel.getPostsByCategory(categorySlug);
         const category = await categoryModel.getCategoryBySlug(categorySlug);
-        const categoryName = category.name;
-        res.render('category', { posts, categoryName });
+        res.render('category', { posts, categoryName: category.name });
 
     } catch (error) {
         console.error('ERROR in blogController.renderCategoryPage():\n', error);
@@ -82,6 +85,7 @@ const renderCategoryPage = async (req, res) => {
 
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/posts/:category/:slug'
+/
 / Renderiza um post específico utilizando template EJS.
 / O conteúdo do post é recuperado por meio dos parâmetros "category" e "slug"
 / que são passados pela URL.
@@ -89,11 +93,13 @@ const renderCategoryPage = async (req, res) => {
 const renderPostBySlugs = async (req, res) => {
     try {
         const { categorySlug, postSlug } = req.params;
+
         const post = await postModel.getPostBySlugs(categorySlug, postSlug);
         if(!post){
             res.status(404).json({ 
                 success: false,
-                message: 'Post not found.'
+                messageEn: 'Post not found.',
+                messagePt: 'Post não encontrado.'
             });
         }
         const comments = await postModel.getComments(post.id);
@@ -103,7 +109,8 @@ const renderPostBySlugs = async (req, res) => {
         console.error('ERROR in blogController.renderPostBySlugs():\n', error);
         res.status(500).json({ 
             success: false,
-            message: 'Internal server error. Contact the administrator.'
+            messageEn: 'Internal server error. Contact the administrator.',
+            messagePt: 'Erro no servidor. Entre em contato com o administrador.'
         });
     }
 }
@@ -114,9 +121,27 @@ const renderPostBySlugs = async (req, res) => {
 / Função para tratar requisições POST no caminho 
 / '/posts/:categorySlug/:postSlug/comments'
 / 
+/ Registra um novo comentário no post especificado na URL.
+/ Verifica se o token está válido, senão, solicita novo login do usuário.
 /*****************************************************************************/
 const postComment = async (req, res) => {
-    try{ 
+    
+    if(res.locals.tokenExpired === true){
+        return res.status(401).json({
+            success: false,
+            messageEn: 'Expired token. Please log in again to submit your comment.',
+            messagePt: 'Token expirado. Por favor, realize o login novamente para submeter seu comentário.'
+        });
+    }
+    if(res.locals.isLoggedIn === false){
+        return res.status(401).json({
+            success: false,
+            messageEn: 'You need to be logged in to comment.',
+            messagePt: 'Você precisa estar logado para comentar.'
+        });
+    }
+    
+    try{
         const { categorySlug, postSlug } = req.params;
         const { commentContent } = req.body;
         const userId = res.locals.currentUser.id;
@@ -124,7 +149,8 @@ const postComment = async (req, res) => {
         if (!commentContent || commentContent.trim() === ''){
             return res.status(400).json({
                 success: false,
-                message: 'Comments cannot be empty.'
+                messageEn: 'Comments cannot be empty.',
+                messagePt: 'Comentários não podem estar vazios.'
             });
         }
 
@@ -132,21 +158,24 @@ const postComment = async (req, res) => {
         if(!postId){
             res.status(404).json({ 
                 success: false,
-                message: 'Post ID not found.'
+                messageEn: 'Post not found.',
+                messagePt: 'Post não encontrado.'
             });
         }
 
         await postModel.createComment(postId, userId, commentContent);
         return res.status(201).json({
             success: true,
-            message: 'Comment successfully added.'
+            messageEn: 'Comment successfully added.',
+            messagePt: 'Comentário adicionado com sucesso.'
         });
 
     } catch(error) {
         console.error('ERROR in blogController.postComment():\n', error);
         res.status(500).json({ 
             success: false,
-            message: 'Internal server error. Contact the administrator.'
+            messageEn: 'Internal server error. Contact the administrator.',
+            messagePt: 'Erro no servidor. Entre em contato com o administrador.'
         });
     }
 
@@ -154,7 +183,7 @@ const postComment = async (req, res) => {
 
 
 /*****************************************************************************
-/ Exporta as funções para serem utilizadas pela aplicação fora deste arquivo.
+/ Exporta as funções para serem utilizadas pela aplicação.
 /*****************************************************************************/
 module.exports = {
     getLoginPage,

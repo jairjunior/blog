@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
 /*****************************************************************************/
-// Função para registrar um novo usuário
+// Função para registrar um novo usuário.
 /*****************************************************************************/
 exports.register = async (req, res) => {
 
@@ -11,19 +11,20 @@ exports.register = async (req, res) => {
     if(!email || !first_name || !last_name || !password) {
         return res.status(400).json({ 
             success: false,
-            message: 'Please, provide all required fields.'
+            messageEn: 'Please, provide all required fields.',
+            messagePt: 'Por favor, providencie todos os campos exigidos.'
         });
     }
 
     try {
-        // Cria hash da senha e insere novo usuário no banco de dados
         const hashedPassword = await bcrypt.hash(password, 10);
         const query = 'INSERT INTO users (email, first_name, last_name, password) VALUES (?, ?, ?, ?)';
         await databasePool.query(query, [email, first_name, last_name, hashedPassword]);    
         
         res.status(201).json({
             success: true,
-            message: 'User registered successfully.'
+            messageEn: 'User registered successfully.',
+            messagePt: 'Usuário registrado com sucesso.'
         });
 
     } catch (error) {
@@ -31,12 +32,14 @@ exports.register = async (req, res) => {
         if (error.code === 'ER_DUP_ENTRY') {
             return res.status(409).json({
                 success: false, 
-                message: 'Email already exists.' 
+                messageEn: 'Email already exists.',
+                messagePt: 'O e-mail informado já está cadastrado.'
             });
         }
         return res.status(500).json({ 
             success: false,
-            message: 'Database error. Contact the administrator.',
+            messageEn: 'Internal server error. Contact the administrator.',
+            messagePt: 'Erro no servidor. Entre em contato com o administrador.'
         });
 
     }
@@ -44,7 +47,7 @@ exports.register = async (req, res) => {
 
 
 /*****************************************************************************/
-// Função para fazer login e autenticar um usuário existente
+// Função para fazer login e autenticar um usuário existente.
 /*****************************************************************************/
 exports.login = async (req, res) => {
     
@@ -52,32 +55,32 @@ exports.login = async (req, res) => {
     if(!email || !password) {
         return res.status(400).json({ 
             success: false,
-            message: 'Please provide both email and password.' 
+            messageEn: 'Please provide both email and password.',
+            messagePt: 'Por favor, providencie o e-mail e a senha para realizar o login.'
         });
     }
 
     try{
-        // Busca no banco de dados o usuário pelo email fornecido
         const query = 'SELECT * FROM users WHERE email = ?';
         const [result] = await databasePool.query(query, [email]);
         if (result.length === 0) {
             return res.status(401).json({ 
                 success: false,
-                message: 'Invalid email or password.'
+                messageEn: 'Invalid email or password.',
+                messagePt: 'E-mail e/ou senha inválidos.'
             });
         }
 
-        // Compara a senha fornecida com a senha armazenada no banco de dados
         const [user] = result;
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             return res.status(401).json({ 
                 success: false,
-                message: 'Invalid email or password.'
+                messageEn: 'Invalid email or password.',
+                messagePt: 'E-mail e/ou senha inválidos.'
             });
         }
 
-        // Gera um token JWT para o usuário autenticado
         const jwtToken = jwt.sign({ 
                 id: user.id, 
                 email: user.email,
@@ -86,10 +89,9 @@ exports.login = async (req, res) => {
                 role: user.role
             }, 
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '2m' }
         );
 
-        // Retorna o token JWT para o cliente
         res.cookie('token', jwtToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
@@ -97,14 +99,16 @@ exports.login = async (req, res) => {
         });
         res.status(200).json({
             success: true,
-            message: 'Login successful.'
+            messageEn: 'Login successful.',
+            messagePt: 'Login realizado com sucesso.'
         });
 
     } catch (error) {
         console.error('ERROR in authController.login():\n', error);
         return res.status(500).json({ 
             success: false,
-            message: 'Database error. Contact the administrator.',
+            messageEn: 'Internal server error. Contact the administrator.',
+            messagePt: 'Erro no servidor. Entre em contato com o administrador.'
         });
 
     }
