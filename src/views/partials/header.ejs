@@ -13,7 +13,7 @@
             <nav class="top-navbar">
                 <ul>
                     <li>
-                        <a href="#" class="search-link">
+                        <a href="#" id="searchLink" class="search-link">
                             <span class="search-text">Buscar</span> 
                             <span class="search-icon">&#x1F50D;</span>
                         </a></li>
@@ -82,4 +82,88 @@
                 <li><a href="/posts/noticias-tech">Notícias Tech</a></li>
             </ul>
         </nav>
+
+
+        <!-- Modal de Busca Global -->
+        <div class="search-modal-overlay" id="searchModal" aria-hidden="true">
+            <div class="search-modal-container">
+                <!-- Botão de Fechar o Modal -->
+                <button class="search-close-btn" id="searchCloseBtn" aria-label="Fechar busca">&times;</button>
+
+                <!-- Formulário e Campo de Pesquisa -->
+                <h3>Buscar em todo o site:</h3>
+                <form action="/search" method="GET" class="search-modal-form" id="searchModalForm">
+                    <div class="search-input-wrapper">
+                        <input 
+                            type="text" 
+                            name="q" 
+                            id="searchInput" 
+                            class="search-modal-input" 
+                            placeholder="" 
+                            autocomplete="off" 
+                            required
+                        >
+                        <button type="submit" class="search-submit-btn" aria-label="Pesquisar">
+                            <span class="search-submit-text">Buscar</span>
+                            <svg class="search-submit-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="8"></circle>
+                                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Seção das Três Colunas Dinâmicas -->
+                <div class="search-columns-grid">
+                    <!-- Coluna 1: Mais Buscados -->
+                    <div class="search-column">
+                        <h3 class="search-col-title">Mais Buscados</h3>
+                        <div class="search-pill-list">
+                            <% if (locals.trendingSearches && trendingSearches.length > 0) { %>
+                                <% trendingSearches.forEach(term => { %>
+                                    <a href="/posts/busca?q=<%= encodeURIComponent(term) %>" class="search-pill"><%= term %></a>
+                                <% }) %>
+                            <% } else { %>
+                                <span class="search-empty-text">Nenhuma busca popular no momento.</span>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 2: Principais Tags -->
+                    <div class="search-column">
+                        <h3 class="search-col-title">Tags Populares</h3>
+                        <div class="search-pill-list">
+                            <% if (locals.popularTags && popularTags.length > 0) { %>
+                                <% popularTags.forEach(tag => { %>
+                                    <a href="/posts/tag/<%= tag.slug %>" class="search-pill tag-pill">#<%= tag.name %></a>
+                                <% }) %>
+                            <% } else { %>
+                                <span class="search-empty-text">Em breve novas tags.</span>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 3: Categorias -->
+                    <div class="search-column">
+                        <h3 class="search-col-title">Categorias</h3>
+                        <ul class="search-category-list">
+                            <% if (locals.siteCategories && siteCategories.length > 0) { %>
+                                <% siteCategories.forEach(cat => { %>
+                                    <li>
+                                        <a href="/posts/<%= cat.slug %>" class="search-category-link"><%= cat.name %></a>
+                                    </li>
+                                <% }) %>
+                            <% } else { %>
+                                <li><a href="/posts/engenharia-de-software" class="search-category-link">Engenharia de Software</a></li>
+                                <li><a href="/posts/inteligencia-artificial" class="search-category-link">Inteligência Artificial</a></li>
+                                <li><a href="/posts/ciberseguranca" class="search-category-link">Cibersegurança</a></li>
+                                <li><a href="/posts/cloud-devops" class="search-category-link">Cloud & DevOps</a></li>
+                                <li><a href="/posts/noticias-tech" class="search-category-link">Notícias Tech</a></li>
+                            <% } %>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </header>

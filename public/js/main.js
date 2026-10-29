@@ -83,3 +83,51 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+
+/****************************************************************************** 
+/ Função para abrir/fechar o modal de busca.
+/
+******************************************************************************/
+document.addEventListener('DOMContentLoaded', () => {
+    const searchLink = document.getElementById('searchLink');
+    const searchModal = document.getElementById('searchModal');
+    const searchCloseBtn = document.getElementById('searchCloseBtn');
+    const searchInput = document.getElementById('searchInput');
+
+    if (searchLink && searchModal) {
+        // Abrir modal ao clicar na lupa
+        searchLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            searchModal.classList.add('active');
+            document.body.style.overflow = 'hidden'; // Impede o scroll da página de fundo
+            setTimeout(() => {
+                if (searchInput) searchInput.focus(); // Foca automaticamente no input
+            }, 100);
+        });
+
+        // Fechar modal pelo botão "X"
+        if (searchCloseBtn) {
+            searchCloseBtn.addEventListener('click', () => {
+                searchModal.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Fechar modal ao clicar fora da caixa central (no overlay translúcido)
+        searchModal.addEventListener('click', (e) => {
+            if (e.target === searchModal) {
+                searchModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+
+        // Fechar modal pressionando a tecla ESC
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && searchModal.classList.contains('active')) {
+                searchModal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        });
+    }
+});
