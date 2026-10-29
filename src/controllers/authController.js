@@ -116,3 +116,17 @@ exports.login = async (req, res) => {
 
     }
 };
+
+
+/*****************************************************************************/
+// Função para fazer logout da aplicação.
+/*****************************************************************************/
+exports.logout = async (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production', // true em produção (HTTPS)
+        sameSite: 'strict'
+    });
+    const redirectTo = req.get('referer') || '/';
+    return res.redirect(redirectTo);
+}
