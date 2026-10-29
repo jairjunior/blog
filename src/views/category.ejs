@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blog Jair Junior</title>
+    <title><%= categoryName %> | jjOutOfBounds</title>
     
     <!-- Link para o arquivo CSS estático -->
     <link rel="stylesheet" href="/css/main.css">
@@ -28,16 +28,20 @@
                 <li class="breadcrumb-item">
                     <a href="/">Início</a>
                 </li>
+
                 <li class="breadcrumb-separator">/</li>
+
                 <% if (categoryName === 'Artigos') { %>
                     <li class="breadcrumb-item">
-                        Artigos
+                        <%= categoryName %>
                     </li>
                 <% } else { %>
                     <li class="breadcrumb-item">
                         <a href="/posts">Artigos</a>
                     </li>
+
                     <li class="breadcrumb-separator">/</li>
+
                     <li class="breadcrumb-item">
                         <%= categoryName %>
                     </li>

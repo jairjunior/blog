@@ -75,10 +75,10 @@ h1 {
 }
 
 .blog-title a:hover {
-    color: #2563eb; /* Um azul vibrante (ou mude para a cor principal da sua marca) */
+    color: #2563eb;
 }
 
-/* Efeito 2: Linha decorativa animada sob o texto */
+/* Efeito: Linha decorativa animada sob o texto */
 .blog-title a::after {
     content: '';
     position: absolute;

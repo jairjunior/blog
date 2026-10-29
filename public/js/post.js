@@ -1,4 +1,5 @@
-// Variável para salvar o comentário caso o token do usuário expire
+// Variável para salvar o comentário temporariamente caso o token
+// do usuário expire e ele precise fazer login novamente.
 var savedCommentDraft = "";
 
 
