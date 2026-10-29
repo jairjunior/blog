@@ -163,7 +163,7 @@ h1 {
     color: #2563eb;
 }
 
-.top-navbar span.buscar-text {
+.top-navbar span.search-text {
     margin-right: 10px;
 }
 
@@ -211,6 +211,25 @@ h1 {
 }
 .header-top.menu-open .menu-toggle .hamburger-bar:nth-child(3) {
     transform: translateY(-9.5px) rotate(-45deg);
+}
+
+/****************************************************************************** 
+/ Animação do ícone de Lupa no Menu Superior
+******************************************************************************/
+nav.top-navbar a.search-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+nav.top-navbar a.search-link span.search-icon {
+    display: inline-block;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-origin: center center;
+}
+
+nav.top-navbar a.search-link:hover span.search-icon {
+    transform: scale(1.35);
 }
 
 
@@ -628,7 +647,7 @@ h1 {
         margin: 0;
     }
 
-    .top-navbar span.buscar-text {
+    .top-navbar span.search-text {
         display: none;
     }
 
