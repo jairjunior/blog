@@ -154,6 +154,12 @@ h1 {
         gap: 20px;
     }
 }
+@media (min-width: 950px) { 
+    .top-menu-button-wrapper {
+        order: 3;
+        gap: 2rem;
+    }
+}
 
 /*-----------------------------------------------------------------------------
 / BOTÃO DA LUPA no topo da página (abre modal de pesquisa)
@@ -194,6 +200,13 @@ h1 {
         font-size: 1.2rem;
     }
 }
+@media (min-width: 950px) { 
+    #topSearchButton {
+        width: 45px;
+        height: 45px;
+        font-size: 1.4rem;
+    }
+}
 
 /*-----------------------------------------------------------------------------
 / BOTÃO DE LOGIN no topo da página
@@ -208,12 +221,13 @@ h1 {
     color: black;
     padding: 8px;
     display: flex;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
     cursor: pointer;
     font-size: 1.3rem;
     position: relative;
-    align-self: flex-end;
+    text-decoration: none;
 }
 
 #topLoginButton span {
@@ -243,6 +257,39 @@ h1 {
         height: 20px;
     }
 }
+@media (min-width: 950px) { 
+    #topLoginButton {
+        width: 45px;
+        height: 45px;
+    }
+    #loginIcon {
+        width: 23px;
+        height: 23px;
+    }
+}
+@media (min-width: 1200px) { 
+    #topLoginButton {
+        background-color: #2563eb;
+        color: rgba(255, 255, 255, 0.774);
+        width: 115px;
+        height: 100%;
+        gap: 10px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        border: 1px solid transparent;
+        box-shadow: 0 6px 20px rgba(37, 100, 235, 0.281);
+        transition: all 0.25s ease;
+    }
+    #topLoginButton:hover {
+        border-color: #6c97f3;
+        background-color: #235fe0;
+        color: white;
+    }
+    #topLoginButton span {
+        display: inline;   
+    }
+}
 
 
 /*-----------------------------------------------------------------------------
@@ -258,7 +305,7 @@ h1 {
     justify-content: space-between;
     align-items: center;
     width: 40px;
-    height: 32px;
+    height: 31px;
     z-index: 1001; /* Fica acima do menu lateral */
 }
 
@@ -271,10 +318,6 @@ h1 {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.hamburger-btn .hamburger-bar:nth-child(2) {
-    transform: translateY(-0.4px);
-}
-
 /*---------------------------------------------------------------------------*/
 /* Classe para JS abrir o menu lateral */
 .header-top.menu-open .top-navbar {
@@ -284,7 +327,7 @@ h1 {
 /*---------------------------------------------------------------------------*/
 /* Animação do burger button virando um "X" */
 .header-top.menu-open .hamburger-btn .hamburger-bar:nth-child(1) {
-    transform: translateY(7.5px) rotate(45deg);
+    transform: translateY(6.8px) rotate(45deg);
 }
 .header-top.menu-open .hamburger-btn .hamburger-bar:nth-child(2) {
     opacity: 0;
@@ -298,19 +341,18 @@ h1 {
 .hamburger-btn:hover {
     animation: hamburgerBounce 0.4s ease;
 }
-
 @keyframes hamburgerBounce {
     0%, 100% {
         transform: translateX(0) rotate(0deg);
     }
     20% {
-        transform: translateX(-3px) rotate(-4deg);
+        transform: translateX(-3px) rotate(-10deg);
     }
     40% {
-        transform: translateX(3px) rotate(4deg);
+        transform: translateX(3px) rotate(6deg);
     }
     60% {
-        transform: translateX(-2px) rotate(-2deg);
+        transform: translateX(-2px) rotate(-3deg);
     }
     80% {
         transform: translateX(2px) rotate(2deg);
@@ -322,26 +364,13 @@ h1 {
 @media (min-width: 576px) { 
     .hamburger-btn {
         width: 45px;
-        height: 35px;
+        height: 34px;
     }
     .hamburger-bar {
         height: 4px;
     }
-    .hamburger-btn .hamburger-bar:nth-child(2) {
-        transform: translateY(0.5px);
-    }
     .header-top.menu-open .hamburger-btn .hamburger-bar:nth-child(1) {
-        transform: translateY(9.5px) rotate(45deg);
-    }
-}
-@media (min-width: 768px) { 
-    .hamburger-btn .hamburger-bar:nth-child(2) {
-        transform: translateY(-0.4px);
-    }
-}
-@media (min-width: 820px) { 
-    .hamburger-btn .hamburger-bar:nth-child(2) {
-        transform: translateY(0.4px);
+        transform: translateY(8.5px) rotate(45deg);
     }
 }
 /* Neste ponto o burger button desaparece */
@@ -420,23 +449,22 @@ h1 {
         padding: 80px 30px 30px 30px;
     }
 }
-
 @media (min-width: 768px) { 
     .top-navbar {
         width: 60vw;
     }
 }
-
 @media (min-width: 820px) { 
     .top-navbar {
         width: 52vw;
     }
 }
-
 /* A partir daqui, o menu estará sempre visível no topo da página */
 @media (min-width: 950px) {
     .top-navbar {
         position: static;
+        margin-left: auto;
+        margin-right: 3rem;
         width: auto;
         height: auto;
         background-color: transparent;
@@ -444,27 +472,24 @@ h1 {
         padding: 0;
         transition: none;
     }
-
     .top-navbar ul {
         flex-direction: row;
+        justify-content: center;
         align-items: center;
         gap: 29px;
+        transform: translateY(3px);
     }
-
     .top-navbar a {
         font-size: 1.1rem;
         font-weight: 500;
     }
-
 }
-
 @media (min-width: 1200px) {
     .top-navbar ul {
         gap: 45px;
     }
-
     .top-navbar a {
-        font-size: 1.15rem;
+        font-size: 1.13rem;
     }
 }
 
