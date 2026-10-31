@@ -3,6 +3,23 @@ const commentModel = require('../models/commentModel');
 const categoryModel = require('../models/categoryModel');
 
 
+
+/*****************************************************************************
+/ Função para tratar requisições GET no caminho '/register'
+/
+/ Pega o parâmetro 'redirectTo' que é passado na URL como uma query string.
+/ Esse parâmetro vai dizer para onde o usuário deve ser redirecionado após
+/ efetuar o cadastro no site.
+/ Esse caminho é exatamente de onde o usuário veio e é para onde ele deve 
+/ voltar.
+/*****************************************************************************/
+const renderRegisterPage = async (req, res) => {
+    const redirectTo = req.query.redirect || '/';
+    res.render('register', { redirectTo });
+}
+
+
+
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/login'
 /
@@ -144,6 +161,7 @@ const renderPostBySlugs = async (req, res) => {
 / Exporta as funções para serem utilizadas pela aplicação.
 /*****************************************************************************/
 module.exports = {
+    renderRegisterPage,
     renderLoginPage,
     renderHomePage,
     renderPostsPage,

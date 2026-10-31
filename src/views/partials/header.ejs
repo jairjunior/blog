@@ -2,86 +2,117 @@
         <div class="container header-top">
             <h1 class="blog-title"><a href="/">jjOutOfBounds</a></h1>
 
-            <!-- Botão Hamburger (Visível apenas em mobile) -->
-            <button class="menu-toggle" aria-label="Abrir Menu" aria-expanded="false">
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-                <span class="hamburger-bar"></span>
-            </button>
+            <div class="top-menu-button-wrapper">
+                <!-- Botão de Login  -->
+                 <a id="topLoginButton" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar">
+                    <span>Entrar</span>
+                    <svg id="loginIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                        <polyline points="10 17 15 12 10 7"></polyline>
+                        <line x1="15" y1="12" x2="3" y2="12"></line>
+                    </svg>
+                </a>
 
-            <!-- Menu Superior -->
+                <!-- Botão da Lupa  -->
+                <button id="topSearchButton" title="Buscar">
+                    <span id="searchIcon">&#x1F50D;</span>
+                </button>
+    
+                <!-- Botão Hamburger (Visível apenas em mobile) -->
+                <button class="hamburger-btn" aria-label="Abrir Menu" aria-expanded="false" title="Menu principal">
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                    <span class="hamburger-bar"></span>
+                </button>
+            </div>
+
+
+            <!-- Menu Principal -->
             <nav class="top-navbar">
                 <ul>
                     <li>
-                        <a href="#" id="searchLink" class="search-link">
-                            <span class="search-text">Buscar</span> 
-                            <span class="search-icon">&#x1F50D;</span>
-                        </a></li>
-                    <li><a href="/posts">Artigos</a></li>
-                    <li><a href="#">Sobre</a></li>
-                    <li><a href="#">Contato</a></li>
-                    <li><a href="#">Newsletter</a></li>
-                    <li>
-                        <% if (user) { %>
-                            <!-- Se o usuário ESTIVER logado: Foto de perfil redonda + Menu Dropdown -->
-                            <div class="user-profile-menu" id="userMenuContainer">
-                                <button class="profile-toggle-btn" id="profileToggleBtn" aria-label="Menu do usuário">
-                                    <% if (user.avatarUrl) { %>
-                                        <img src="<%= user.avatarUrl %>" alt="Foto de perfil para <%= user.first_name %>" class="profile-avatar">
-                                    <% } else { %>
-                                        <div class="profile-avatar-fallback">
-                                            <%= user.first_name ? user.first_name.charAt(0).toUpperCase() : 'U' %>
-                                        </div>
-                                    <% } %>
-                                </button>
-
-                                <!-- Menu Dropdown -->
-                                <div class="profile-dropdown" id="profileDropdown">
-                                    <div class="dropdown-header-email">
-                                        <strong><%= user.email %></strong>
-                                    </div>
-
-                                    <div class="dropdown-divider"></div>
-
-                                    <a href="/conta/informacoes" class="dropdown-item">
-                                        <span class="dropdown-icon">⚙️</span>
-                                        <span>Informações da conta</span>
-                                    </a>
-
-                                    <div class="dropdown-divider"></div>
-
-                                    <a href="/api/auth/logout" class="dropdown-item logout-item">
-                                        <span class="dropdown-icon">🚪</span>
-                                        <span>Sair</span>
-                                    </a>
-                                </div>
-                            </div>
-                        <% } else { %>
-                            <!-- Se NÃO estiver logado: Botão de Login com redirect -->
-                            <a href="/login?redirect=<%= encodeURIComponent(currentUrl || '/') %>" class="btn-login">
-                                <span>Entrar</span>
-                                <svg class="login-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                                    <polyline points="12 5 19 12 12 19"></polyline>
-                                </svg>
-                            </a>
-                        <% } %>
+                        <a href="/posts" class="top-navbar-link">
+                            <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
+                            <span>Artigos</span>
+                        </a>
                     </li>
+                    <li>
+                        <a href="#" class="top-navbar-link">
+                            <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"></circle>
+                                <line x1="12" y1="16" x2="12" y2="12"></line>
+                                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+                            </svg>
+                            <span>Sobre</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="top-navbar-link">
+                            <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                <polyline points="22,6 12,13 2,6"></polyline>
+                            </svg>
+                            <span>Contato</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="top-navbar-link">
+                            <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M4 11a9 9 0 0 1 9 9"></path>
+                                <path d="M4 4a16 16 0 0 1 16 16"></path>
+                                <circle cx="5" cy="19" r="1"></circle>
+                            </svg>
+                            <span>Newsletter</span>
+                        </a>
+                    </li>
+                    <!-- Botão de Criar Conta -->
+                    <li class="mobile-menu-item">
+                        <a class="btn-mobile-signup" href="/register?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Criar Conta">
+                            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="8.5" cy="7" r="4"></circle>
+                                <line x1="20" y1="8" x2="20" y2="14"></line>
+                                <line x1="23" y1="11" x2="17" y2="11"></line>
+                            </svg>
+                            Criar Conta
+                        </a>
+                    </li>
+                    <!-- Botão de Login -->
+                    <li class="mobile-menu-item">
+                        <a class="btn-mobile-login" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar">
+                            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                <polyline points="10 17 15 12 10 7"></polyline>
+                                <line x1="15" y1="12" x2="3" y2="12"></line>
+                            </svg>
+                            Entrar
+                        </a>
+                    </li>
+                    <!-- Barra de pesquisa -->
+                    <li class="mobile-menu-item search-menu-item">
+                        <span>ou então:</span>
+                        <form action="/search" method="GET" class="search-menu-form" id="menuSearchForm">
+                            <div class="search-menu-wrapper">
+                                <input 
+                                    type="text" 
+                                    name="q" 
+                                    id="menuSearchInput" 
+                                    class="search-menu-input" 
+                                    placeholder="Pesquise aqui" 
+                                    autocomplete="off" 
+                                    aria-placeholder="Buscar"
+                                    required
+                                >
+                            </div>
+                        </form>
+                    </li>
+
                 </ul>
             </nav>
         </div>
-
-        <!-- Menu Horizontal de Categorias -->
-        <nav class="category-navbar container">
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/posts/engenharia-de-software">Engenharia de Software</a></li>
-                <li><a href="/posts/inteligencia-artificial">Inteligência Artificial</a></li>
-                <li><a href="/posts/ciberseguranca">Cibersegurança</a></li>
-                <li><a href="/posts/cloud-devops">Cloud & DevOps</a></li>
-                <li><a href="/posts/noticias-tech">Notícias Tech</a></li>
-            </ul>
-        </nav>
 
 
         <!-- Modal de Busca Global -->
@@ -97,7 +128,7 @@
                         <input 
                             type="text" 
                             name="q" 
-                            id="searchInput" 
+                            id="searchModalInput" 
                             class="search-modal-input" 
                             placeholder="" 
                             autocomplete="off" 
@@ -165,5 +196,18 @@
                 </div>
             </div>
         </div>
+
+
+        <!-- Menu Horizontal de Categorias -->
+        <nav class="category-navbar container">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/posts/engenharia-de-software">Engenharia de Software</a></li>
+                <li><a href="/posts/inteligencia-artificial">Inteligência Artificial</a></li>
+                <li><a href="/posts/ciberseguranca">Cibersegurança</a></li>
+                <li><a href="/posts/cloud-devops">Cloud & DevOps</a></li>
+                <li><a href="/posts/noticias-tech">Notícias Tech</a></li>
+            </ul>
+        </nav>
 
     </header>

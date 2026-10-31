@@ -173,9 +173,6 @@ div.login-box span {
 / Telas maiores 
 ******************************************************************************/
 @media (min-width: 768px) { 
-    .title-box {
-        margin-bottom: 0;
-    }
     h1.blog-title {
         font-size: clamp(3.3rem, 3vw, 4.5rem);
     }

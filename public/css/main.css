@@ -1,6 +1,8 @@
-/****************************************************************************** 
-/ Reset de variáveis
-******************************************************************************/
+/******************************************************************************
+/******************************************************************************
+/ CONFIGURAÇÕES INICIAIS (RESET)
+/******************************************************************************
+/*****************************************************************************/
 :root {
     /* O tamanho da fonte cresce fluidamente entre o mobile e o desktop/TV, mas tem travas */
     --font-title: clamp(1.5rem, 2vw + 1rem, 2.5rem); 
@@ -27,11 +29,6 @@ h1 {
     font-size: var(--font-title);
 }
 
-
-
-/****************************************************************************** 
-/ Container padrão
-******************************************************************************/
 .container {
     width: 100%;
     max-width: 1500px;
@@ -41,9 +38,11 @@ h1 {
 
 
 
-/****************************************************************************** 
-/ Título do Blog
-******************************************************************************/
+/******************************************************************************
+/******************************************************************************
+/ TÍTULO DO BLOG
+/******************************************************************************
+/*****************************************************************************/
 .site-header {
     background-color: #ffffff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.05);
@@ -54,13 +53,13 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 30px;
+    padding: 20px 15px;
     position: relative;
 }
 
 .blog-title {
     font-family: 'Outfit', sans-serif;
-    font-size: clamp(2rem, 3vw, 2.9rem);
+    font-size: clamp(1.4rem, 3vw, 2.9rem);
     font-weight: 800;
     letter-spacing: -0.03em;
     margin: 0;
@@ -94,26 +93,139 @@ h1 {
     transition: transform 0.35s cubic-bezier(0.65, 0.05, 0.36, 1);
 }
 
-/* Quando passa o mouse, a linha desliza elegantemente da esquerda para a direita */
+/* Quando passa o mouse, a linha desliza da esquerda para a direita */
 .blog-title a:hover::after {
     transform: scaleX(1);
     transform-origin: left;
 }
 
 
-/****************************************************************************** 
-/ Menu superior
-******************************************************************************/
-.menu-toggle {
+/*---------------------------------------------------------------------------*/
+/* Ajuste para telas maiores */
+@media (min-width: 412px) { 
+    .blog-title {  
+        font-size: clamp(1.6rem, 3vw, 2.9rem);
+    }    
+}
+
+@media (min-width: 576px) { 
+    .blog-title {  
+        font-size: clamp(1.8rem, 3vw, 2.9rem);
+    }    
+}
+
+@media (min-width: 768px) { 
+    .blog-title {  
+        font-size: clamp(2rem, 3vw, 2.9rem);
+    } 
+}
+
+@media (min-width: 820px) { 
+    .blog-title {  
+        font-size: clamp(2.2rem, 3vw, 2.9rem);
+    } 
+}
+
+@media (min-width: 950px) { 
+    .blog-title {  
+        font-size: clamp(1.8rem, 3vw, 2.9rem);
+    } 
+}
+
+
+/******************************************************************************
+/******************************************************************************
+/ MENU SUPERIOR
+/******************************************************************************
+/*****************************************************************************/
+.top-menu-button-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 17px;
+}
+
+/*-----------------------------------------------------------------------------
+/ BOTÃO DE LOGIN no topo da página
+/----------------------------------------------------------------------------*/
+#topLoginButton {
+    background-color: #1f79f821;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    justify-content: center;
+    color: black;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.3rem;
+    position: relative;
+    align-self: flex-end;
+}
+
+#topLoginButton span {
+    display: none;
+}
+
+#loginIcon {
+    width: 20px;
+    height: 20px;
+    transition: transform 0.2s ease;
+    transform: translateX(-1.5px);
+}
+
+#topLoginButton:hover #loginIcon {
+    transform: translateX(4px);
+}
+
+
+/*-----------------------------------------------------------------------------
+/ BOTÃO DE LUPA no topo da página (Buscar/Pesquisar)
+/----------------------------------------------------------------------------*/
+#topSearchButton {
+    background-color: #1f79f821;
+    width: 45px;
+    height: 45px;
+    border: none;
+    border-radius: 50%;
+    justify-content: center;
+    color: black;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1.3rem;
+    position: relative;
+}
+
+#searchIcon {
+    display: inline-block;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-origin: center center;
+}
+
+#searchIcon:hover {
+    transform: scale(1.2);
+}
+
+/*-----------------------------------------------------------------------------
+/ BURGER BUTTON para abrir menu superior
+/----------------------------------------------------------------------------*/
+.hamburger-btn {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    padding: 8px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 30px;
-    height: 22px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    padding: 0;
+    width: 38px;
+    height: 30px;
     z-index: 1001; /* Fica acima do menu lateral */
 }
 
@@ -126,35 +238,92 @@ h1 {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+/*---------------------------------------------------------------------------*/
+/* Classe para JS abrir o menu lateral */
+.header-top.menu-open .top-navbar {
+    right: 0;
+}
+
+/*---------------------------------------------------------------------------*/
+/* Animação do burger button virando um "X" */
+.header-top.menu-open .hamburger-btn .hamburger-bar:nth-child(1) {
+    transform: translateY(5.4px) rotate(45deg);
+}
+.header-top.menu-open .hamburger-btn .hamburger-bar:nth-child(2) {
+    opacity: 0;
+}
+.header-top.menu-open .hamburger-btn .hamburger-bar:nth-child(3) {
+    transform: translateY(-5.4px) rotate(-45deg);
+}
+
+/*---------------------------------------------------------------------------*/
+/* Animação de tremores no burger button */
+/* Aciona a animação de tremor quando o mouse passa por cima */
+.hamburger-btn:hover {
+    animation: hamburgerBounce 0.4s ease;
+}
+
+/* Definição dos quadros da animação vibrante */
+@keyframes hamburgerBounce {
+    0%, 100% {
+        transform: translateX(0) rotate(0deg);
+    }
+    20% {
+        transform: translateX(-3px) rotate(-4deg);
+    }
+    40% {
+        transform: translateX(3px) rotate(4deg);
+    }
+    60% {
+        transform: translateX(-2px) rotate(-2deg);
+    }
+    80% {
+        transform: translateX(2px) rotate(2deg);
+    }
+}
+
+@media (min-width: 950px) { 
+    .hamburger-btn {
+        display: none;
+    }
+}
+
+/*-----------------------------------------------------------------------------
+/ MENU PRINCIPAL
+/ Telas pequenas: Menu lateral (abre com o burguer)
+/ Telas grandes: Barra de navegação superior
+/----------------------------------------------------------------------------*/
 .top-navbar {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 280px;
+    width: 80vw;
     height: 100vh;
     background-color: #ffffff;
     box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
-    padding: 80px 30px 30px 30px;
+    padding: 80px 20px 30px 20px;
     transition: right 0.35s cubic-bezier(0.77, 0, 0.175, 1);
     z-index: 1000;
 }
 
 .top-navbar ul {
     list-style: none;
-    padding: 0;
-    margin: 0;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: flex-start;
-    gap: 20px;
+    padding: 0;
+    margin: 0;
+    gap: 1rem;
+    width: 100%;
+    height: 100%;
 }
 
 .top-navbar a {
     text-decoration: none;
     color: #111827;
     font-size: 1.1rem;
-    font-weight: 600;
+    font-weight: 500;
     display: block;
     transition: color 0.2s;
 }
@@ -163,10 +332,203 @@ h1 {
     color: #2563eb;
 }
 
-.top-navbar span.search-text {
-    margin-right: 10px;
+.top-navbar a.top-navbar-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
 }
 
+.top-navbar svg.top-navbar-link-icon {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    transition: transform 0.2s ease;
+}
+
+.top-navbar a:hover .top-navbar-link-icon {
+    transform: scale(1.1);
+}
+
+/*-----------------------------------*/
+/* Menu principal */
+/* Ajustes para Telas Grandes */
+@media (min-width: 576px) { 
+    .top-navbar {
+        width: 70vw;
+        padding: 80px 30px 30px 30px;
+    }
+}
+
+@media (min-width: 768px) { 
+    .top-navbar {
+        width: 60vw;
+    }
+}
+
+@media (min-width: 820px) { 
+    .top-navbar {
+        width: 52vw;
+    }
+}
+
+@media (min-width: 950px) {
+    .top-navbar {
+        position: static;
+        width: auto;
+        height: auto;
+        background-color: transparent;
+        box-shadow: none;
+        padding: 0;
+        transition: none;
+    }
+
+    .top-navbar ul {
+        flex-direction: row;
+        align-items: center;
+        gap: 29px;
+    }
+
+    .top-navbar a {
+        font-size: 1.1rem;
+        font-weight: 500;
+    }
+
+    .mobile-menu-item {
+        display: none;
+    }
+
+}
+
+@media (min-width: 1200px) {
+    .top-navbar ul {
+        gap: 45px;
+    }
+
+    .top-navbar a {
+        font-size: 1.15rem;
+    }
+}
+
+/*-----------------------------------------------------------------------------
+/ BOTÕES DE CRIAR CONTA E LOGIN DO MENU
+/----------------------------------------------------------------------------*/
+.mobile-menu-item {
+    width: 100%;
+    list-style: none;
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.mobile-menu-item a {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+/* 1. Botão de Cadastro */
+.mobile-menu-item .btn-mobile-signup {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.mobile-menu-item .btn-mobile-signup:hover {
+    background-color: #1d4ed8;
+    color: rgba(255, 255, 255, 0.822);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
+}
+
+/* 2. Botão de Login */
+.mobile-menu-item .btn-mobile-login {
+    background-color: transparent;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+.mobile-menu-item .btn-mobile-login:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    border-color: #94a3b8;
+}
+
+.mobile-menu-item .btn-icon {
+    width: 18px;
+    height: 18px;
+    stroke: currentColor;
+    transition: transform 0.2s ease;
+}
+
+.mobile-menu-item .btn-mobile-signup:hover .btn-icon {
+    transform: scale(1.1);
+}
+
+.mobile-menu-item .btn-mobile-login:hover .btn-icon {
+    transform: translateX(2px);
+}
+
+
+/*-----------------------------------------------------------------------------
+/ CAMPO DE BUSCA DENTRO DO MENU LATERAL
+/----------------------------------------------------------------------------*/
+.search-menu-item {
+    margin-top: auto;
+}
+
+.mobile-menu-item span {
+    margin-left: 0.3rem;
+    margin-bottom: 0.4rem;
+}
+
+.search-menu-form input::placeholder {
+    color: #00000038;
+}
+
+.search-menu-form .search-menu-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 5px;
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 6px 10px 6px 6px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-menu-form .search-menu-wrapper:focus-within {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
+    background: #ffffff;
+}
+
+.search-menu-form .search-menu-input{
+    width: clamp(80%, 5vw, 90%);
+    flex-grow: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 14px;
+    font-size: 1.1rem;
+    color: #0f172a;
+    outline: none;
+}
+
+
+
+
+
+/******************************************************************************
+/ Botão de login da barra de navegação superior
+/*****************************************************************************/
 .top-navbar a.btn-login {
     display: inline-flex;
     align-items: center;
@@ -178,6 +540,7 @@ h1 {
     margin-top: 10px;
     border-radius: 8px;
     font-weight: 600;
+    font-size: 1rem;
     cursor: pointer;
     transition: background-color 0.2s ease, transform 0.2s ease;
 }
@@ -197,45 +560,21 @@ h1 {
     transform: translateX(4px);
 }
 
-/* Classe ativada pelo JS para abrir o menu lateral */
-.header-top.menu-open .top-navbar {
-    right: 0; /* Desliza para dentro da tela */
-}
 
-/* Animação do botão hamburger virando um "X" quando aberto */
-.header-top.menu-open .menu-toggle .hamburger-bar:nth-child(1) {
-    transform: translateY(9.5px) rotate(45deg);
-}
-.header-top.menu-open .menu-toggle .hamburger-bar:nth-child(2) {
-    opacity: 0;
-}
-.header-top.menu-open .menu-toggle .hamburger-bar:nth-child(3) {
-    transform: translateY(-9.5px) rotate(-45deg);
-}
 
-/****************************************************************************** 
-/ Animação do ícone de Lupa no Menu Superior
-******************************************************************************/
-nav.top-navbar a.search-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-}
-
-nav.top-navbar a.search-link span.search-icon {
-    display: inline-block;
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-origin: center center;
-}
-
-nav.top-navbar a.search-link:hover span.search-icon {
-    transform: scale(1.35);
+/*-------------------------------------------------*/
+@media (min-width: 950px) {
+    .top-navbar a.btn-login {
+        margin: 0;
+    }
 }
 
 
-/****************************************************************************** 
-/ Modal de Busca Fullscreen
-******************************************************************************/
+/******************************************************************************
+/******************************************************************************
+/ MODAL DE PESQUISA (fullscreen)
+/******************************************************************************
+/*****************************************************************************/
 .search-modal-overlay {
     position: fixed;
     top: 0;
@@ -248,7 +587,7 @@ nav.top-navbar a.search-link:hover span.search-icon {
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    padding: 40px 20px;
+    padding: 40px 15px;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
@@ -266,7 +605,7 @@ nav.top-navbar a.search-link:hover span.search-icon {
     max-width: 1100px;
     background: #ffffff;
     border-radius: 16px;
-    padding: 40px 20px 30px;
+    padding: 40px 18px 30px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
     position: relative;
     transform: translateY(-20px);
@@ -455,7 +794,9 @@ nav.top-navbar a.search-link:hover span.search-icon {
     font-style: italic;
 }
 
-/* Ajustes para Telas Grandes (Desktop): Colunas Lado a Lado com Linha Vertical */
+
+/*-------------------------------------------------*/
+/* Ajustes para Telas Grandes */
 @media (min-width: 950px) {
     .search-modal-container {
         padding: 60px 40px 40px;
@@ -495,15 +836,21 @@ nav.top-navbar a.search-link:hover span.search-icon {
 }
 
 
-/****************************************************************************** 
-/ Menu do Usuário Logado & Dropdown (Perfil)
-******************************************************************************/
+/******************************************************************************
+/******************************************************************************
+/ MENU DO USUÁRIO LOGADO + DROPDOWN
+/******************************************************************************
+/*****************************************************************************/
 .user-profile-menu {
     position: relative;
     display: inline-block;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .profile-toggle-btn {
+    width: 100%;
     background: none;
     border: none;
     padding: 0;
@@ -520,15 +867,13 @@ nav.top-navbar a.search-link:hover span.search-icon {
 }
 
 .profile-avatar {
-    width: 40px;
-    height: 40px;
     border-radius: 50%;
     object-fit: cover;
 }
 
 .profile-avatar-fallback {
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     background: linear-gradient(135deg, #2563eb, #1d4ed8);
     color: #ffffff;
@@ -540,10 +885,10 @@ nav.top-navbar a.search-link:hover span.search-icon {
 }
 
 .profile-dropdown {
-    position: absolute;
-    right: 0;
+    /* position: absolute; */
+    right: -135px;
     top: calc(100% + 12px);
-    width: 240px;
+    width: 100%;
     background-color: #ffffff;
     border-radius: 12px;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
@@ -562,15 +907,24 @@ nav.top-navbar a.search-link:hover span.search-icon {
     transform: translateY(0);
 }
 
-.dropdown-header-email {
+.dropdown-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
     padding: 10px 16px;
-    font-size: 0.85rem;
-    color: #4b5563;
-    word-break: break-all;
 }
 
-.dropdown-header-email strong {
+.dropdown-header-name {
+    font-size: 1rem;
     color: #111827;
+    font-weight: 600;
+}
+
+.dropdown-header-email {
+    font-size: 0.9rem;
+    color: #4b5563c5;
+    word-break: break-all;
 }
 
 .dropdown-divider {
@@ -606,9 +960,32 @@ nav.top-navbar a.search-link:hover span.search-icon {
 }
 
 
-/****************************************************************************** 
-/ Menu de Categorias
-******************************************************************************/
+/*-------------------------------------------------*/
+@media (min-width: 950px) {
+    .profile-dropdown {
+        position: absolute;
+        right: 0;
+        top: calc(100% + 12px);
+        width: 300px;
+        background-color: #fafafa;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e2e8f0;
+        padding: 8px 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(-8px);
+        transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 1000;
+    }
+}
+
+
+/******************************************************************************
+/******************************************************************************
+/ MENU DE CATEGORIAS
+/******************************************************************************
+/*****************************************************************************/
 .category-navbar {
     border-top: 1px solid #e2e8f0;
     background-color: #ffffff;
@@ -639,22 +1016,6 @@ nav.top-navbar a.search-link:hover span.search-icon {
     font-weight: 500;
 }
 
-/* .category-navbar li.active {
-    background-color: #1e293b;
-    color: #ffffff;
-    padding: 6px 14px;
-    border-radius: 6px;
-    font-weight: 500;
-} */
-
-/* .category-navbar li.active {
-    background-color: transparent;
-    color: #0f172a;
-    font-weight: 600;
-    border-bottom: 3px solid #3b82f6;
-    padding-bottom: 4px;
-} */
-
 .category-navbar a {
     text-decoration: none;
     color: #4b5563;
@@ -673,9 +1034,11 @@ nav.top-navbar a.search-link:hover span.search-icon {
 }
 
 
-/****************************************************************************** 
-/ Breadcrumb
-******************************************************************************/
+/******************************************************************************
+/******************************************************************************
+/ BREADCRUMB
+/******************************************************************************
+/*****************************************************************************/
 .breadcrumb {
     margin-bottom: 20px;
     font-size: 0.9rem;
@@ -718,9 +1081,11 @@ nav.top-navbar a.search-link:hover span.search-icon {
 
 
 
-/****************************************************************************** 
-/ Conteúdo principal (Main)
-******************************************************************************/
+/******************************************************************************
+/******************************************************************************
+/ CONTEÚDO PRINCIPAL (MAIN)
+/******************************************************************************
+/*****************************************************************************/
 .main-content {
     flex: 1;
     padding-bottom: 50px;
@@ -822,9 +1187,11 @@ nav.top-navbar a.search-link:hover span.search-icon {
 }
 
 
-/****************************************************************************** 
-/ Rodapé
-******************************************************************************/
+/******************************************************************************
+/******************************************************************************
+/ RODAPÉ (FOOTER)
+/******************************************************************************
+/*****************************************************************************/
 .site-footer {
     background-color: #1f2937;
     color: #9ca3af;
@@ -860,6 +1227,10 @@ nav.top-navbar a.search-link:hover span.search-icon {
 
 
 
+
+
+
+
 /****************************************************************************** 
 / Tablets 
 ******************************************************************************/
@@ -879,55 +1250,10 @@ nav.top-navbar a.search-link:hover span.search-icon {
 }
 
 
-@media (min-width: 950px) { 
-    .menu-toggle {
-        display: none;
-    }
-
-    .top-navbar {
-        position: static;
-        width: auto;
-        height: auto;
-        background-color: transparent;
-        box-shadow: none;
-        padding: 0;
-        transition: none;
-    }
-
-    .top-navbar ul {
-        flex-direction: row;
-        align-items: center;
-        gap: 40px;
-    }
-
-    .top-navbar a {
-        font-size: 1.15rem;
-        font-weight: 500;
-    }
-
-    .top-navbar a.btn-login {
-        margin: 0;
-    }
-
-    .top-navbar span.search-text {
-        display: none;
-    }
-
-}
-
-
 /******************************************************************** 
 / Desktops e TVs 
 *********************************************************************/
 @media (min-width: 1200px) {
-    .top-navbar ul {
-        gap: 45px;
-    }
-
-    .top-navbar a {
-        font-size: 1.2rem;
-    }
-    
     .posts-grid {
         grid-template-columns: repeat(3, 1fr);
         gap: 40px 3%;

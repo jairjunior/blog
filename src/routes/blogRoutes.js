@@ -5,6 +5,7 @@ const commentsController = require('../controllers/commentsController');
 
 
 router.get('/', blogController.renderHomePage);
+router.get('/register', blogController.renderRegisterPage)
 router.get('/login', blogController.renderLoginPage)
 router.get('/posts', blogController.renderPostsPage);
 router.get('/posts/:categorySlug', blogController.renderCategoryPage);

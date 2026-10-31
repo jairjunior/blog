@@ -1,30 +1,57 @@
 /****************************************************************************** 
-/ Função para colapsar/mostrar o menu superior do site.
+/ Função para mostrar/colapsar o menu superior do site.
 ******************************************************************************/
 document.addEventListener("DOMContentLoaded", () => {
     const headerTop = document.querySelector(".header-top");
-    const menuToggle = document.querySelector(".menu-toggle");
+    const burgerButton = document.querySelector(".hamburger-btn");
 
-    if (menuToggle && headerTop) {
-        menuToggle.addEventListener("click", () => {
-            // Alterna a classe 'menu-open' no container principal do header
-            headerTop.classList.toggle("menu-open");
-            
-            // Atualiza o atributo de acessibilidade
-            const isExpanded = headerTop.classList.contains("menu-open");
-            menuToggle.setAttribute("aria-expanded", isExpanded);
+    if (burgerButton && headerTop) {
+        const closeMenu = () => {
+            headerTop.classList.remove("menu-open");
+            burgerButton.setAttribute("aria-expanded", "false");
+        };
+
+        // Alterna o menu ao clicar no botão hambúrguer
+        burgerButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            const isOpen = headerTop.classList.toggle("menu-open");
+            burgerButton.setAttribute("aria-expanded", isOpen);
         });
 
-        // Opcional: Fecha o menu automaticamente ao clicar em qualquer link dele (bom para mobile)
-        const navLinks = document.querySelectorAll(".top-navbar a");
-        navLinks.forEach(link => {
-            link.addEventListener("click", () => {
-                headerTop.classList.remove("menu-open");
-                menuToggle.setAttribute("aria-expanded", "false");
-            });
+        // Fechar ao clicar fora do menu
+        document.addEventListener("click", (event) => {
+            const isMenuOpen = headerTop.classList.contains("menu-open");
+            if (isMenuOpen && !headerTop.contains(event.target) && !burgerButton.contains(event.target)) {
+                closeMenu();
+            }
+        });
+
+        // Fechar ao apertar a tecla ESC
+        document.addEventListener("keydown", (event) => {
+            if (event.key === "Escape" && headerTop.classList.contains("menu-open")) {
+                closeMenu();
+                burgerButton.focus();
+            }
         });
     }
 });
+
+
+/****************************************************************************** 
+/ Função para capturar os clicks nos botões de "Criar Conta" e "Entrar"
+/ Esses botões estão dentro do menu principal que aparece em dispositivos móveis
+******************************************************************************/
+document.addEventListener('DOMContentLoaded', () => {
+    const authButtons = document.querySelectorAll('#buttonMenuRegister, #buttonMenuLogin');
+    authButtons.forEach( button => {
+        button.addEventListener('click', () => {
+            const targetUrl = button.getAttribute('data-redirect');
+            const currentUrl = window.location.href;
+            window.location.href = `${targetUrl}?redirectTo=${encodeURIComponent(currentUrl)}`;
+        });
+    });
+});
+
 
 
 /****************************************************************************** 
@@ -87,46 +114,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /****************************************************************************** 
 / Função para abrir/fechar o modal de busca.
-/
 ******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
-    const searchLink = document.getElementById('searchLink');
+    const topSearchButton = document.getElementById('topSearchButton');
     const searchModal = document.getElementById('searchModal');
     const searchCloseBtn = document.getElementById('searchCloseBtn');
     const searchInput = document.getElementById('searchInput');
 
-    if (searchLink && searchModal) {
-        // Abrir modal ao clicar na lupa
-        searchLink.addEventListener('click', (e) => {
+    if (topSearchButton && searchModal) {
+        // Abrir modal ao clicar no ícone da lupa
+        topSearchButton.addEventListener('click', (e) => {
             e.preventDefault();
             searchModal.classList.add('active');
+            searchModal.setAttribute('aria-hidden', false);
             document.body.style.overflow = 'hidden'; // Impede o scroll da página de fundo
             setTimeout(() => {
                 if (searchInput) searchInput.focus(); // Foca automaticamente no input
             }, 100);
         });
 
-        // Fechar modal pelo botão "X"
+        // Função para fechar o modal
+        const closeSearchModal = () => {
+            if (topSearchButton) {
+                topSearchButton.focus();
+            }
+            searchModal.classList.remove('active');
+            searchModal.setAttribute('aria-hidden', true);
+            document.body.style.overflow = '';
+        };
+
+
+        // Evento click no botão "X"
         if (searchCloseBtn) {
-            searchCloseBtn.addEventListener('click', () => {
-                searchModal.classList.remove('active');
-                document.body.style.overflow = '';
-            });
+            searchCloseBtn.addEventListener('click', closeSearchModal);
         }
 
-        // Fechar modal ao clicar fora da caixa central (no overlay translúcido)
-        searchModal.addEventListener('click', (e) => {
-            if (e.target === searchModal) {
-                searchModal.classList.remove('active');
-                document.body.style.overflow = '';
+        // Evento click fora do modal
+        searchModal.addEventListener('click', (event) => {
+            if (event.target === searchModal) {
+                closeSearchModal();
             }
         });
 
-        // Fechar modal pressionando a tecla ESC
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && searchModal.classList.contains('active')) {
-                searchModal.classList.remove('active');
-                document.body.style.overflow = '';
+        // Evento tecla ESC
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Escape' && searchModal.classList.contains('active')) {
+                closeSearchModal();
             }
         });
     }
