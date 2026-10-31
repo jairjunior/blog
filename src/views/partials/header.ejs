@@ -1,8 +1,16 @@
     <header class="site-header">
+        <!-- Barra de navegação superior -->
         <div class="container header-top">
+            <!-- Nome / Logomarca -->
             <h1 class="blog-title"><a href="/">jjOutOfBounds</a></h1>
 
+            <!-- Conjunto de botões (Lupa, Login, Burger) -->
             <div class="top-menu-button-wrapper">
+                <!-- Botão da Lupa  -->
+                <button id="topSearchButton" title="Buscar">
+                    <span id="searchIcon">&#x1F50D;</span>
+                </button>
+
                 <!-- Botão de Login  -->
                  <a id="topLoginButton" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar">
                     <span>Entrar</span>
@@ -12,13 +20,8 @@
                         <line x1="15" y1="12" x2="3" y2="12"></line>
                     </svg>
                 </a>
-
-                <!-- Botão da Lupa  -->
-                <button id="topSearchButton" title="Buscar">
-                    <span id="searchIcon">&#x1F50D;</span>
-                </button>
     
-                <!-- Botão Hamburger (Visível apenas em mobile) -->
+                <!-- Botão Hamburger (visível apenas em mobile) -->
                 <button class="hamburger-btn" aria-label="Abrir Menu" aria-expanded="false" title="Menu principal">
                     <span class="hamburger-bar"></span>
                     <span class="hamburger-bar"></span>
@@ -27,9 +30,10 @@
             </div>
 
 
-            <!-- Menu Principal -->
+            <!-- Menu Principal (em mobile aparece na lateral) -->
             <nav class="top-navbar">
                 <ul>
+                    <!-- Links para Artigos, Sobre, Contato, Newsletter -->
                     <li>
                         <a href="/posts" class="top-navbar-link">
                             <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -68,7 +72,7 @@
                             <span>Newsletter</span>
                         </a>
                     </li>
-                    <!-- Botão de Criar Conta -->
+                    <!-- Botões de "Criar Conta" e "Entrar" (visível apenas em mobile) -->
                     <li class="mobile-menu-item">
                         <a class="btn-mobile-signup" href="/register?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Criar Conta">
                             <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -80,7 +84,6 @@
                             Criar Conta
                         </a>
                     </li>
-                    <!-- Botão de Login -->
                     <li class="mobile-menu-item">
                         <a class="btn-mobile-login" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar">
                             <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -91,7 +94,7 @@
                             Entrar
                         </a>
                     </li>
-                    <!-- Barra de pesquisa -->
+                    <!-- Barra de pesquisa do menu lateral (visível apenas em mobile) -->
                     <li class="mobile-menu-item search-menu-item">
                         <span>ou então:</span>
                         <form action="/search" method="GET" class="search-menu-form" id="menuSearchForm">
@@ -102,8 +105,7 @@
                                     id="menuSearchInput" 
                                     class="search-menu-input" 
                                     placeholder="Pesquise aqui" 
-                                    autocomplete="off" 
-                                    aria-placeholder="Buscar"
+                                    autocomplete="off"
                                     required
                                 >
                             </div>

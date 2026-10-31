@@ -37,10 +37,9 @@ h1 {
 }
 
 
-
 /******************************************************************************
 /******************************************************************************
-/ TÍTULO DO BLOG
+/ MENU PRINCIPAL no topo da página
 /******************************************************************************
 /*****************************************************************************/
 .site-header {
@@ -53,13 +52,25 @@ h1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 15px;
+    padding: 15px 15px;
     position: relative;
 }
 
+/*---------------------------------------------------------------------------*/
+/* Ajuste para telas maiores */
+@media (min-width: 576px) { 
+    .header-top {  
+        padding: 20px 30px;
+    } 
+}
+
+
+/*-----------------------------------------------------------------------------
+/ TÍTULO / LOGOMARCA do blog
+/----------------------------------------------------------------------------*/
 .blog-title {
     font-family: 'Outfit', sans-serif;
-    font-size: clamp(1.4rem, 3vw, 2.9rem);
+    font-size: clamp(1.6rem, 3vw, 2.9rem);
     font-weight: 800;
     letter-spacing: -0.03em;
     margin: 0;
@@ -101,49 +112,87 @@ h1 {
 
 
 /*---------------------------------------------------------------------------*/
-/* Ajuste para telas maiores */
-@media (min-width: 412px) { 
-    .blog-title {  
-        font-size: clamp(1.6rem, 3vw, 2.9rem);
-    }    
-}
-
+/* Ajuste do título / logomarca para telas maiores */
 @media (min-width: 576px) { 
     .blog-title {  
-        font-size: clamp(1.8rem, 3vw, 2.9rem);
+        font-size: 1.8rem;
     }    
 }
 
 @media (min-width: 768px) { 
     .blog-title {  
-        font-size: clamp(2rem, 3vw, 2.9rem);
+        font-size: 2rem;
     } 
 }
 
 @media (min-width: 820px) { 
     .blog-title {  
-        font-size: clamp(2.2rem, 3vw, 2.9rem);
+        font-size: 2.2rem;
     } 
 }
 
 @media (min-width: 950px) { 
     .blog-title {  
-        font-size: clamp(1.8rem, 3vw, 2.9rem);
+        font-size: clamp(2.2rem, 3vw, 2.9rem);
     } 
 }
 
 
-/******************************************************************************
-/******************************************************************************
-/ MENU SUPERIOR
-/******************************************************************************
-/*****************************************************************************/
+/*-----------------------------------------------------------------------------
+/ CONJUNTO DE BOTÕES do topo da página
+/----------------------------------------------------------------------------*/
 .top-menu-button-wrapper {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: 17px;
+    gap: 15px;
+}
+/* Ajustes para telas maiores */
+@media (min-width: 576px) { 
+    .top-menu-button-wrapper {
+        gap: 20px;
+    }
+}
+
+/*-----------------------------------------------------------------------------
+/ BOTÃO DA LUPA no topo da página (abre modal de pesquisa)
+/----------------------------------------------------------------------------*/
+#topSearchButton {
+    background-color: #1f79f821;
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%;
+    justify-content: center;
+    color: black;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    font-size: 1rem;
+    position: relative;
+}
+
+#searchIcon {
+    display: inline-block;
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transform-origin: center center;
+}
+
+#searchIcon:hover {
+    transform: scale(1.15);
+}
+
+/*---------------------------------------------------------------------------*/
+/* Ajustes do botão de Pesquisar para telas maiores */
+@media (min-width: 576px) { 
+    #topSearchButton {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
 }
 
 /*-----------------------------------------------------------------------------
@@ -151,8 +200,8 @@ h1 {
 /----------------------------------------------------------------------------*/
 #topLoginButton {
     background-color: #1f79f821;
-    width: 45px;
-    height: 45px;
+    width: 32px;
+    height: 32px;
     border: none;
     border-radius: 50%;
     justify-content: center;
@@ -172,49 +221,32 @@ h1 {
 }
 
 #loginIcon {
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
     transition: transform 0.2s ease;
     transform: translateX(-1.5px);
 }
 
 #topLoginButton:hover #loginIcon {
-    transform: translateX(4px);
+    transform: translateX(1px);
+}
+
+/*---------------------------------------------------------------------------*/
+/* Ajustes do botão de Login para telas maiores */
+@media (min-width: 576px) { 
+    #topLoginButton {
+        width: 40px;
+        height: 40px;
+    }
+    #loginIcon {
+        width: 20px;
+        height: 20px;
+    }
 }
 
 
 /*-----------------------------------------------------------------------------
-/ BOTÃO DE LUPA no topo da página (Buscar/Pesquisar)
-/----------------------------------------------------------------------------*/
-#topSearchButton {
-    background-color: #1f79f821;
-    width: 45px;
-    height: 45px;
-    border: none;
-    border-radius: 50%;
-    justify-content: center;
-    color: black;
-    padding: 8px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    font-size: 1.3rem;
-    position: relative;
-}
-
-#searchIcon {
-    display: inline-block;
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform-origin: center center;
-}
-
-#searchIcon:hover {
-    transform: scale(1.2);
-}
-
-/*-----------------------------------------------------------------------------
-/ BURGER BUTTON para abrir menu superior
+/ BURGER BUTTON para abrir menu lateral (somente mobile)
 /----------------------------------------------------------------------------*/
 .hamburger-btn {
     cursor: pointer;
@@ -224,8 +256,9 @@ h1 {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    width: 38px;
-    height: 30px;
+    align-items: center;
+    width: 40px;
+    height: 32px;
     z-index: 1001; /* Fica acima do menu lateral */
 }
 
@@ -238,6 +271,10 @@ h1 {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+.hamburger-btn .hamburger-bar:nth-child(2) {
+    transform: translateY(-0.4px);
+}
+
 /*---------------------------------------------------------------------------*/
 /* Classe para JS abrir o menu lateral */
 .header-top.menu-open .top-navbar {
@@ -247,7 +284,7 @@ h1 {
 /*---------------------------------------------------------------------------*/
 /* Animação do burger button virando um "X" */
 .header-top.menu-open .hamburger-btn .hamburger-bar:nth-child(1) {
-    transform: translateY(5.4px) rotate(45deg);
+    transform: translateY(7.5px) rotate(45deg);
 }
 .header-top.menu-open .hamburger-btn .hamburger-bar:nth-child(2) {
     opacity: 0;
@@ -258,12 +295,10 @@ h1 {
 
 /*---------------------------------------------------------------------------*/
 /* Animação de tremores no burger button */
-/* Aciona a animação de tremor quando o mouse passa por cima */
 .hamburger-btn:hover {
     animation: hamburgerBounce 0.4s ease;
 }
 
-/* Definição dos quadros da animação vibrante */
 @keyframes hamburgerBounce {
     0%, 100% {
         transform: translateX(0) rotate(0deg);
@@ -282,6 +317,34 @@ h1 {
     }
 }
 
+/*---------------------------------------------------------------------------*/
+/* Ajustes do burger button para telas maiores */
+@media (min-width: 576px) { 
+    .hamburger-btn {
+        width: 45px;
+        height: 35px;
+    }
+    .hamburger-bar {
+        height: 4px;
+    }
+    .hamburger-btn .hamburger-bar:nth-child(2) {
+        transform: translateY(0.5px);
+    }
+    .header-top.menu-open .hamburger-btn .hamburger-bar:nth-child(1) {
+        transform: translateY(9.5px) rotate(45deg);
+    }
+}
+@media (min-width: 768px) { 
+    .hamburger-btn .hamburger-bar:nth-child(2) {
+        transform: translateY(-0.4px);
+    }
+}
+@media (min-width: 820px) { 
+    .hamburger-btn .hamburger-bar:nth-child(2) {
+        transform: translateY(0.4px);
+    }
+}
+/* Neste ponto o burger button desaparece */
 @media (min-width: 950px) { 
     .hamburger-btn {
         display: none;
@@ -289,8 +352,8 @@ h1 {
 }
 
 /*-----------------------------------------------------------------------------
-/ MENU PRINCIPAL
-/ Telas pequenas: Menu lateral (abre com o burguer)
+/ MENU DE NAVEGAÇÃO
+/ Telas pequenas: Menu lateral (abre pelo burger button)
 / Telas grandes: Barra de navegação superior
 /----------------------------------------------------------------------------*/
 .top-navbar {
@@ -349,9 +412,8 @@ h1 {
     transform: scale(1.1);
 }
 
-/*-----------------------------------*/
-/* Menu principal */
-/* Ajustes para Telas Grandes */
+/*---------------------------------------------------------------------------*/
+/* Ajustes para telas maiores */
 @media (min-width: 576px) { 
     .top-navbar {
         width: 70vw;
@@ -371,6 +433,7 @@ h1 {
     }
 }
 
+/* A partir daqui, o menu estará sempre visível no topo da página */
 @media (min-width: 950px) {
     .top-navbar {
         position: static;
@@ -393,10 +456,6 @@ h1 {
         font-weight: 500;
     }
 
-    .mobile-menu-item {
-        display: none;
-    }
-
 }
 
 @media (min-width: 1200px) {
@@ -410,7 +469,7 @@ h1 {
 }
 
 /*-----------------------------------------------------------------------------
-/ BOTÕES DE CRIAR CONTA E LOGIN DO MENU
+/ BOTÕES de "CRIAR CONTA" e "ENTRAR" do menu lateral
 /----------------------------------------------------------------------------*/
 .mobile-menu-item {
     width: 100%;
@@ -432,12 +491,13 @@ h1 {
     transition: all 0.25s ease;
 }
 
-/* 1. Botão de Cadastro */
+/* BOTÃO DE CRIAR CONTA */
 .mobile-menu-item .btn-mobile-signup {
     background-color: #2563eb;
     color: #ffffff;
     border: none;
     box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    margin-top: 7px;
 }
 
 .mobile-menu-item .btn-mobile-signup:hover {
@@ -447,11 +507,12 @@ h1 {
     box-shadow: 0 6px 16px rgba(37, 99, 235, 0.3);
 }
 
-/* 2. Botão de Login */
+/* BOTÃO DE ENTRAR */
 .mobile-menu-item .btn-mobile-login {
     background-color: transparent;
     color: #475569;
     border: 1px solid #cbd5e1;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
 }
 
 .mobile-menu-item .btn-mobile-login:hover {
@@ -460,6 +521,7 @@ h1 {
     border-color: #94a3b8;
 }
 
+/* Estilo e animações para os ícones dos botões */
 .mobile-menu-item .btn-icon {
     width: 18px;
     height: 18px;
@@ -475,24 +537,20 @@ h1 {
     transform: translateX(2px);
 }
 
-
 /*-----------------------------------------------------------------------------
-/ CAMPO DE BUSCA DENTRO DO MENU LATERAL
+/ CAMPO DE BUSCA dentro do menu lateral
 /----------------------------------------------------------------------------*/
-.search-menu-item {
+.mobile-menu-item.search-menu-item {
     margin-top: auto;
 }
 
-.mobile-menu-item span {
-    margin-left: 0.3rem;
-    margin-bottom: 0.4rem;
+.mobile-menu-item.search-menu-item span {
+    font-size: 1rem;
+    color: #00000090;
+    margin-left: 4px;
 }
 
-.search-menu-form input::placeholder {
-    color: #00000038;
-}
-
-.search-menu-form .search-menu-wrapper {
+.mobile-menu-item .search-menu-form .search-menu-wrapper {
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
@@ -505,13 +563,13 @@ h1 {
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
-.search-menu-form .search-menu-wrapper:focus-within {
+.mobile-menu-item .search-menu-form .search-menu-wrapper:focus-within {
     border-color: #2563eb;
     box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.15);
     background: #ffffff;
 }
 
-.search-menu-form .search-menu-input{
+.mobile-menu-item .search-menu-form .search-menu-input {
     width: clamp(80%, 5vw, 90%);
     flex-grow: 1;
     border: none;
@@ -522,50 +580,15 @@ h1 {
     outline: none;
 }
 
-
-
-
-
-/******************************************************************************
-/ Botão de login da barra de navegação superior
-/*****************************************************************************/
-.top-navbar a.btn-login {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    background-color: #316be7;
-    color: #ffffff !important;
-    padding: 8px 12px;
-    margin-top: 10px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+.mobile-menu-item .search-menu-form input::placeholder {
+    color: #00000055;
 }
 
-.top-navbar a.btn-login:hover {
-    background-color: #1d4ed8;
-    transform: translateY(-1px);
-}
-
-.top-navbar a.btn-login .login-arrow {
-    width: 18px;
-    height: 18px;
-    transition: transform 0.2s ease;
-}
-
-.top-navbar a.btn-login:hover .login-arrow {
-    transform: translateX(4px);
-}
-
-
-
-/*-------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/* Em telas maiores, os botões e a barra de pesquisa desaparecem */
 @media (min-width: 950px) {
-    .top-navbar a.btn-login {
-        margin: 0;
+    .mobile-menu-item {
+        display: none;
     }
 }
 
@@ -640,7 +663,7 @@ h1 {
     color: #dc2626;
 }
 
-/* Formulário de Busca */
+/* Formulário de Pesquisa */
 .search-modal-form {
     margin-top: 10px;
     margin-bottom: 30px;
@@ -796,40 +819,31 @@ h1 {
 
 
 /*-------------------------------------------------*/
-/* Ajustes para Telas Grandes */
+/* Ajustes do Modal para telas maiores */
 @media (min-width: 950px) {
     .search-modal-container {
         padding: 60px 40px 40px;
     }
-
     .search-submit-btn {
         padding: 10px 20px;
     }
     .search-submit-text {
         display: inline;
     }
-
     .search-columns-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        gap: 0; /* Removido o gap para usarmos bordas como divisórias verticais */
+        gap: 0;
     }
-
     .search-column {
         padding: 0 24px;
     }
-
-    /* Remove o padding esquerdo da primeira coluna */
     .search-column:first-child {
         padding-left: 0;
     }
-
-    /* Remove o padding direito da última coluna */
     .search-column:last-child {
         padding-right: 0;
     }
-
-    /* Criação da linha vertical divisória entre as colunas do meio */
     .search-column:not(:last-child) {
         border-right: 1px solid #e2e8f0;
     }
@@ -843,7 +857,6 @@ h1 {
 /*****************************************************************************/
 .user-profile-menu {
     position: relative;
-    display: inline-block;
     display: flex;
     flex-direction: column;
     align-items: center;
