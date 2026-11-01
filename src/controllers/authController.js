@@ -86,6 +86,7 @@ exports.login = async (req, res) => {
                 email: user.email,
                 first_name: user.first_name,
                 last_name: user.last_name,
+                avatarUrl: user.avatar,
                 role: user.role
             }, 
             process.env.JWT_SECRET,

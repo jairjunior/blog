@@ -84,28 +84,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /****************************************************************************** 
-/ Função para abertura/fechamento do dropdown ao clicar na foto.
+/ Função para abertura/fechamento do Dropdown Menu ao clicar na foto.
 / Ao clicar fora ou ao pressionar ESC
 ******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
     const toggleBtn = document.getElementById('profileToggleBtn');
-    const dropdown = document.getElementById('profileDropdown');
+    const dropdownMenu = document.getElementById('profileDropdown');
 
-    if (toggleBtn && dropdown) {
+    if (toggleBtn && dropdownMenu) {
         toggleBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            dropdown.classList.toggle('active');
+            dropdownMenu.classList.toggle('active');
         });
 
         document.addEventListener('click', (e) => {
-            if (!dropdown.contains(e.target) && !toggleBtn.contains(e.target)) {
-                dropdown.classList.remove('active');
+            if (!dropdownMenu.contains(e.target) && !toggleBtn.contains(e.target)) {
+                dropdownMenu.classList.remove('active');
             }
         });
 
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                dropdown.classList.remove('active');
+                dropdownMenu.classList.remove('active');
             }
         });
     }

@@ -7,19 +7,62 @@
             <!-- Conjunto de botões (Lupa, Login, Burger) -->
             <div class="top-menu-button-wrapper">
                 <!-- Botão da Lupa  -->
-                <button id="topSearchButton" title="Buscar">
+                <button id="topSearchButton" title="Pesquisar">
                     <span id="searchIcon">&#x1F50D;</span>
                 </button>
 
-                <!-- Botão de Login  -->
-                 <a id="topLoginButton" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar">
-                    <svg id="loginIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                        <polyline points="10 17 15 12 10 7"></polyline>
-                        <line x1="15" y1="12" x2="3" y2="12"></line>
-                    </svg>
-                    <span>Entrar</span>
-                </a>
+                <% if (user) { %>
+                    <!-- Se o usuário estiver logado -->
+                    <div class="user-profile-menu" id="userMenuContainer">
+                        <!-- Foto de perfil redonda -->
+                        <button class="profile-toggle-btn" id="profileToggleBtn" aria-label="Menu do usuário">
+                            <% if (user.avatarUrl) { %>
+                                <img src="/img/profiles/<%= user.avatarUrl %>" alt="Foto de perfil para <%= user.first_name %>" class="profile-avatar">
+                            <% } else { %>
+                                <div class="profile-avatar-fallback">
+                                    <%= user.first_name ? user.first_name.charAt(0).toUpperCase() : 'U' %>
+                                </div>
+                            <% } %>
+                        </button>
+
+                        <!-- Menu Dropdown -->
+                        <div class="profile-dropdown" id="profileDropdown">
+                            <div class="dropdown-header">
+                                <span class="dropdown-header-name"><%= user.first_name %> <%= user.last_name %></span>
+                                <span class="dropdown-header-email"><%= user.email %></span>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="/conta/informacoes" class="dropdown-item">
+                                <span class="dropdown-icon">⚙️</span>
+                                <span>Informações da conta</span>
+                            </a>
+                            <a href="/conta/informacoes" class="dropdown-item">
+                                <span class="dropdown-icon">⚙️</span>
+                                <span>Informações da conta</span>
+                            </a>
+                            <a href="/conta/informacoes" class="dropdown-item">
+                                <span class="dropdown-icon">⚙️</span>
+                                <span>Informações da conta</span>
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="/api/auth/logout" class="dropdown-item logout-item">
+                                <span class="dropdown-icon">🚪</span>
+                                <span>Sair</span>
+                            </a>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <!-- Se NÃO estiver logado: Botão de Login com redirect -->
+                    <!-- Botão de Login  -->
+                    <a id="topLoginButton" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar">
+                        <svg id="loginIcon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                            <polyline points="10 17 15 12 10 7"></polyline>
+                            <line x1="15" y1="12" x2="3" y2="12"></line>
+                        </svg>
+                        <span>Entrar</span>
+                    </a>
+                <% } %>
     
                 <!-- Botão Hamburger (visível apenas em mobile) -->
                 <button class="hamburger-btn" aria-label="Abrir Menu" aria-expanded="false" title="Menu principal">
@@ -44,7 +87,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" class="top-navbar-link">
+                        <a href="/about" class="top-navbar-link">
                             <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="12" y1="16" x2="12" y2="12"></line>
