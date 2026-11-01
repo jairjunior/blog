@@ -1,0 +1,254 @@
+/* ==========================================
+   ABOUT PAGE STYLES (Mobile-First)
+   ========================================== */
+
+.about-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 1.5rem 1rem;
+    color: #1e293b;
+    font-family: inherit;
+}
+
+/* --- Hero Section --- */
+.about-hero {
+    margin-bottom: 2rem;
+}
+
+.about-badge {
+    font-family: monospace;
+    font-size: 0.875rem;
+    color: #2563eb;
+    background-color: #eff6ff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+}
+
+.about-title {
+    font-size: 2rem;
+    font-weight: 800;
+    margin: 0.5rem 0 1rem;
+    line-height: 1.2;
+    overflow-wrap: break-word;
+}
+
+.about-lead {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: #475569;
+}
+
+/* --- Sections & Cards General --- */
+.about-section, .about-card {
+    background-color: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.about-section h2, .about-card h2 {
+    font-size: 1.35rem;
+    margin-bottom: 0.75rem;
+    color: #0f172a;
+}
+
+.about-section p, .about-card p {
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+    overflow-wrap: break-word;
+}
+
+.about-section p:last-child {
+    margin-bottom: 0;
+}
+
+code {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    padding: 0.15rem 0.35rem;
+    border-radius: 4px;
+    font-size: 0.9em;
+    font-family: monospace;
+}
+
+/* --- Layout Grid (Mobile-First stack) --- */
+.about-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* --- Stack Tags --- */
+.stack-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.tag {
+    background-color: #1e293b;
+    color: #f8fafc;
+    font-size: 0.8rem;
+    font-family: monospace;
+    padding: 0.3rem 0.6rem;
+    border-radius: 4px;
+}
+
+/* --- Listas --- */
+.about-list, .benefits-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.about-list li, .benefits-list li {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-bottom: 0.75rem;
+    line-height: 1.5;
+}
+
+.about-list li::before, .benefits-list li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #2563eb;
+    font-weight: bold;
+}
+
+/* --- Community Block --- */
+.community-card {
+    border-left: 4px solid #2563eb;
+}
+
+.cta-register {
+    margin-top: 1.25rem;
+}
+
+/* --- Newsletter Block --- */
+.newsletter-card {
+    background-color: #0f172a;
+    color: #f8fafc;
+    border-radius: 8px;
+    padding: 1.5rem 1.25rem;
+    margin-bottom: 1.5rem;
+}
+
+.newsletter-card h2 {
+    color: #ffffff;
+    margin-bottom: 0.5rem;
+}
+
+.newsletter-disclaimer {
+    font-size: 0.85rem;
+    color: #94a3b8;
+    margin-bottom: 1rem;
+}
+
+.newsletter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #334155;
+    background-color: #1e293b;
+    color: #ffffff;
+    font-size: 1rem;
+}
+
+.form-input:focus {
+    outline: 2px solid #2563eb;
+}
+
+/* --- Contact Block --- */
+.contact-block {
+    text-align: center;
+    padding: 2rem 1rem;
+    background-color: #f8fafc;
+    border-radius: 8px;
+    border: 1px dashed #cbd5e1;
+}
+
+.contact-block h2 {
+    margin-bottom: 0.5rem;
+}
+
+.contact-block p {
+    margin-bottom: 1.25rem;
+    color: #64748b;
+}
+
+/* --- Botões Utilitários --- */
+.btn {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    padding: 0.75rem 1.25rem;
+    border-radius: 6px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+    transition: background-color 0.2s, opacity 0.2s;
+}
+
+.btn-primary {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background-color: #1d4ed8;
+}
+
+.btn-secondary {
+    background-color: #38bdf8;
+    color: #0f172a;
+}
+
+.btn-secondary:hover {
+    background-color: #0284c7;
+    color: #ffffff;
+}
+
+.btn-outline {
+    background-color: transparent;
+    border: 2px solid #0f172a;
+    color: #0f172a;
+}
+
+.btn-outline:hover {
+    background-color: #0f172a;
+    color: #ffffff;
+}
+
+/* ==========================================
+   MEDIA QUERIES (Ajustes para telas maiores)
+   ========================================== */
+
+@media (min-width: 640px) {
+    .about-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .newsletter-form {
+        flex-direction: row;
+    }
+
+    .form-input {
+        flex: 1;
+    }
+
+    .btn {
+        width: auto;
+    }
+}

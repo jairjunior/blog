@@ -158,6 +158,18 @@ const renderPostBySlugs = async (req, res) => {
 
 
 /*****************************************************************************
+/ Função para tratar requisições GET no caminho '/about'
+/
+/ 
+/*****************************************************************************/
+const renderAboutPage = async (req, res) => {
+    res.render('about', {
+        user: res.locals.currentUser,
+        currentUrl: req.originalUrl
+    });
+}
+
+/*****************************************************************************
 / Exporta as funções para serem utilizadas pela aplicação.
 /*****************************************************************************/
 module.exports = {
@@ -167,4 +179,5 @@ module.exports = {
     renderPostsPage,
     renderCategoryPage,
     renderPostBySlugs,
+    renderAboutPage
 };

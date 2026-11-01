@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- O servidor injeta o título exato do post e o resumo para SEO -->
+    <title>Sobre | jjOutOfBounds</title>
+    <meta name="description" content="Apresentação do blog e do seu autor, Jair Junior. Descreve a origem, trajetória, objetivos, temas abordados e canais de comunicação. Blog sobre Engenharia de Software, Clean Code e Desenvolvimento Fullstack por Jair Junior (JJ). Tutoriais práticos, arquitetura web e padrões da indústria.">
+    
+    <!-- CSS principal do site e estilo específico do post -->
+    <link rel="stylesheet" href="/css/main.css">
+    <link rel="stylesheet" href="/css/about.css">
+
+    <!-- Importação da fonte Outfit do Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;750;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Cabeçalho Principal -->
+    <%- include('partials/header') %>
+
+    <main class="about-container">
+        <!-- Hero / Apresentação Inicial -->
+        <header class="about-hero">
+            <span class="about-badge">&lt;about&gt;</span>
+            <h1 class="about-title">Sobre o jjOutOfBounds</h1>
+            <p class="about-lead">
+                Seja bem-vindo! Se você busca conteúdo direto ao ponto sobre desenvolvimento de software, padrões da indústria e arquitetura web, você está no lugar certo.
+            </p>
+        </header>
+
+        <!-- Biografia & Propósito -->
+        <section class="about-section bio-card">
+            <h2>O criador por trás do código</h2>
+            <p>Prazer, sou <strong>Jair Junior</strong> (pode me chamar de <strong>JJ</strong>).</p>
+            <p>
+                Sou engenheiro eletrônico formado pela Universidade de Brasília (<strong>UnB</strong>), com especialização em Desenvolvimento de Aplicações Web pela <strong>PUC Minas</strong> e em Java pela <strong>Duke University</strong>. Atuo no mercado de TI desde 2020, acumulando bagagem prática em <em>service desk</em>, desenvolvimento, governança e planejamento estratégico de TI.
+            </p>
+            <p>
+                Decidi colocar o <strong>jjOutOfBounds</strong> no ar para manter a prática afiada, me forçar a continuar estudando o que há de mais moderno no mercado e, acima de tudo, devolver valor para a comunidade dev.
+            </p>
+        </section>
+
+        <!-- Conceito do Nome -->
+        <section class="about-section name-concept">
+            <h2>E de onde vem esse nome?</h2>
+            <p>
+                Se você já debugou um vetor ou manipulou ponteiros, sabe que <code>out of bounds</code> é a clássica exceção de quando estouramos os limites da memória. Mas aqui, o nome também é um convite para <strong>pensar fora da caixa</strong>.
+            </p>
+            <p>
+                Para fechar o conceito, o nome é formatado em <code>camelCase</code> — uma sutil alusão às boas práticas e às convenções consagradas no clássico <em>Código Limpo</em>.
+            </p>
+        </section>
+
+        <!-- Tópicos do Blog & Stack -->
+        <div class="about-grid">
+            <section class="about-card">
+                <h2>O que você vai encontrar por aqui</h2>
+                <ul class="about-list">
+                    <li><strong>Arquitetura & Clean Code:</strong> Código limpo, testável e preparado para manutenção em escala.</li>
+                    <li><strong>Frontend Robusto:</strong> Responsividade real (<em>mobile-first</em>), acessibilidade WAI-ARIA e otimização de performance.</li>
+                    <li><strong>Padrões da Indústria:</strong> Design patterns, boas práticas no backend e decisões de engenharia.</li>
+                    <li><strong>Notícias Tech:</strong> Curadoria dos principais acontecimentos do universo da tecnologia.</li>
+                </ul>
+            </section>
+
+            <section class="about-card stack-card">
+                <h2>Desenvolvido na unha (<em>Built from Scratch</em>)</h2>
+                <p>Este site não foi montado sobre templates prontos. Ele foi codado do zero para ser leve e rápido:</p>
+                <div class="stack-tags">
+                    <span class="tag">Node.js</span>
+                    <span class="tag">Express</span>
+                    <span class="tag">MySQL</span>
+                    <span class="tag">HTML5</span>
+                    <span class="tag">CSS3</span>
+                    <span class="tag">Vanilla JS</span>
+                </div>
+            </section>
+        </div>
+
+        <!-- Benefícios de Cadastro (Community Callout) -->
+        <section class="about-section community-card">
+            <h2>Por que se cadastrar na comunidade?</h2>
+            <p>Acompanhar como leitor casual é legal, mas criar sua conta gratuita destrava a experiência completa:</p>
+            <ul class="benefits-list">
+                <li><strong>Salvar & Organizar:</strong> Marque artigos favoritos para usar como referência rápida de código.</li>
+                <li><strong>Participar das Discussões:</strong> Troque experiências e tire dúvidas diretamente nos comentários.</li>
+                <li><strong>Experiência Personalizada:</strong> Recomendações alinhadas às tecnologias que você estuda.</li>
+            </ul>
+            <div class="cta-register">
+                <a href="/register" class="btn btn-primary">Criar Conta Gratuita</a>
+            </div>
+        </section>
+
+        <!-- Newsletter Block -->
+        <section class="newsletter-card">
+            <h2>Assine a Newsletter do JJ</h2>
+            <p>Toda semana eu envio um resumo exclusivo com as novas postagens, análises de arquitetura e novidades da área tech.</p>
+            <p class="newsletter-disclaimer"><em>Sem spam, sem propaganda de terceiros e sem enrolação. Apenas avisos de conteúdo novo.</em></p>
+            
+            <form action="/newsletter/subscribe" method="POST" class="newsletter-form">
+                <input type="email" name="email" placeholder="Digite seu e-mail..." required class="form-input">
+                <button type="submit" class="btn btn-secondary">Assinar Newsletter</button>
+            </form>
+        </section>
+
+        <!-- Contato Block -->
+        <section class="contact-block">
+            <h2>Quer trocar uma ideia?</h2>
+            <p>Tem alguma sugestão de pauta, proposta profissional ou quer debater sobre engenharia de software?</p>
+            <a href="/contato" class="btn btn-outline">Entrar em Contato</a>
+        </section>
+    </main>
+
+    <%- include('partials/footer') %>
+
+    <script src="/js/main.js"></script>
+
+</body>
+</html>
