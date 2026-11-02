@@ -13,7 +13,7 @@ const categoryModel = require('../models/categoryModel');
 / voltar.
 /*****************************************************************************/
 const renderRegisterPage = async (req, res) => {
-    const redirectTo = req.query.redirect || '/';
+    const redirectTo = req.query.redirectTo || '/';
     res.render('register', { redirectTo });
 }
 
@@ -28,7 +28,7 @@ const renderRegisterPage = async (req, res) => {
 / voltar.
 /*****************************************************************************/
 const renderLoginPage = async (req, res) => {
-    const redirectTo = req.query.redirect || '/';
+    const redirectTo = req.query.redirectTo || '/';
     res.render('login', { redirectTo });
 }
 

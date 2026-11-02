@@ -22,11 +22,27 @@
     <%- include('partials/header') %>
 
     <main class="about-container">
-        <!-- Hero / Apresentação Inicial -->
-        <header class="about-hero">
-            <span class="about-badge">&lt;about&gt;</span>
+
+        <!-- Breadcrumb de Navegação -->
+        <nav class="breadcrumb" aria-label="breadcrumb">
+            <ol class="breadcrumb-list">
+                <li class="breadcrumb-separator">/</li>
+                <li class="breadcrumb-item">
+                    <a href="/">Início</a>
+                </li>
+
+                <li class="breadcrumb-separator">/</li>
+
+                <li class="breadcrumb-item">
+                    Sobre o Blog
+                </li>
+            </ol>
+        </nav>
+
+        <!-- Apresentação Inicial -->
+        <header class="about-header">
             <h1 class="about-title">Sobre o jjOutOfBounds</h1>
-            <p class="about-lead">
+            <p class="about-header-text">
                 Seja bem-vindo! Se você busca conteúdo direto ao ponto sobre desenvolvimento de software, padrões da indústria e arquitetura web, você está no lugar certo.
             </p>
         </header>

@@ -8,6 +8,8 @@ const postModel = require('../models/postModel');
 / 
 / Registra um novo comentário no post especificado na URL.
 / Verifica se o token está válido, senão, solicita novo login do usuário.
+/ Também utiliza a função validateCommentFrequency() para verificar se o 
+/ usuário está tentando comentar repetidamente, evitando spam de comentários.
 /*****************************************************************************/
 const postComment = async (req, res) => {
     
@@ -65,8 +67,8 @@ const postComment = async (req, res) => {
         });
 
     } catch(error) {
-        console.error('ERROR in blogController.postComment():\n', error);
-        res.status(500).json({ 
+        console.error('ERROR in commentsController.postComment():\n', error);
+        return res.status(500).json({ 
             success: false,
             messageEn: 'Internal server error. Contact the administrator.',
             messagePt: 'Erro no servidor. Entre em contato com o administrador.'

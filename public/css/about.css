@@ -1,39 +1,28 @@
-/* ==========================================
-   ABOUT PAGE STYLES (Mobile-First)
-   ========================================== */
-
+/******************************************************************************
+/******************************************************************************
+/ PÁGINA SOBRE O BLOG E O AUTOR
+/******************************************************************************
+/*****************************************************************************/
 .about-container {
-    width: 100%;
+    width: 95vw;
     max-width: 900px;
     margin: 0 auto;
-    padding: 1.5rem 1rem;
+    padding: 0 1rem;
     color: #1e293b;
     font-family: inherit;
 }
 
-/* --- Hero Section --- */
-.about-hero {
+.about-header {
     margin-bottom: 2rem;
-}
-
-.about-badge {
-    font-family: monospace;
-    font-size: 0.875rem;
-    color: #2563eb;
-    background-color: #eff6ff;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
 }
 
 .about-title {
     font-size: 2rem;
+    margin-bottom: 1rem;
     font-weight: 800;
-    margin: 0.5rem 0 1rem;
-    line-height: 1.2;
-    overflow-wrap: break-word;
 }
 
-.about-lead {
+.about-header-text {
     font-size: 1.125rem;
     line-height: 1.6;
     color: #475569;
