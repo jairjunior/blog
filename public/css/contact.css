@@ -89,6 +89,7 @@ textarea.form-input {
     color: #ffffff;
     font-weight: 600;
     font-size: 1rem;
+    height: 3rem;
     padding: 0.85rem 1.75rem;
     border-radius: 8px;
     border: none;
@@ -118,6 +119,20 @@ textarea.form-input {
     transform: none;
     box-shadow: none;
     background: #64748b;
+}
+
+.spinner-icon {
+    width: 1.45rem;
+    height: 1.45rem;
+    animation: gear-spin 1.8s linear infinite;
+}
+@keyframes gear-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 
@@ -260,7 +275,9 @@ textarea.form-input {
     box-shadow: 0 2px 8px rgba(225, 29, 72, 0.3);
 }
 
-/* --- Responsivo --- */
+
+/*---------------------------------------------------------------------------*/
+/* Ajuste para telas maiores */
 @media (min-width: 576px) {
     .contact-form-section {
         padding: 2rem;
