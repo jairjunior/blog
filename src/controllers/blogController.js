@@ -3,7 +3,6 @@ const commentModel = require('../models/commentModel');
 const categoryModel = require('../models/categoryModel');
 
 
-
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/register'
 /
@@ -17,7 +16,6 @@ const renderRegisterPage = async (req, res) => {
     const redirectTo = req.query.redirect || '/';
     res.render('register', { redirectTo });
 }
-
 
 
 /*****************************************************************************
@@ -160,7 +158,9 @@ const renderPostBySlugs = async (req, res) => {
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/about'
 /
-/ 
+/ Renderiza a página "Sobre" utilizando template EJS.
+/ Nenhuma informação dinâmica é necessária para essa página, então não há 
+/ necessidade de buscar nada no banco de dados.
 /*****************************************************************************/
 const renderAboutPage = async (req, res) => {
     res.render('about', {
@@ -168,6 +168,22 @@ const renderAboutPage = async (req, res) => {
         currentUrl: req.originalUrl
     });
 }
+
+
+/*****************************************************************************
+/ Função para tratar requisições GET no caminho '/contact'
+/
+/ Renderiza a página "Contato" utilizando template EJS.
+/ Nenhuma informação dinâmica é necessária para essa página, então não há 
+/ necessidade de buscar nada no banco de dados.
+/*****************************************************************************/
+const renderContactPage = async (req, res) => {
+    res.render('contact', {
+        user: res.locals.currentUser,
+        currentUrl: req.originalUrl
+    });
+}
+
 
 /*****************************************************************************
 / Exporta as funções para serem utilizadas pela aplicação.
@@ -179,5 +195,6 @@ module.exports = {
     renderPostsPage,
     renderCategoryPage,
     renderPostBySlugs,
-    renderAboutPage
+    renderAboutPage,
+    renderContactPage
 };

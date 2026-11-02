@@ -13,16 +13,24 @@
     "url": "git+https://github.com/jairjunior/blog.git"
   },
   "keywords": [
+    "website",
     "blog",
     "personal",
     "content",
+    "jair-junior",
     "jairjr",
+    "jairjr.com.br",
     "nodejs",
     "express",
     "mysql",
     "ejs",
     "jwt",
-    "bcryptjs"
+    "bcryptjs",
+    "email",
+    "nodemailer",
+    "cookie-parser",
+    "dotenv",
+    "nodemon"
   ],
   "author": "Jair Dias de Oliveira Junior",
   "license": "ISC",
@@ -37,7 +45,8 @@
     "ejs": "^7.0.2",
     "express": "^5.3.0",
     "jsonwebtoken": "^9.0.3",
-    "mysql2": "^3.24.6"
+    "mysql2": "^3.24.6",
+    "nodemailer": "^10.3.1"
   },
   "devDependencies": {
     "nodemon": "^3.1.14"

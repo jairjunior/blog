@@ -1,0 +1,268 @@
+/******************************************************************************
+/******************************************************************************
+/ PÁGINA DE CONTATO E FORMULÁRIO DE ENVIO
+/******************************************************************************
+/*****************************************************************************/
+.contact-container{
+    width: 95vw;
+    max-width: 850px;
+    margin: 0 auto;
+    padding: 0 1.1rem;
+}
+
+.contact-title {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.contact-text {
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.6;
+    margin-bottom: 1.3rem;
+}
+
+.contact-form-section {
+    background-color: #ffffff;
+    border: 1px solid #d6dce4;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-group label {
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #1e293b;
+}
+
+.required {
+    color: #e11d48;
+}
+
+.form-input {
+    width: 100%;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border: 1px solid #cbd5e1;
+    background-color: #f8fafc;
+    color: #0f172a;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s, outline 0.2s;
+}
+
+.form-input:focus {
+    outline: none;
+    border-color: #2563eb;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+textarea.form-input {
+    resize: vertical;
+    min-height: 150px;
+}
+
+.btn-submit {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.85rem 1.75rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.btn-submit:hover {
+    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
+    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-submit:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+.btn-submit:disabled {
+    opacity: 0.75;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+    background: #64748b;
+}
+
+
+
+/******************************************************************************
+/******************************************************************************
+/ MODAL DE FEEDBACK PARA O USUÁRIO (SUCESSO / ERRO)
+/******************************************************************************
+/*****************************************************************************/
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+    padding: 1rem;
+}
+
+.modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal-card {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 450px;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    position: relative;
+    transform: translateY(10px);
+    transition: transform 0.25s ease;
+}
+
+.modal-overlay.active .modal-card {
+    transform: translateY(0);
+}
+
+.modal-header {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0;
+}
+
+.modal-body {
+    margin: 0;
+    text-align: center;
+}
+
+.modal-icon {
+    font-size: 2rem;
+    margin: 0;
+}
+
+.modal-color-green {
+    color: rgb(0, 131, 0);
+}
+
+.modal-color-red {
+    color: #e11d48;
+}
+
+.modal-message {
+    font-size: 1.05rem;
+    color: #334155;
+    line-height: 1.5;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.9rem;
+}
+
+.modal-action-btn {
+    width: 100%;
+    height: 3rem;
+    font-size: 1.35rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+}
+
+/* Botão de Sucesso */
+.modal-btn-success {
+    background: linear-gradient(135deg, #05865d 0%, #036449 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-btn-success:hover {
+    background: linear-gradient(135deg, #047857 0%, #065f46 100%);
+    box-shadow: 0 6px 18px rgba(5, 150, 105, 0.4);
+    transform: translateY(-2px);
+}
+
+.modal-btn-success:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
+}
+
+/* Botão de Erro */
+.modal-btn-error {
+    background: linear-gradient(135deg, #be193d 0%, #af0f37 100%);
+    color: #ffffff;
+    box-shadow: 0 4px 12px rgba(225, 29, 72, 0.25);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-btn-error:hover {
+    background: linear-gradient(135deg, #b11139 0%, #921035 100%);
+    box-shadow: 0 6px 18px rgba(225, 29, 72, 0.4);
+    transform: translateY(-2px);
+}
+
+.modal-btn-error:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(225, 29, 72, 0.3);
+}
+
+/* --- Responsivo --- */
+@media (min-width: 576px) {
+    .contact-form-section {
+        padding: 2rem;
+    }
+    
+    .btn-submit {
+        min-width: 240px;
+        margin-left: auto;
+        align-self: flex-start;
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}

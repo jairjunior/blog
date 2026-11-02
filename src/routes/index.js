@@ -7,9 +7,10 @@ router.use('/api/auth', require('./authRoutes.js'));
 router.use('/api/users', require('./usersRoutes.js'));
 router.use('/api/posts', require('./postsRoutes.js'));
 router.use('/api/comments', require('./commentsRoutes.js'));
+router.use('/api/contact', require('./contactRoutes.js'));
 
 
-// Rotas do Blog
+// Rotas do Blog para renderizar paginas EJS
 router.use('/', require('./blogRoutes.js'));
 
 
