@@ -15,9 +15,9 @@ const rateLimit = require('express-rate-limit');
 ******************************************************************************/
 const contactLimiter = rateLimit({
     windowMs: 15 * 60 * 1000, 
-    max: 3, 
-    standardHeaders: true,
+    limit: 3,
     legacyHeaders: false,
+    standardHeaders: true,
     message: {
         success: false,
         messageEn: 'Too many messages sent from this IP. Please try again after 15 minutes.',
