@@ -133,7 +133,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 link.closest(".category-navbar li").classList.add("active");
             }
         });
-    } else {
+    } else if (segments[1] === '') {
         const homeLink = document.querySelector('.category-navbar li a[href="/"]');
         homeLink.closest(".category-navbar li").classList.add("active");
     }

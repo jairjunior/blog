@@ -79,6 +79,11 @@
     box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
 }
 
+.form-input::placeholder {
+    color: #a9b9cf;
+    font-size: 0.94rem;
+}
+
 textarea.form-input {
     resize: vertical;
     min-height: 210px;
