@@ -157,14 +157,14 @@ h1 {
 @media (min-width: 950px) { 
     .top-menu-button-wrapper {
         order: 3;
-        gap: 2rem;
+        gap: 1.5rem;
     }
 }
 
 /*-----------------------------------------------------------------------------
 / BOTÃO DA LUPA no topo da página (abre modal de pesquisa)
 /----------------------------------------------------------------------------*/
-#topSearchButton {
+.top-search-btn {
     background-color: #1f79f821;
     width: 36px;
     height: 36px;
@@ -181,27 +181,36 @@ h1 {
     position: relative;
 }
 
-#searchIcon {
+#topSearchBtnNoUser {
+    display: none; /* Em teleas muito pequenas esse botão não aparece. */
+}
+
+.top-search-btn-icon {
     display: inline-block;
     transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     transform-origin: center center;
 }
 
-#topSearchButton:hover #searchIcon {
+.top-search-btn:hover .top-search-btn-icon {
     transform: scale(1.15);
 }
 
 /*---------------------------------------------------------------------------*/
 /* Ajustes do botão de Pesquisar para telas maiores */
+@media (min-width: 420px) { 
+    #topSearchBtnNoUser {
+        display: block;
+    }
+}
 @media (min-width: 576px) { 
-    #topSearchButton {
+    .top-search-btn {
         width: 44px;
         height: 44px;
         font-size: 1.2rem;
     }
 }
 @media (min-width: 950px) { 
-    #topSearchButton {
+    .top-search-btn {
         width: 48px;
         height: 48px;
         font-size: 1.4rem;
@@ -209,86 +218,118 @@ h1 {
 }
 
 /*-----------------------------------------------------------------------------
-/ BOTÃO DE LOGIN no topo da página
+/ BOTÕES de "CRIAR CONTA" e "ENTRAR" no topo da página
 /----------------------------------------------------------------------------*/
-#topLoginButton {
-    background-color: #1f79f821;
+.top-auth-btn {
     width: 36px;
     height: 36px;
-    border: none;
     border-radius: 50%;
     justify-content: center;
-    color: black;
-    padding: 8px;
+    padding: 0px;
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
+    flex-wrap: nowrap;
     cursor: pointer;
-    font-size: 1.3rem;
     position: relative;
     text-decoration: none;
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
-
-#topLoginButton span {
-    display: none;
+.top-auth-btn:hover {
+    box-shadow: 0 6px 15px rgba(37, 99, 235, 0.4);
 }
-
-#loginIcon {
-    width: 15px;
-    height: 15px;
-    transition: transform 0.2s ease;
-    transform: translateX(-1.5px);
+.top-auth-btn-icon {
+    width: 17px;
+    height: 17px;
     stroke-width: 2.7px;
 }
+.top-auth-btn span {
+    display: none;
+    white-space: nowrap;
+}
 
-#topLoginButton:hover #loginIcon {
+/*---------------------------------------------*/
+/* Botão CRIAR CONTA (top menu) */
+#topCreateAccountBtn {
+    background-color: #2563eb;
+    color: #ffffff;
+    border: none;
+}
+#topCreateAccountBtnIcon {
+    transform: translateY(-10px);
+    transform: translateX(0.5px);
+    transition: transform 0.2s ease;
+}
+#topCreateAccountBtn:hover {
+    background-color: #1d4ed8;
+    color: rgba(255, 255, 255, 0.822);
+    transform: translateY(-1px);
+}
+#topCreateAccountBtn:hover svg {
+    transform: scale(1.1);
+}
+
+/*---------------------------------------------*/
+/* Botão ENTRAR (top menu) */
+#topLoginBtn {
+    background-color: transparent;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+#topLoginBtnIcon {
+    transform: translateX(-1.5px);
+    transition: transform 0.2s ease;
+}
+#topLoginBtn:hover {
+    background-color: #f1f5f9;
+    color: #0f172a;
+    border-color: #94a3b8;
+    transform: translateY(-1px);
+}
+#topLoginBtn:hover svg {
     transform: translateX(1px);
 }
 
 /*---------------------------------------------------------------------------*/
-/* Ajustes do botão de Login para telas maiores */
+/* Ajustes dos botões "CRIAR CONTA" "ENTRAR" para telas maiores */
 @media (min-width: 576px) { 
-    #topLoginButton {
+    .top-auth-btn {
         width: 44px;
         height: 44px;
     }
-    #loginIcon {
+    .top-auth-btn-icon {
         width: 22px;
         height: 22px;
     }
+    #topCreateAccountBtn:hover .top-auth-btn-icon {
+        transform: scale(1.05);
+    }
 }
 @media (min-width: 950px) { 
-    #topLoginButton {
+    .top-auth-btn {
         width: 48px;
         height: 48px;
     }
-    #loginIcon {
+    .top-auth-btn-icon {
         width: 25px;
         height: 25px;
+        stroke-width: 2.4px;
     }
 }
-@media (min-width: 1200px) { 
-    #topLoginButton {
-        background-color: #2563eb;
-        color: rgba(255, 255, 255, 0.774);
-        width: 115px;
-        height: 100%;
+@media (min-width: 1350px) { 
+    .top-auth-btn {
+        padding: 12px 20px;
         gap: 10px;
         border-radius: 8px;
-        font-size: 1rem;
+        font-size: 0.975rem;
         font-weight: 600;
-        border: 1px solid transparent;
-        box-shadow: 0 6px 20px rgba(37, 100, 235, 0.281);
+        box-shadow: 0 6px 14px rgba(37, 100, 235, 0.285);
         transition: all 0.25s ease;
+        width: auto;
     }
-    #topLoginButton:hover {
-        border-color: #6c97f3;
-        background-color: #235fe0;
-        color: white;
-    }
-    #topLoginButton span {
-        display: inline;   
+    .top-auth-btn span {
+        display: inline;
     }
 }
 
@@ -398,7 +439,6 @@ h1 {
     transition: right 0.35s cubic-bezier(0.77, 0, 0.175, 1);
     z-index: 1000;
 }
-
 .top-navbar ul {
     list-style: none;
     display: flex;
@@ -411,7 +451,6 @@ h1 {
     width: 100%;
     height: 100%;
 }
-
 .top-navbar a {
     text-decoration: none;
     color: #111827;
@@ -419,25 +458,23 @@ h1 {
     font-weight: 500;
     display: block;
     transition: color 0.2s;
+    transition: transform 0.1s ease;
 }
-
 .top-navbar a:hover {
     color: #2563eb;
+    transform: scale(1.01);
 }
-
 .top-navbar a.top-navbar-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
 }
-
 .top-navbar svg.top-navbar-link-icon {
     width: 18px;
     height: 18px;
     stroke: currentColor;
     transition: transform 0.2s ease;
 }
-
 .top-navbar a:hover .top-navbar-link-icon {
     transform: scale(1.1);
 }
@@ -461,7 +498,7 @@ h1 {
     }
 }
 /* A partir daqui, o menu estará sempre visível no topo da página */
-@media (min-width: 950px) {
+@media (min-width: 1032px) {
     .top-navbar {
         position: static;
         margin-left: auto;
@@ -480,10 +517,10 @@ h1 {
         gap: 29px;
         transform: translateY(3px);
     }
-    .top-navbar a {
-        font-size: 1.1rem;
-        font-weight: 500;
-    }
+    /* .top-navbar a {
+        font-size: 1.03rem;
+        font-weight: 550;
+    } */
 }
 @media (min-width: 1200px) {
     .top-navbar {
@@ -586,7 +623,7 @@ h1 {
     align-items: center;
     gap: 5px;
     background: #f8fafc;
-    border: 2px solid #e2e8f0;
+    border: 2px solid #b4b8be;
     border-radius: 12px;
     padding: 6px 10px 6px 6px;
     transition: border-color 0.2s, box-shadow 0.2s;
@@ -1094,7 +1131,7 @@ h1 {
 .category-navbar a {
     text-decoration: none;
     color: #4b5563;
-    font-size: 1rem;
+    font-size: 0.975rem;
     font-weight: 500;
     white-space: nowrap;
     transition: color 0.2s;
@@ -1106,6 +1143,12 @@ h1 {
 
 .category-navbar li.active a {
     font-weight: 700;
+}
+
+@media (min-width: 1200px) {
+    .category-navbar a {
+        font-size: 1.01rem;
+    }
 }
 
 

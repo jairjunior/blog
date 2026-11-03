@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 / Função para abrir/fechar o modal de busca.
 ******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
-    const topSearchButton = document.getElementById('topSearchButton');
+    const topSearchButton = document.getElementById('topSearchBtnLoggedUser') || document.getElementById('topSearchBtnNoUser');
     const searchModal = document.getElementById('searchModal');
     const searchCloseBtn = document.getElementById('searchCloseBtn');
     const searchModalInput = document.getElementById('searchModalInput');
