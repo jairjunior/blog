@@ -16,7 +16,7 @@
 
                     <!-- Foto de perfil redonda -->
                     <div class="user-profile-menu" id="userMenuContainer">
-                        <button class="profile-toggle-btn" id="profileToggleBtn" aria-label="Menu do usuário">
+                        <button class="profile-toggle-btn" id="profileToggleBtn" title="Menu do usuário" aria-label="Menu do usuário" aria-expanded="false" aria-controls="profileDropdown">
                             <% if (user.avatarUrl) { %>
                                 <img src="/img/profiles/<%= user.avatarUrl %>" alt="Foto de perfil para <%= user.first_name %>" class="profile-avatar">
                             <% } else { %>
@@ -56,12 +56,12 @@
                 <!-- USUÁRIO NÃO LOGADO -->
                 <% } else { %>
                     <!-- Botão da Lupa  -->
-                    <button id="topSearchBtnNoUser" class="top-search-btn" title="Pesquisar">
+                    <button id="topSearchBtnNoUser" class="top-search-btn" title="Pesquisar" aria-label="Pesquisar em todo o site">
                         <span class="top-search-btn-icon">&#x1F50D;</span>
                     </button>
 
                     <!--  Botão de Criar Conta-->
-                    <a id="topCreateAccountBtn" class="top-auth-btn" href="/cadastrar?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Criar Conta">
+                    <a id="topCreateAccountBtn" class="top-auth-btn" href="/cadastrar?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Criar Conta gratuitamente" aria-label="Criar Conta gratuitamente">
                         <svg id="topCreateAccountBtnIcon" class="top-auth-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                             <circle cx="8.5" cy="7" r="4"></circle>
@@ -72,7 +72,7 @@
                     </a>
                     
                     <!-- Botão de Login  -->
-                    <a id="topLoginBtn" class="top-auth-btn" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar">
+                    <a id="topLoginBtn" class="top-auth-btn" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar" aria-label="Entrar">
                         <svg id="topLoginBtnIcon" class="top-auth-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
                             <polyline points="10 17 15 12 10 7"></polyline>
@@ -198,7 +198,7 @@
                             autocomplete="off" 
                             required
                         >
-                        <button type="submit" class="search-submit-btn" aria-label="Pesquisar">
+                        <button type="submit" class="search-submit-btn" aria-label="Realizar pesquisa">
                             <span class="search-submit-text">Buscar</span>
                             <svg class="search-submit-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                                 <circle cx="11" cy="11" r="8"></circle>

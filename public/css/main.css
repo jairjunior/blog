@@ -327,6 +327,7 @@ h1 {
         box-shadow: 0 6px 14px rgba(37, 100, 235, 0.285);
         transition: all 0.25s ease;
         width: auto;
+        height: 45px;
     }
     .top-auth-btn span {
         display: inline;
@@ -416,7 +417,7 @@ h1 {
     }
 }
 /* Neste ponto o burger button desaparece */
-@media (min-width: 950px) { 
+@media (min-width: 1032px) { 
     .hamburger-btn {
         display: none;
     }
@@ -652,7 +653,7 @@ h1 {
 
 /*---------------------------------------------------------------------------*/
 /* Em telas maiores, os botões e a barra de pesquisa desaparecem */
-@media (min-width: 950px) {
+@media (min-width: 1032px) {
     .mobile-menu-item {
         display: none;
     }

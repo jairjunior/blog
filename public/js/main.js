@@ -15,6 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
             event.stopPropagation();
             const isOpen = headerTop.classList.toggle("menu-open");
             burgerButton.setAttribute("aria-expanded", isOpen);
+            if (isOpen) {
+                burgerButton.setAttribute("aria-label", "Fechar menu");
+            } else {
+                burgerButton.setAttribute("aria-label", "Abrir menu");
+            }
         });
         // Fechar ao clicar fora do menu
         document.addEventListener("click", (event) => {
@@ -92,20 +97,27 @@ document.addEventListener('DOMContentLoaded', () => {
     const dropdownMenu = document.getElementById('profileDropdown');
 
     if (toggleBtn && dropdownMenu) {
+        const closeDropdownMenu = () => {
+            dropdownMenu.classList.remove('active');
+            toggleBtn.setAttribute('aria-expanded', 'false');
+        }
+        // Abre menu dropdown ao clicar no botão/foto de perfil
         toggleBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             dropdownMenu.classList.toggle('active');
+            isExpanded = dropdownMenu.classList.contains('active');
+            toggleBtn.setAttribute('aria-expanded', isExpanded);
         });
-
+        // Fecha menu dropdown ao clicar fora
         document.addEventListener('click', (e) => {
             if (!dropdownMenu.contains(e.target) && !toggleBtn.contains(e.target)) {
-                dropdownMenu.classList.remove('active');
+                closeDropdownMenu();
             }
         });
-
+        // Fecha menu dropdown ao apertar tecla ESC
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
-                dropdownMenu.classList.remove('active');
+                closeDropdownMenu();
             }
         });
     }
