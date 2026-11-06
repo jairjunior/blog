@@ -1,15 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const contactController = require('../controllers/contactController');
 const rateLimit = require('express-rate-limit');
-
+const contactController = require('../controllers/contactController');
 
 
 /****************************************************************************** 
 / Configuração do Rate Limit para a rota de contato.
 / Opções:
 / -Janela de tempo: 15 minutos (em milissegundos)
-/ -Limite máximo: Cada IP pode fazer no máximo 5 requisições por janela
+/ -Limite máximo: Cada IP pode fazer no máximo 3 requisições por janela
 / -Retorna os headers informativos de limite (RateLimit-*)
 / -Desativa os headers antigos (X-RateLimit-*)
 ******************************************************************************/
