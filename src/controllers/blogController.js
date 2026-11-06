@@ -1,6 +1,9 @@
 const postModel = require('../models/postModel');
-const commentModel = require('../models/commentModel');
 const categoryModel = require('../models/categoryModel');
+const commentModel = require('../models/commentModel');
+const userModel = require('../models/userModel');
+const jwt = require('jsonwebtoken');
+const { printConsoleError } = require('../utils/logger');
 
 
 /*****************************************************************************
@@ -156,7 +159,7 @@ const renderPostBySlugs = async (req, res) => {
 
 
 /*****************************************************************************
-/ Função para tratar requisições GET no caminho '/about'
+/ Função para tratar requisições GET no caminho '/sobre'
 /
 / Renderiza a página "Sobre" utilizando template EJS.
 / Nenhuma informação dinâmica é necessária para essa página, então não há 
@@ -171,7 +174,7 @@ const renderAboutPage = async (req, res) => {
 
 
 /*****************************************************************************
-/ Função para tratar requisições GET no caminho '/contact'
+/ Função para tratar requisições GET no caminho '/contato'
 /
 / Renderiza a página "Contato" utilizando template EJS.
 / Nenhuma informação dinâmica é necessária para essa página, então não há 
@@ -186,6 +189,58 @@ const renderContactPage = async (req, res) => {
 
 
 /*****************************************************************************
+/ Função para tratar requisições GET no caminho '/recuperar-senha'
+/
+/ 
+/*****************************************************************************/
+const renderForgotPasswordPage = async (req, res) => {
+    res.render('forgot-password');
+}
+
+
+
+/*****************************************************************************
+/ Função para tratar requisições GET no caminho '/alterar-senha'
+/
+/ Essa rota será chamada quando o usuário estiver tentando resgatar o acesso
+/ ao site. A validação acontecerá pelo token JWT encaminhado pela URL.
+/*****************************************************************************/
+const renderResetPasswordPage = async (req, res) => {
+    const { token } = req.query;
+
+    try {
+        // Decodifica o token
+        const decoded = jwt.decode(token);
+        if (!decoded || !decoded.id) {
+            throw new Error('Invalid or malformed token. Could not decode it.')
+        }
+
+        // Busca o usuário no banco de dados
+        const user = await userModel.getUserById(decoded.id);
+        if (!user) throw new Error('User not found in the database.');
+
+        // Recria o secret usando a senha atual
+        const secretForThisUser = process.env.JWT_SECRET + user.password;
+        // Agora sim, verifica o token
+        jwt.verify(token, secretForThisUser);
+        // Em caso de sucesso, renderiza página e envia o token
+        res.render('reset-password', {
+            success: true,
+            token
+        });
+
+    } catch (error) {
+        printConsoleError(error);
+        return res.render('reset-password', {
+            success: false,
+            messageEn: 'The recovery link is invalid or has already expired. Please submit a new request to recover your password or contact the administrator.',
+            messagePt: 'O link de recuperação é inválido ou já expirou. Faça uma nova solicitação para recuperar a senha ou entre em contato com o administrador.'
+        });
+    }
+};
+
+
+/*****************************************************************************
 / Exporta as funções para serem utilizadas pela aplicação.
 /*****************************************************************************/
 module.exports = {
@@ -196,5 +251,7 @@ module.exports = {
     renderCategoryPage,
     renderPostBySlugs,
     renderAboutPage,
-    renderContactPage
+    renderContactPage,
+    renderForgotPasswordPage,
+    renderResetPasswordPage
 };
