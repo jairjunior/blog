@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const redirectTo = document.getElementById('redirectTo').value;
+            const feedbackMessage = document.getElementById('feedbackMessage');
 
             try {
                 const loginHttpResponse = await fetch('/api/auth/login', {
@@ -16,17 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ email, password, redirectTo })
                 });
-                const loginResponseData = await loginHttpResponse.json();
+                const responseData = await loginHttpResponse.json();
+
                 if (loginHttpResponse.ok) {
-                    window.location.href = loginResponseData.redirectUrl;
+                    window.location.href = responseData.redirectUrl;
                 } else {
-                    console.error('ERROR: ', loginResponseData.messageEn);
-                    const messageField = document.getElementById('responseMessage');
-                    messageField.textContent = loginResponseData.messagePt;
+                    throw new Error(responseData.messagePt);
                 }
                 
             } catch (error) {
-                console.error('Erro na requisição:\n', error);
+                console.error('ERRO na requisição HTTP:/n', error);
+                feedbackMessage.className = 'feedback-message error';
+                feedbackMessage.textContent = error.message || 'Ocorreu um erro interno ao processar a solicitação.';
             }
         });
     }

@@ -1,10 +1,17 @@
 /****************************************************************************** 
-/ Reset de variáveis
+/ Reset e Variáveis de Estilo
 ******************************************************************************/
 :root {
-    /* O tamanho da fonte cresce fluidamente entre o mobile e o desktop/TV, mas tem travas */
     --font-title: clamp(1.5rem, 2vw + 1rem, 2.5rem); 
     --spacing-container: clamp(16px, 5vw, 80px);
+    --primary-blue: #2563eb;
+    --primary-blue-hover: #1d4ed8;
+    --text-main: #111827;
+    --text-muted: #4b5563;
+    --border-color: #b8c0c8;
+    --error-color: #e11d48;
+    --success-color: #059669;
+    --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.4);
 }
 
 * {
@@ -12,7 +19,6 @@
     padding: 0;
     box-sizing: border-box;
 }
-
 
 /****************************************************************************** 
 / Corpo da página
@@ -25,20 +31,18 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: #222;
+    color: var(--text-main);
     background: #f4f6f8;
-    font-family: system-ui, sans-serif;
+    font-family: system-ui, -apple-system, sans-serif;
 }
 
-
 /****************************************************************************** 
-/ Título do Blog
+/ Título / Logotipo
 ******************************************************************************/
 .title-box {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-end;
     margin-bottom: 2rem;
 }
 
@@ -51,15 +55,17 @@ h1.blog-title {
 }
 
 h1.blog-title a {
-    color: #111827;
+    color: var(--text-main);
     text-decoration: none;
     position: relative;
     display: inline-block;
     transition: color 0.3s ease;
 }
 
-h1.blog-title a:hover {
-    color: #2563eb;
+h1.blog-title a:hover,
+h1.blog-title a:focus-visible {
+    color: var(--primary-blue);
+    outline: none;
 }
 
 /* Efeito: Linha decorativa animada sob o texto */
@@ -70,18 +76,25 @@ h1.blog-title a:hover {
     height: 3px;
     bottom: -4px;
     left: 0;
-    background-color: #2563eb;
-    
-    /* Configuração para a linha começar invisível e encolhida */
+    background-color: var(--primary-blue);
     transform: scaleX(0);
     transform-origin: right;
     transition: transform 0.35s cubic-bezier(0.65, 0.05, 0.36, 1);
 }
 
 /* Quando passa o mouse, a linha desliza elegantemente da esquerda para a direita */
-.blog-title a:hover::after {
+h1.blog-title a:hover::after,
+h1.blog-title a:focus-visible::after {
     transform: scaleX(1);
     transform-origin: left;
+}
+
+/*---------------------------------------------------------------------------*/
+/* Título em telas maiores  */
+@media (min-width: 768px) { 
+    h1.blog-title {
+        font-size: clamp(3.3rem, 3vw, 4.5rem);
+    }
 }
 
 
@@ -96,84 +109,139 @@ main {
     min-height: 60vh;
 }
 
-.login-box {
-    width: min(100%, 24rem);
-    margin: auto;
+.main-box {
+    width: min(100%, 26rem);
+    margin: 0;
     padding: 2rem;
     background: #fff;
     border-radius: 0.75rem;
     box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 8%);
 }
+.card-hover-effect {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.card-hover-effect:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 12%);
+}
+
+form {
+    margin-bottom: 1.8rem;
+}
 
 h2 {
-    margin-top: 0;
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.75rem;
+    font-weight: 750;
+    margin-bottom: 1.1rem;
+}
+
+.form-group {
+    margin-bottom: 1rem;
 }
 
 label {
-    display: block; 
-    margin: 1rem 0 0.4rem;
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 0.4rem;
+}
+
+.required {
+    color: var(--error-color);
 }
 
 input {
     width: 100%;
     padding: 0.75rem;
-    border: 1px solid #b8c0c8;
+    border: 1px solid var(--border-color);
     border-radius: 0.4rem;
     font: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.error-message {
-    color: red;
-    margin-top: 0.4rem;
-    margin-bottom: 0;
+input:focus-visible {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: var(--focus-ring);
+}
+
+.feedback-message {
+    font-size: 0.875rem;
+    margin: 0.75rem 0;
+    line-height: 1.4;
+    border-radius: 0.4rem;
+    padding: 0;
+}
+
+.feedback-message.success {
+    color: var(--success-color);
+    background: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    padding: 0.75rem;
+}
+
+.feedback-message.error {
+    color: var(--error-color);
+    background: #fff1f2;
+    border: 1px solid #fecdd3;
+    padding: 0.75rem;
 }
 
 button {
     width: 100%;
-    margin-top: 1.25rem;
+    margin-top: 1.5rem;
     padding: 0.8rem;
     border: 0;
     border-radius: 0.4rem;
     color: #fff;
     background: #2457c5;
     font: inherit;
+    font-weight: 600;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+}
+button:hover {
+    background: #1d4ed8;
+    transform: translateY(-2px);
+    box-shadow: 0 0.4rem 1rem rgba(36, 87, 197, 0.35);
+}
+button:active {
+    transform: translateY(0);
+    box-shadow: 0 0.2rem 0.5rem rgba(36, 87, 197, 0.2);
+}
+button:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
 }
 
-.recovery { 
-    margin: 1rem 0 0; 
+.recovery, .register {
+    margin-top: 0.7rem;
     text-align: center;
-}
-
-div.login-box span {
-    display: block;
-    width: 100%;
-    margin: 1.2rem 0 0; 
-}
-
-.register { 
-    margin: 1.2rem 0 0; 
-    text-align: center;
+    font-size: 1rem;
 }
 
 .recovery a, .register a {
+    color: var(--primary-blue);
     text-decoration: none;
+    font-weight: 600;
 }
 
-.recovery a:hover, .register a:hover {
-    text-decoration: underline
+.recovery a:hover, .register a:hover,
+.recovery a:focus-visible, .register a:focus-visible {
+    text-decoration: underline;
+    outline: none;
 }
 
+span.or-then {
+    display: block;
+    width: 100%;
+    margin: 0.7rem 0 0; 
+}
 .text-center {
     text-align: center;
-}
-
-
-/****************************************************************************** 
-/ Telas maiores 
-******************************************************************************/
-@media (min-width: 768px) { 
-    h1.blog-title {
-        font-size: clamp(3.3rem, 3vw, 4.5rem);
-    }
 }

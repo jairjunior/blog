@@ -1,9 +1,10 @@
 <!doctype html>
-<html lang="en">
+<html lang="pt-BR">
 <head>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>Log in | jjOutOfBounds</title>
+	<title>Entrar | jjOutOfBounds</title>
+	<meta name="description" content="Realizar login com sua conta cadastrada no jjOutOfBounds.">
 
 	<!-- Link para o arquivo CSS estático -->
     <link rel="stylesheet" href="/css/login.css">
@@ -12,34 +13,55 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;750;800&display=swap" rel="stylesheet">
-
 </head>
 
-
 <body>
-	<div class="title-box">
-		<h1 class="blog-title"><a href="/">jjOutOfBounds</a></h1>
-	</div>
+	<header class="title-box">
+		<h1 class="blog-title">
+			<a href="/" aria-label="Página inicial do blog">jjOutOfBounds</a>
+		</h1>
+	</header>
 	
 	<main>
-		<div class="login-box">
-			<h2>Log in</h2>	
+		<div class="main-box card-hover-effect">
+			<h2>Entrar</h2>	
 			<form id="loginForm">
 				<input id="redirectTo" name="redirectTo" type="hidden" value="<%= redirectTo %>">
 
-				<label for="email">E-mail</label>
-				<input id="email" name="email" type="email" autocomplete="email" required>
+				<div class="form-group">
+					<label for="email">E-mail <span class="required" aria-hidden="true">*</span></label>
+					<input 
+						id="email" 
+						name="email" 
+						type="email" 
+						autocomplete="email" 
+						placeholder="seu.email@exemplo.com" 
+						required
+					>
+				</div>
 
-				<label for="password">Senha</label>
-				<input id="password" name="password" type="password" autocomplete="current-password" required>
+				<div class="form-group">
+					<label for="password">Senha <span class="required" aria-hidden="true">*</span></label>
+					<input 
+					id="password" 
+					name="password" 
+					type="password" 
+					autocomplete="current-password" 
+					required
+				>
+				</div>
 
-				<p id="responseMessage" class="error-message"></p>
+				<p id="feedbackMessage" class="feedback-message" role="alert" aria-live="assertive"></p>
 
 				<button type="submit">Entrar</button>
 			</form>
-			<p class="recovery"><a href="/esqueceu-a-senha">Esqueceu a senha?</a></p>
-			<span class="text-center">ou então</span>
-			<p class="register"><a href="/cadastrar">Crie uma conta gratuitamente</a></p>
+			<p class="recovery">
+				<a href="/recuperar-senha">Esqueceu a senha?</a>
+			</p>
+			<span class="text-center or-then">ou então</span>
+			<p class="register">
+				<a href="/cadastrar">Crie uma conta gratuitamente</a>
+			</p>
 		</div>
 	</main>
 
