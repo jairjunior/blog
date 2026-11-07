@@ -79,6 +79,8 @@ function openModal(modal, message, isSuccess) {
         modalActionBtn.classList.add('modal-btn-error');
     }
 
+    disableBackground();
+    modalActionBtn.focus();
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
 }
@@ -89,7 +91,31 @@ function openModal(modal, message, isSuccess) {
 function closeModal(modal) {
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden', 'true');
+    enableBackground();
     document.getElementById('topSearchButton').focus();
+}
+
+/****************************************************************************** 
+/ Conjunto de funções para evitar que o usuário navegue pelo site usando
+/ a tecla TAB quando o modal estiver aberto.
+******************************************************************************/
+function disableBackground() {
+    const header = document.querySelector('header.site-header');
+    const mainContent = document.querySelector('body main');
+    const footer = document.querySelector('footer.site-footer');
+
+    header.setAttribute('inert', '');
+    mainContent.setAttribute('inert', '');
+    footer.setAttribute('inert', '');
+}
+function enableBackground() {
+    const header = document.querySelector('header.site-header');
+    const mainContent = document.querySelector('body main');
+    const footer = document.querySelector('footer.site-footer');
+
+    header.removeAttribute('inert');
+    mainContent.removeAttribute('inert');
+    footer.removeAttribute('inert');
 }
 
 /****************************************************************************** 
