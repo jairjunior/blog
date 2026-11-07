@@ -1,8 +1,19 @@
 /******************************************************************************
 /******************************************************************************
-/ PÁGINA DE CONTATO E FORMULÁRIO DE ENVIO
+/ PÁGINA DE CONTATO E FORMULÁRIO DE ENVIO DE E-MAILS
 /******************************************************************************
 /*****************************************************************************/
+:root {
+    --primary-blue: #2563eb;
+    --primary-blue-hover: #1d4ed8;
+    --text-main: #111827;
+    --text-muted: #4b5563;
+    --border-color: #cbd5e1;
+    --error-color: #e11d48;
+    --success-color: #059669;
+    --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.4);
+}
+
 .contact-container{
     width: 95vw;
     max-width: 900px;
@@ -38,6 +49,8 @@
     margin-bottom: 2rem;
 }
 
+/*---------------------------------------------------------------------------*/
+/* Formulário de Contato */
 .contact-form {
     display: flex;
     flex-direction: column;
@@ -57,75 +70,72 @@
 }
 
 .required {
-    color: #e11d48;
+    color: var(--error-color);
 }
 
 .form-input {
     width: 100%;
     padding: 0.75rem;
-    border-radius: 6px;
-    border: 1px solid #cbd5e1;
+    border-radius: 0.4rem;
+    border: 1px solid var(--border-color);
     background-color: #f8fafc;
-    color: #0f172a;
-    font-size: 1rem;
-    font-family: inherit;
+    color: var(--text-main);
+    font: inherit;
     transition: border-color 0.2s, outline 0.2s;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
-
-.form-input:focus {
-    outline: none;
-    border-color: #2563eb;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-}
-
 .form-input::placeholder {
     color: #a9b9cf;
     font-size: 0.94rem;
 }
-
+.form-input:focus-visible {
+    outline: none;
+    border-color: var(--primary-blue);
+    box-shadow: var(--focus-ring);
+}
 textarea.form-input {
     resize: vertical;
     min-height: 210px;
 }
 
+/*---------------------------------------------------------------------------*/
+/* Botão de Enviar */
 .btn-submit {
-    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 1rem;
     height: 3rem;
-    padding: 0.85rem 1.75rem;
-    border-radius: 8px;
+    padding: 0.8rem 1.75rem;
+    background: var(--primary-blue);
+    color: #ffffff;
+    font: inherit;
+    font-weight: 600;
     border: none;
+    border-radius: 0.4rem;
     cursor: pointer;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: inline-flex;
+    display: flex;
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
+    transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
-
 .btn-submit:hover {
-    background: linear-gradient(135deg, #1d4ed8 0%, #1e40af 100%);
-    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+    background: var(--primary-blue-hover);
     transform: translateY(-2px);
+    box-shadow: 0 0.4rem 1rem rgba(36, 87, 197, 0.35);
 }
-
 .btn-submit:active {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+    box-shadow: 0 0.2rem 0.5rem rgba(36, 87, 197, 0.2);
 }
-
+.btn-submit:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
 .btn-submit:disabled {
-    opacity: 0.75;
+    opacity: 0.7;
     cursor: not-allowed;
-    transform: none;
-    box-shadow: none;
-    background: #64748b;
 }
 
+/*---------------------------------------------------------------------------*/
+/* Animação para a engrenagem girando */
 .spinner-icon {
     width: 1.45rem;
     height: 1.45rem;
@@ -242,6 +252,7 @@ textarea.form-input {
     cursor: pointer;
 }
 
+/*---------------------------------------------------------------------------*/
 /* Botão de Sucesso */
 .modal-btn-success {
     background: linear-gradient(135deg, #05865d 0%, #036449 100%);
@@ -261,6 +272,7 @@ textarea.form-input {
     box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
 }
 
+/*---------------------------------------------------------------------------*/
 /* Botão de Erro */
 .modal-btn-error {
     background: linear-gradient(135deg, #be193d 0%, #af0f37 100%);
