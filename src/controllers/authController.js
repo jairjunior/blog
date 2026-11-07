@@ -217,6 +217,7 @@ exports.resetPassword = async (req, res) => {
         });
     }
 
+    // Validação de confirmação de senha
     if (password !== confirmPassword) {
         return res.status(400).json({
             success: false,

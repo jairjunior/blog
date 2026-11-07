@@ -5,7 +5,7 @@ const contactController = require('../controllers/contactController');
 
 
 /****************************************************************************** 
-/ Configuração do Rate Limit para a rota de contato.
+/ Configuração do Rate Limit para a rota do formulário de contato.
 / Opções:
 / -Janela de tempo: 15 minutos (em milissegundos)
 / -Limite máximo: Cada IP pode fazer no máximo 3 requisições por janela
@@ -20,13 +20,12 @@ const contactLimiter = rateLimit({
     message: {
         success: false,
         messageEn: 'Too many messages sent from this IP. Please try again after 15 minutes.',
-        messagePt: 'Muitas mensagens enviadas a partir deste endereço IP. Por favor, tente novamente após 15 minutos.'
+        messagePt: 'Muitas mensagens enviadas a partir deste endereço. Por favor, aguarde 15 minutos antes de tentar novamente.'
     }
 });
 
 
-
-// Trata o envio dos dados do formulário de contato
+// Trata o envio dos dados pelo formulário de contato
 router.post('/', contactLimiter, contactController.sendContactMessage);
 
 

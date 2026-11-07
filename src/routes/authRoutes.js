@@ -25,10 +25,11 @@ const forgotPasswordLimiter = rateLimit({
 });
 
 
+// Rotas de autenticação do site
 router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.post('/forgot-password', forgotPasswordLimiter, authController.forgotPassword);
-router.post('/reset-password', authController.resetPassword);
+router.post('/reset-password', forgotPasswordLimiter, authController.resetPassword);
 router.get('/logout', authController.logout);
 
 
