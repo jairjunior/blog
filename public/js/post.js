@@ -20,19 +20,19 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const httpResponse = await postHttpRequest(`${pathName}/comments`, {commentContent});
                 const responseData = await httpResponse.json();
+                const feedbackMessage = document.getElementById('commentFeedbackMessage');
                 if (httpResponse.ok) { // Comentário postado com sucesso
                     location.reload();
-
                 } else if (httpResponse.status === 401) { // Token expirado
                     console.error('ERROR: ', responseData.messageEn);
                     savedCommentDraft = commentContent;
-                    openLoginModal();
-
+                    openReauthModal();
+                } else if (httpResponse.status == 429) { // Too many requests
+                    feedbackMessage.textContent = `⚠️ ${responseData.messagePt}`;
+                    startCommentCountdown();
                 } else { // Outros erros
                     console.error('ERROR: ', responseData.messageEn);
-                    document.getElementById('commentResponseMessage').innerHTML = `
-                        <span class="comment-alert-icon">&#x26A0;</span> ${responseData.messagePt}
-                    `;
+                    feedbackMessage.innerHTML = `⚠️ ${responseData.messagePt}`;
                 }
 
             } catch (error) {
@@ -50,9 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
 / sem que o usuário precise digitá-lo novamente.
 ******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
-    const loginModalForm = document.getElementById('loginModalForm')
-    if(loginModalForm){
-        loginModalForm.addEventListener('submit', async (event) => {
+    const reauthModalForm = document.getElementById('reauthModalForm')
+    if(reauthModalForm){
+        reauthModalForm.addEventListener('submit', async (event) => {
             event.preventDefault();
             const email = document.getElementById('modalEmail').value;
             const password = document.getElementById('modalPassword').value;
@@ -61,24 +61,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 const loginHttpResponse = await postHttpRequest('/api/auth/login', {email, password});
                 const loginResponseData = await loginHttpResponse.json();
                 if (loginHttpResponse.ok) { // Login efetuado com sucesso
-                    
                     const pathName = window.location.pathname;
                     const retryHttpResponse = await postHttpRequest(`${pathName}/comments`,{ commentContent: savedCommentDraft });
                     const retryResponseData = await retryHttpResponse.json();
                     if (retryHttpResponse.ok) { // Comentário postado com sucesso
-                        closeLoginModal();
+                        closeReauthModal();
                         location.reload();
                     } else { // Autenticou corretamente, porém teve erro ao postar comentário
                         console.error('ERROR: ', retryResponseData.messageEn);
-                        document.getElementById('commentResponseMessage').innerHTML = `
-                            <span class="comment-alert-icon">&#x26A0;</span> ${retryResponseData.messagePt}
-                        `;
-                        closeLoginModal();
+                        document.getElementById('commentFeedbackMessage').innerHTML = `⚠️ ${retryResponseData.messagePt}`;
+                        closeReauthModal();
                     }
 
                 } else { // Erro ao fazer login pelo modal
                     console.error('ERROR: ', loginResponseData.messageEn);
-                    document.getElementById('loginResponseMessage').textContent = loginResponseData.messagePt;
+                    document.getElementById('modalLoginFeedbackMessage').textContent = loginResponseData.messagePt;
                 }
             } catch (error) {
                 console.error('Erro na requisição:\n', error);
@@ -103,10 +100,12 @@ async function postHttpRequest(url, content){
 /****************************************************************************** 
 / Abre o modal de login.
 ******************************************************************************/
-function openLoginModal() {
-    const loginModal = document.getElementById('loginModal');
-    if (loginModal) {
-        loginModal.style.display = 'flex';   
+function openReauthModal() {
+    const reauthModal = document.getElementById('reauthModal');
+    if (reauthModal) {
+        reauthModal.style.display = 'flex';
+        disableBackground();
+        document.body.classList.add('modal-open');
         const emailInput = document.getElementById('modalEmail');
         if (emailInput) {
             emailInput.focus();
@@ -118,11 +117,13 @@ function openLoginModal() {
 /****************************************************************************** 
 / Fecha o modal de login.
 ******************************************************************************/
-function closeLoginModal() {
-    const loginModal = document.getElementById('loginModal');
-    if (loginModal) {
-        document.getElementById('loginResponseMessage').textContent = '';
-        loginModal.style.display = 'none';
+function closeReauthModal() {
+    const reauthModal = document.getElementById('reauthModal');
+    if (reauthModal) {
+        document.getElementById('modalLoginFeedbackMessage').textContent = '';
+        reauthModal.style.display = 'none';
+        enableBackground();
+        document.body.classList.remove('modal-open');
     }
     
 }
@@ -133,7 +134,7 @@ function closeLoginModal() {
 ******************************************************************************/
 window.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
-        closeLoginModal();
+        closeReauthModal();
     }
 });
 
@@ -142,8 +143,64 @@ window.addEventListener('keydown', (event) => {
 / Fecha o modal de login ao clicar fora da caixa (no fundo escuro).
 ******************************************************************************/
 window.addEventListener('click', (event) => {
-    const loginModal = document.getElementById('loginModal');
-    if (event.target === loginModal) {
-        closeLoginModal();
+    const reauthModal = document.getElementById('reauthModal');
+    if (event.target === reauthModal) {
+        closeReauthModal();
     }
 });
+
+
+/****************************************************************************** 
+/ Faz countdown do tempo que falta para postar novo comentário.
+******************************************************************************/
+async function startCommentCountdown() {
+    const feedbackElement = document.getElementById('commentFeedbackMessage');
+    if (!feedbackElement) return;
+
+    const originalText = feedbackElement.textContent;    
+    const numbersFound = originalText.match(/\d+/);
+    if (!numbersFound) return;
+
+    let secondsRemaining = parseInt(numbersFound[0], 10);
+    feedbackElement.classList.remove('fade-out');
+
+    const commentBtn = document.getElementById('commentSubmitBtn');
+    commentBtn.disabled = true;
+    const interval = setInterval(() => {
+        secondsRemaining--;
+        if (secondsRemaining >= 0) {
+            feedbackElement.textContent = `⚠️ Aguarde ${secondsRemaining} segundos para comentar novamente.`;
+        } else {
+            clearInterval(interval);
+            feedbackElement.classList.add('fade-out');
+            setTimeout(() => {
+                feedbackElement.textContent = '';
+            }, 500);
+            commentBtn.disabled = false;
+        }
+    }, 1000);
+}
+
+
+/****************************************************************************** 
+/ Conjunto de funções para evitar que o usuário navegue pelo site usando
+/ a tecla TAB quando o modal estiver aberto.
+******************************************************************************/
+function disableBackground() {
+    const header = document.querySelector('header.site-header');
+    const mainContent = document.querySelector('body main');
+    const footer = document.querySelector('footer.site-footer');
+
+    header.setAttribute('inert', '');
+    mainContent.setAttribute('inert', '');
+    footer.setAttribute('inert', '');
+}
+function enableBackground() {
+    const header = document.querySelector('header.site-header');
+    const mainContent = document.querySelector('body main');
+    const footer = document.querySelector('footer.site-footer');
+
+    header.removeAttribute('inert');
+    mainContent.removeAttribute('inert');
+    footer.removeAttribute('inert');
+}

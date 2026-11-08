@@ -80,19 +80,22 @@ function openModal(modal, message, isSuccess) {
     }
 
     disableBackground();
-    modalActionBtn.focus();
     modal.classList.add('active');
     modal.setAttribute('aria-hidden', 'false');
+    setTimeout(() => {
+        modalActionBtn.focus();
+    }, 100);
 }
 
 /****************************************************************************** 
 / Função para fechar o modal.
 ******************************************************************************/
 function closeModal(modal) {
+    const modalActionBtn = document.getElementById('modalActionBtn');
+    modalActionBtn.blur();
+    enableBackground();
     modal.classList.remove('active');
     modal.setAttribute('aria-hidden', 'true');
-    enableBackground();
-    document.getElementById('topSearchButton').focus();
 }
 
 /****************************************************************************** 
@@ -103,19 +106,21 @@ function disableBackground() {
     const header = document.querySelector('header.site-header');
     const mainContent = document.querySelector('body main');
     const footer = document.querySelector('footer.site-footer');
-
     header.setAttribute('inert', '');
     mainContent.setAttribute('inert', '');
     footer.setAttribute('inert', '');
+    document.body.classList.add('modal-open');
 }
+
+
 function enableBackground() {
     const header = document.querySelector('header.site-header');
     const mainContent = document.querySelector('body main');
     const footer = document.querySelector('footer.site-footer');
-
     header.removeAttribute('inert');
     mainContent.removeAttribute('inert');
     footer.removeAttribute('inert');
+    document.body.classList.remove('modal-open');
 }
 
 /****************************************************************************** 

@@ -53,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (responseHttpRequest.ok) {
                     feedbackMessage.className = 'feedback-message success';
-                    feedbackMessage.textContent = responseData.messagePt || 'Senha alterada com sucesso! Redirecionando...';
+                    feedbackMessage.textContent = responseData.messagePt || 'Senha alterada com sucesso! Redirecionando para página principal...';
                     await new Promise(resolve => setTimeout(resolve, 5000));
                     window.location.href = responseData.redirectUrl || '/';
                 } else {

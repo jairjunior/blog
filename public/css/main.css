@@ -261,11 +261,15 @@ h1 {
 }
 #topCreateAccountBtn:hover {
     background-color: #1d4ed8;
-    color: rgba(255, 255, 255, 0.822);
     transform: translateY(-1px);
+    box-shadow: 0 0.4rem 1rem rgba(36, 87, 197, 0.5);
+}
+#topCreateAccountBtn:active {
+    transform: translateY(0);
+    box-shadow: 0 0.2rem 0.5rem rgba(36, 87, 197, 0.2);
 }
 #topCreateAccountBtn:hover svg {
-    transform: scale(1.1);
+    transform: scale(1.05);
 }
 
 /*---------------------------------------------*/
@@ -282,7 +286,7 @@ h1 {
 #topLoginBtn:hover {
     background-color: #f1f5f9;
     color: #0f172a;
-    border-color: #94a3b8;
+    border-color: #94a3b88f;
     transform: translateY(-1px);
 }
 #topLoginBtn:hover svg {
@@ -1355,4 +1359,14 @@ h1 {
 
 .footer-links a:hover {
     color: #ffffff;
+}
+
+
+/******************************************************************************
+/******************************************************************************
+/ CLASSES AUXILIARES
+/******************************************************************************
+/*****************************************************************************/
+body.modal-open {
+    overflow: hidden;
 }

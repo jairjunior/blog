@@ -87,7 +87,7 @@ async function validateCommentFrequency(postId, userId){
     }
 
     const elapsedTimeInSeconds = queryResult[0].seconds_elapsed;
-    const COOLDOWN_SECONDS = 60;
+    const COOLDOWN_SECONDS = 120;
     if (elapsedTimeInSeconds < COOLDOWN_SECONDS) {
         const remainingSeconds = COOLDOWN_SECONDS - elapsedTimeInSeconds;
         return {
