@@ -6,10 +6,8 @@
 	<title>Entrar | jjOutOfBounds</title>
 	<meta name="description" content="Realizar login com sua conta cadastrada no jjOutOfBounds.">
 
-	<!-- Link para o arquivo CSS estático -->
     <link rel="stylesheet" href="/css/login.css">
 
-	<!-- Importação da fonte Outfit do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;750;800&display=swap" rel="stylesheet">
@@ -18,12 +16,12 @@
 <body>
 	<header class="title-box">
 		<h1 class="blog-title">
-			<a href="/" aria-label="Página inicial do blog">jjOutOfBounds</a>
+			<a href="/" aria-label="Título do blog. Clique para ir para a página inicial.">jjOutOfBounds</a>
 		</h1>
 	</header>
 	
 	<main>
-		<div class="main-box card-hover-effect">
+		<div class="main-box">
 			<h2>Entrar</h2>	
 			<form id="loginForm">
 				<input id="redirectTo" name="redirectTo" type="hidden" value="<%= redirectTo %>">
@@ -42,20 +40,29 @@
 
 				<div class="form-group">
 					<label for="password">Senha <span class="required" aria-hidden="true">*</span></label>
-					<input 
-					id="password" 
-					name="password" 
-					type="password" 
-					autocomplete="current-password" 
-					placeholder="Sua senha" 
-					required
-				>
+					<div class="password-wrapper">
+						<input 
+							id="password" 
+							name="password" 
+							type="password" 
+							autocomplete="current-password" 
+							placeholder="Sua senha" 
+							required
+						>
+						<button type="button" id="togglePassword" aria-label="Mostrar senha">
+							<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-labelledby="closedEyeIconTitle" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> 
+								<title id="closedEyeIconTitle">Ocultar senha</title> 
+								<path d="M20 9C20 9 19.6797 9.66735 19 10.5144M12 14C10.392 14 9.04786 13.5878 7.94861 13M12 14C13.608 14 14.9521 13.5878 16.0514 13M12 14V17.5M4 9C4 9 4.35367 9.73682 5.10628 10.6448M7.94861 13L5 16M7.94861 13C6.6892 12.3266 5.75124 11.4228 5.10628 10.6448M16.0514 13L18.5 16M16.0514 13C17.3818 12.2887 18.3535 11.3202 19 10.5144M5.10628 10.6448L2 12M19 10.5144L22 12"/>
+							</svg>
+						</button>
+					</div>
 				</div>
 
 				<p id="feedbackMessage" class="feedback-message" role="alert" aria-live="assertive"></p>
 
-				<button type="submit">Entrar</button>
+				<button type="submit" id="loginSubmitBtn">Entrar</button>
 			</form>
+
 			<p class="recovery">
 				<a href="/recuperar-senha">Esqueceu a senha?</a>
 			</p>
@@ -63,6 +70,7 @@
 			<p class="register">
 				<a href="/cadastrar">Crie uma conta gratuitamente</a>
 			</p>
+
 		</div>
 	</main>
 
