@@ -1,5 +1,5 @@
 /****************************************************************************** 
-/ Variáveis Globais & Reset
+/ Reset e Variáveis de Estilo
 ******************************************************************************/
 :root {
     --primary-blue: #2563eb;
@@ -21,6 +21,9 @@
     box-sizing: border-box;
 }
 
+/****************************************************************************** 
+/ Corpo da página
+******************************************************************************/
 body {
     min-height: 100vh;
     padding: 2rem 1rem;
@@ -34,7 +37,7 @@ body {
 }
 
 /****************************************************************************** 
-/ Logotipo (Harmonizado com login.css)
+/ Logotipo
 ******************************************************************************/
 .title-box {
     display: flex;
@@ -84,7 +87,7 @@ h1.blog-title a:focus-visible::after {
 }
 
 /****************************************************************************** 
-/ Layout Principal (Mobile-First: Caixas Empilhadas)
+/ Layout Principal
 ******************************************************************************/
 .register-container {
     width: 100%;
@@ -96,10 +99,11 @@ h1.blog-title a:focus-visible::after {
     justify-content: center;
 }
 
+/*---------------------------------------------------------------------------*/
 /* Card 1: Vantagens */
 .benefits-card {
     width: 100%;
-    max-width: 32rem; /* Limite individual no mobile */
+    max-width: 32rem;
     background: var(--bg-card);
     padding: 2rem;
     border-radius: 1rem;
@@ -124,6 +128,7 @@ h1.blog-title a:focus-visible::after {
     font-weight: 750;
     margin-bottom: 0.5rem;
     background: var(--gradient-accent);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -175,6 +180,7 @@ h1.blog-title a:focus-visible::after {
     line-height: 1.4;
 }
 
+/*---------------------------------------------------------------------------*/
 /* Card 2: Formulário */
 .register-box {
     width: 100%;
@@ -183,6 +189,7 @@ h1.blog-title a:focus-visible::after {
     padding: 2rem;
     border-radius: 1rem;
     box-shadow: 0 0.5rem 1.5rem rgb(0 0 0 / 8%);
+    border-bottom: 5px solid var(--primary-blue);
 }
 
 .form-title {
@@ -230,7 +237,7 @@ input:focus-visible {
 }
 
 .input-hint {
-    font-size: 0.75rem;
+    font-size: 0.83rem;
     color: var(--text-muted);
     margin-top: 0.3rem;
 }
@@ -242,6 +249,7 @@ input:focus-visible {
     color: var(--primary-blue);
 }
 
+/*---------------------------------------------------------------------------*/
 /* Erro e Botão */
 .error-message {
     color: var(--error-color);
@@ -289,6 +297,12 @@ input:focus-visible {
     transform: none;
 }
 
+.btn-submit svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+}
+
 .divider-text {
     display: block;
     width: 100%;
@@ -315,7 +329,7 @@ input:focus-visible {
 }
 
 /****************************************************************************** 
-/ Classe Universal de Hover (Inspirada no jjOutOfBounds)
+/ Classe Universal de Hover
 ******************************************************************************/
 .card-hover-effect {
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -344,7 +358,6 @@ input:focus-visible {
 /****************************************************************************** 
 / Responsividade (Media Queries)
 ******************************************************************************/
-
 /* Telas intermediárias: Nome e Sobrenome lado a lado */
 @media (min-width: 600px) {
     .form-row {
