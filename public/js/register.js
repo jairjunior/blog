@@ -1,5 +1,5 @@
 // SVG de Engrenagem Animada para o estado de Carregamento
-const gearSpinnerSvg = `
+const gearIcon = `
     <svg class="spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
         <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
@@ -49,104 +49,100 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Submissão do Formulário
-    if (registerForm) {
-        registerForm.addEventListener('submit', async (event) => {
-            event.preventDefault();
-            feedbackMessage.className = 'feedback-message';
-            feedbackMessage.textContent = '';
-            const password = passwordInput.value;
-            const confirmPassword = confirmPasswordInput.value;
+    registerForm.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        feedbackMessage.className = 'feedback-message';
+        feedbackMessage.textContent = '';
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
 
-            // Valida se os campos atendem às regras nativas do HTML5 (required, minlength, etc.)
-            if (!registerForm.checkValidity()) {
-                registerForm.reportValidity();
-                return;
-            }
+        // Valida se os campos atendem às regras nativas do HTML5 (required, minlength, etc.)
+        if (!registerForm.checkValidity()) {
+            registerForm.reportValidity();
+            return;
+        }
 
-            // Validação de confirmação de senha
-            if (password !== confirmPassword) {
-                feedbackMessage.className = 'feedback-message error';
-                feedbackMessage.textContent = 'As senhas informadas não correspondem.';
-                return;
-            }
+        // Validação Explicita via RegEx do E-mail
+        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        if (!emailRegex.test(emailInput.value)) {
+            emailInput.setCustomValidity('Por favor, insira um e-mail válido (ex: nome@dominio.com).');
+            emailInput.reportValidity();
+            return;
+        } else {
+            emailInput.setCustomValidity('');
+        }
 
-            // Validação da complexidade da senha via RegEx
-            // Mínimo 8 caracteres, 1 maiúscula, 1 minúscula, 1 número e 1 caractere especial
-            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#.\-_])[A-Za-z\d@$!%*?&#.\-_]{8,}$/;
-            if (!passwordRegex.test(password)) {
-                feedbackMessage.className = 'feedback-message error';
-                feedbackMessage.textContent = 'A senha informada não atende aos requisitos mínimos estabelecidos.';
-                return;
-            }
+        // Validação de confirmação de senha
+        if (password !== confirmPassword) {
+            feedbackMessage.className = 'feedback-message error';
+            feedbackMessage.textContent = 'As senhas informadas não correspondem.';
+            return;
+        }
 
-            // Validação Explicita via RegEx do E-mail
-            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-            if (!emailRegex.test(emailInput.value)) {
-                emailInput.setCustomValidity('Por favor, insira um e-mail válido (ex: nome@dominio.com).');
-                emailInput.reportValidity();
-                return;
+        // Validação da complexidade da senha via RegEx
+        // Mínimo 8 caracteres, 1 maiúscula, 1 minúscula, 1 número e 1 caractere especial
+        const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#.\-_])[A-Za-z\d@$!%*?&#.\-_]{8,}$/;
+        if (!passwordRegex.test(password)) {
+            feedbackMessage.className = 'feedback-message error';
+            feedbackMessage.textContent = 'A senha informada não atende aos requisitos mínimos estabelecidos.';
+            return;
+        }
+
+        // Preparação dos dados para a API
+        const payload = {
+            first_name: registerForm.firstName.value.trim(),
+            last_name: registerForm.lastName.value.trim(),
+            email: registerForm.email.value.trim(),
+            password: registerForm.password.value
+        };
+
+        // Botão com visual de Carregamento (Loading)
+        const originalBtnText = submitBtn.innerHTML;
+        submitBtn.innerHTML = `${gearIcon} <span>Cadastrando...</span>`;
+        submitBtn.disabled = true;
+
+        try {
+            const responseHttpRequest = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(payload)
+            });
+            const responseData = await responseHttpRequest.json();
+
+            if (responseHttpRequest.ok) {
+                window.location.href = responseData.redirectUrl || '/?registered=true';
             } else {
-                emailInput.setCustomValidity('');
+                throw new Error(responseData.messagePt);
             }
-
-            // Preparação dos dados para a API
-            const payload = {
-                first_name: registerForm.firstName.value.trim(),
-                last_name: registerForm.lastName.value.trim(),
-                email: registerForm.email.value.trim(),
-                password: registerForm.password.value
-            };
-
-            // Estado visual de Carregamento (Loading)
-            const originalBtnText = submitBtn.innerHTML;
-            submitBtn.innerHTML = `${gearSpinnerSvg} <span>Cadastrando...</span>`;
-            submitBtn.disabled = true;
-
-            try {
-                const responseHttpRequest = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(payload)
-                });
-                const responseData = await responseHttpRequest.json();
-
-                if (responseHttpRequest.ok) {
-                    window.location.href = responseData.redirectUrl || '/?registered=true';
-                } else {
-                    throw new Error(responseData.messagePt);
-                }
-            } catch (error) {
-                console.error('ERRO na requisição HTTP:\n', error);
-                feedbackMessage.className = 'feedback-message error';
-                feedbackMessage.textContent = error.message || 'Ocorreu um erro interno ao processar a solicitação.';
-            } finally {
-                submitBtn.innerHTML = originalBtnText;
-                submitBtn.disabled = false;
-            }
-        });
-    }
+        } catch (error) {
+            console.error('ERRO na requisição HTTP:\n', error);
+            feedbackMessage.className = 'feedback-message error';
+            feedbackMessage.textContent = error.message || 'Ocorreu um erro interno ao processar a solicitação.';
+        } finally {
+            submitBtn.innerHTML = originalBtnText;
+            submitBtn.disabled = false;
+        }
+    });
 
 
     // Função para mostrar/ocultar a senha.
     const passwordGroups = document.querySelectorAll('div.password-wrapper');
-    if (passwordGroups.length === 2) {
-        passwordGroups.forEach(passwordGroup => {
-            const passwordInput = passwordGroup.querySelector('input[type="password"]');
-            const togglePasswordBtn = passwordGroup.querySelector('button.toggle-password');
-            if (passwordInput && togglePasswordBtn) {
-                togglePasswordBtn.addEventListener('click', () => {
-                    const isPassword = passwordInput.type === 'password';
-                    passwordInput.type = isPassword ? 'text' : 'password';
-                    togglePasswordBtn.innerHTML = isPassword ? openEyeIcon : closedEyeIcon;
-                    togglePasswordBtn.setAttribute(
-                        'aria-label', 
-                        isPassword ? 'Ocultar senha' : 'Visualizar senha'
-                    );
-                });
-            }
-        });
-    }
+    passwordGroups.forEach(passwordGroup => {
+        const passwordInput = passwordGroup.querySelector('input[type="password"]');
+        const togglePasswordBtn = passwordGroup.querySelector('button.toggle-password');
+        if (passwordInput && togglePasswordBtn) {
+            togglePasswordBtn.addEventListener('click', () => {
+                const isPassword = passwordInput.type === 'password';
+                passwordInput.type = isPassword ? 'text' : 'password';
+                togglePasswordBtn.innerHTML = isPassword ? openEyeIcon : closedEyeIcon;
+                togglePasswordBtn.setAttribute(
+                    'aria-label', 
+                    isPassword ? 'Ocultar senha' : 'Visualizar senha'
+                );
+            });
+        }
+    });
 
 });
