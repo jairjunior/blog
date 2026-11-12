@@ -3,11 +3,13 @@ const userModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { sendResetPasswordEmail } = require('../services/contactEmailService');
-const { printConsoleError } = require('../utils/logger');
+const { printConsoleError, printConsoleWarning } = require('../utils/logger');
 
 
 /*****************************************************************************/
-// Função para registrar um novo usuário.
+// Função para tratar requisições POST no rota /api/auth/register
+//
+// Cadastra um novo usuário no sistema.
 /*****************************************************************************/
 exports.register = async (req, res) => {
 
@@ -32,7 +34,7 @@ exports.register = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('ERROR in authController.register():\n', error);
+        printConsoleError(error);
         if (error.code === 'ER_DUP_ENTRY') {
             return res.status(409).json({
                 success: false, 
@@ -51,7 +53,10 @@ exports.register = async (req, res) => {
 
 
 /*****************************************************************************/
-// Função para fazer login e autenticar um usuário existente.
+// Função para tratar requisições POST no rota /api/auth/login
+//
+// Efetua login e autentica o usuário existente gerando um token JWT que será
+// armazenado como cookie no navegador do usuário.
 /*****************************************************************************/
 exports.login = async (req, res) => {
     
@@ -112,7 +117,7 @@ exports.login = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('ERROR in authController.login():\n', error);
+        printConsoleError(error);
         return res.status(500).json({ 
             success: false,
             messageEn: 'Internal server error. Contact the administrator.',
@@ -124,7 +129,9 @@ exports.login = async (req, res) => {
 
 
 /*****************************************************************************/
-// Função para fazer logout da aplicação.
+// Função para tratar requisições GET no rota /api/auth/logout
+//
+// Faz logout da aplicação invalidando o token no navegador do usuário.
 /*****************************************************************************/
 exports.logout = async (req, res) => {
     res.clearCookie('token', {
@@ -155,7 +162,7 @@ exports.forgotPassword = async (req, res) => {
     try {
         const user = await userModel.getUserByEmail(email);
         if (!user) {
-            console.error(`Someone is trying to reset password of a non existing user: [${email}]`);
+            printConsoleWarning(`Someone is trying to reset password of a non existing user: [${email}]`);
             return res.status(200).json({
                 success: true,
                 messageEn: 'If the email is registered, a link to reset your password has been sent.',
@@ -190,7 +197,7 @@ exports.forgotPassword = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('ERROR in authController.forgotPassword():\n', error);
+        printConsoleError(error);
         return res.status(500).json({
             success: false,
             messageEn: 'An internal error occurred while processing the request.',
@@ -198,7 +205,6 @@ exports.forgotPassword = async (req, res) => {
         });
     }
 };
-
 
 
 /*****************************************************************************/
