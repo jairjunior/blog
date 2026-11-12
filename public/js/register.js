@@ -53,8 +53,6 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault();
         feedbackMessage.className = 'feedback-message';
         feedbackMessage.textContent = '';
-        const password = passwordInput.value;
-        const confirmPassword = confirmPasswordInput.value;
 
         // Valida se os campos atendem às regras nativas do HTML5 (required, minlength, etc.)
         if (!registerForm.checkValidity()) {
@@ -62,7 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Validação Explicita via RegEx do E-mail
+        // Validação do e-mail via RegEx
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!emailRegex.test(emailInput.value)) {
             emailInput.setCustomValidity('Por favor, insira um e-mail válido (ex: nome@dominio.com).');
@@ -73,6 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Validação de confirmação de senha
+        const password = passwordInput.value;
+        const confirmPassword = confirmPasswordInput.value;
         if (password !== confirmPassword) {
             feedbackMessage.className = 'feedback-message error';
             feedbackMessage.textContent = 'As senhas informadas não correspondem.';
@@ -96,11 +96,12 @@ document.addEventListener('DOMContentLoaded', () => {
             password: registerForm.password.value
         };
 
-        // Botão com visual de Carregamento (Loading)
-        const originalBtnText = submitBtn.innerHTML;
+        // Botão com visual de Carregamento (Loading...)
+        const originalBtnHtml = submitBtn.innerHTML;
         submitBtn.innerHTML = `${gearIcon} <span>Cadastrando...</span>`;
         submitBtn.disabled = true;
 
+        // Realiza requisição HTTP
         try {
             const responseHttpRequest = await fetch('/api/auth/register', {
                 method: 'POST',
@@ -121,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
             feedbackMessage.className = 'feedback-message error';
             feedbackMessage.textContent = error.message || 'Ocorreu um erro interno ao processar a solicitação.';
         } finally {
-            submitBtn.innerHTML = originalBtnText;
+            submitBtn.innerHTML = originalBtnHtml;
             submitBtn.disabled = false;
         }
     });
