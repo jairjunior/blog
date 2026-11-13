@@ -43,8 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
         feedbackMessage.textContent = '';
 
         // Valida se os campos atendem às regras nativas do HTML5 (required, minlength, etc.)
-        if (!registerForm.checkValidity()) {
-            registerForm.reportValidity();
+        if (!loginForm.checkValidity()) {
+            loginForm.reportValidity();
             return;
         }
 

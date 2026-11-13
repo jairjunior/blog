@@ -8,7 +8,7 @@
     --primary-blue-hover: #1d4ed8;
     --text-main: #111827;
     --text-muted: #4b5563;
-    --border-color: #b8c0c8;
+    --border-color: #cbd5e1;
     --error-color: #e11d48;
     --success-color: #059669;
     --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.4);
@@ -275,6 +275,7 @@ button#loginSubmitBtn:focus-visible {
     outline: none;
 }
 span.or-then {
+    font-size: 0.9rem;
     display: block;
     width: 100%;
     margin: 0.7rem 0 0; 
