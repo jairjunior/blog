@@ -24,8 +24,7 @@ exports.register = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const query = 'INSERT INTO users (email, first_name, last_name, password) VALUES (?, ?, ?, ?)';
-        await databasePool.query(query, [email, first_name, last_name, hashedPassword]);    
+        await userModel.createUser(email, first_name, last_name, hashedPassword);
         
         res.status(201).json({
             success: true,
