@@ -25,8 +25,10 @@ const closedEyeIcon = `
 /****************************************************************************** 
 / Função executada ao carregar a página.
 /
-/ Adiciona um Event Listener para o botão de submit do formulário e outro para
-/ o ícone de mostrar/ocultar senha.
+/ Adiciona Event Listeners nos elementos da página:
+/ 1) Em todos os inputs do formulário para limpar o campo feedbackMessage;
+/ 2) Botão de submit do formulário para cadastro de novo usuário;
+/ 3) Ícone de mostrar/ocultar senha.
 ******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('registerForm');
@@ -88,18 +90,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Preparação dos dados para a API
-        const payload = {
-            first_name: registerForm.firstName.value.trim(),
-            last_name: registerForm.lastName.value.trim(),
-            email: registerForm.email.value.trim(),
-            password: registerForm.password.value
-        };
-
         // Botão com visual de Carregamento (Loading...)
         const originalBtnHtml = submitBtn.innerHTML;
         submitBtn.innerHTML = `${gearIcon} <span>Cadastrando...</span>`;
         submitBtn.disabled = true;
+
+        // Preparação dos dados para a API
+        const firstName = registerForm.firstName.value.trim();
+        const lastName = registerForm.lastName.value.trim();
+        const email = registerForm.email.value.trim();
+        const payload = {firstName, lastName, email, password};
 
         // Realiza requisição HTTP
         try {
@@ -112,8 +112,8 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const responseData = await responseHttpRequest.json();
 
-            if (responseHttpRequest.ok) {
-                window.location.href = responseData.redirectUrl || '/?registered=true';
+            if (responseHttpRequest.ok && responseHttpRequest.status === 201) { // HTTP 201 = Created 
+                window.location.href = responseData.redirectUrl || '/?erro=falha-de-redirecionamento';
             } else {
                 throw new Error(responseData.messagePt);
             }
