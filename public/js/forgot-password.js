@@ -65,7 +65,6 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 throw new Error(responseData.messagePt);
             }
-
         } catch (error) {
             console.error('ERRO na requisição HTTP:\n', error);
             feedbackMessage.className = 'feedback-message error';
