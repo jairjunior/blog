@@ -1,4 +1,4 @@
-const { sendContactEmail } = require('../services/contactEmailService');
+const { sendContactEmail } = require('../services/emailService');
 
 
 /*****************************************************************************
