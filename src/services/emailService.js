@@ -1,7 +1,7 @@
 const nodemailer = require('nodemailer');
 
 /******************************************************************************
-/ Cria o transportador com as credenciais do servidor SMTP
+/ Cria o transportador com as credenciais do servidor SMTP.
 /*****************************************************************************/
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST,
@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 
 /******************************************************************************
-/ Função responsável por disparar o e-mail de contato
+/ Função responsável por disparar o e-mail do formulário de contato do site.
 /*****************************************************************************/
 async function sendContactEmail({ name, email, subject, message }) {
     const mailOptions = {
@@ -39,7 +39,38 @@ async function sendContactEmail({ name, email, subject, message }) {
 
 
 /******************************************************************************
-/ Função responsável por disparar o e-mail de recuperar a senha
+/ Função responsável por disparar o e-mail de confirmação de cadastro de 
+/ novo usuario.
+/*****************************************************************************/
+async function sendNewUserVerificationEmail(email, userName, verificationUrl){
+    const mailOptions = {
+        from: `"jjOutOfBounds" <${process.env.EMAIL_USER}>`,
+        to: email,
+        subject: 'Confirmação de Cadastro - jjOutOfBounds',
+        html: `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #111827;">
+                <h2 style="color: #2563eb;">Bem-vindo(a) ao jjOutOfBounds!</h2>
+                <p>Olá, prezado(a) ${userName || 'leitor(a)'}!</p>
+                <p>Recebemos o seu cadastro no blog <a href="https://blog.jairjr.com.br"><strong>jjOutOfBounds</strong></a>. Para ativar a sua conta e liberar o acesso completo aos recursos, por favor confirme o seu e-mail clicando no botão abaixo:</p>
+                <p style="text-align: center; margin: 30px 0;">
+                    <a href="${verificationUrl}" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Confirmar Meu E-mail</a>
+                </p>
+                <p style="font-size: 0.85rem; color: #4b5563;">
+                    Ou copie e cole o seguinte link no seu navegador:<br>
+                    <a href="${verificationUrl}" style="color: #2563eb;">${verificationUrl}</a>
+                </p>
+                <p style="font-size: 0.85rem; color: #dc2626; margin-top: 20px;">
+                    ⚠️ <strong>Este link expira em 24 horas.</strong> Se você não realizou este cadastro, por favor ignore este e-mail.
+                </p>
+            </div>
+        `
+    };
+    return await transporter.sendMail(mailOptions);
+}
+
+
+/******************************************************************************
+/ Função responsável por disparar o e-mail de recuperar a senha do usuário.
 /*****************************************************************************/
 async function sendResetPasswordEmail(email, userName, resetUrl) {
     const mailOptions = {
@@ -74,5 +105,6 @@ async function sendResetPasswordEmail(email, userName, resetUrl) {
 /*****************************************************************************/
 module.exports = {
     sendContactEmail,
+    sendNewUserVerificationEmail,
     sendResetPasswordEmail
 };
