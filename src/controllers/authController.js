@@ -2,20 +2,20 @@ const databasePool = require('../config/database');
 const userModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { sendResetPasswordEmail } = require('../services/contactEmailService');
+const { sendNewUserVerificationEmail, sendResetPasswordEmail } = require('../services/emailService');
 const { printConsoleError, printConsoleWarning } = require('../utils/logger');
 
 
-/*****************************************************************************/
-// Função para tratar requisições POST no rota /api/auth/register
-//
-// Cadastra um novo usuário no sistema.
+/******************************************************************************
+/ Função para tratar requisições POST no rota /api/auth/register
+/
+/ Cadastra um novo usuário no sistema.
 /*****************************************************************************/
 exports.register = async (req, res) => {
 
-    const { email, first_name, last_name, password } = req.body;
-    if(!email || !first_name || !last_name || !password) {
-        return res.status(400).json({ 
+    const { email, firstName, lastName, password } = req.body;
+    if(!email || !firstName || !lastName || !password) {
+        return res.status(400).json({ // HTTP 400 Bad Request
             success: false,
             messageEn: 'Please, provide all required fields.',
             messagePt: 'Por favor, providencie todos os campos exigidos.'
@@ -23,39 +23,72 @@ exports.register = async (req, res) => {
     }
 
     try {
+        // Faz hash da senha
+        // Cria novo usuário no banco de dados
         const hashedPassword = await bcrypt.hash(password, 10);
-        await userModel.createUser(email, first_name, last_name, hashedPassword);
-        
-        res.status(201).json({
+        const newUserId = await userModel.createUser(email, firstName, lastName, hashedPassword);
+
+        // Cria um JWT de verificação válido por 24 horas
+        const verificationToken = jwt.sign({ 
+                userId: newUserId,
+                email: email
+            }, 
+            process.env.JWT_SECRET, 
+            { expiresIn: '24h' }
+        );
+
+        // Monta o link absoluto para a rota de verificação
+        const protocol = req.protocol;
+        const host = req.get('host');
+        const verificationUrl = `${protocol}://${host}/api/auth/verify?token=${verificationToken}`;
+
+        // Dispara o envio do e-mail de verificação com tratamento personalizado
+        // Se der erro no envio, salva uma flag na sessão indicando que o e-mail 
+        // falhou ao ser despachado.
+        const userName = `${firstName} ${lastName}`;
+        try {
+            await sendNewUserVerificationEmail(email, userName, verificationUrl);
+        } catch (emailError) {
+            printConsoleError(emailError);
+            req.session.failedToSendVerificationEmail = true;
+        }
+
+        // Cria session variable indicando que o e-mail ainda está pendente de verificação
+        req.session.pendingVerificationEmail = email;
+
+        // Sucesso!
+        res.status(201).json({ // HTTP 201 Created
             success: true,
-            messageEn: 'User registered successfully.',
-            messagePt: 'Usuário registrado com sucesso.'
+            redirectUrl: `/confirmacao-de-cadastro?email=${encodeURIComponent(email)}&firstName=${firstName}`,
+            messageEn: `User [${email}] registered successfully. Still needs confirmation.`,
+            messagePt: `Usuário [${email}] registrado com sucesso. Ainda necessita de confirmação.`
         });
 
     } catch (error) {
         printConsoleError(error);
         if (error.code === 'ER_DUP_ENTRY') {
-            return res.status(409).json({
+            return res.status(409).json({ // HTTP 409 Conflict
                 success: false, 
                 messageEn: 'Email already exists.',
                 messagePt: 'O e-mail informado já está cadastrado.'
             });
+        } else {
+            return res.status(500).json({ // HTTP 500 Internal Server Error 
+                success: false,
+                messageEn: 'Internal server error. Please try again later or contact the administrator.',
+                messagePt: 'Erro interno do servidor. Tente novamente mais tarde ou entre em contato com o administrador.'
+            });
         }
-        return res.status(500).json({ 
-            success: false,
-            messageEn: 'Internal server error. Contact the administrator.',
-            messagePt: 'Erro no servidor. Entre em contato com o administrador.'
-        });
-
     }
+
 };
 
 
-/*****************************************************************************/
-// Função para tratar requisições POST no rota /api/auth/login
-//
-// Efetua login e autentica o usuário existente gerando um token JWT que será
-// armazenado como cookie no navegador do usuário.
+/******************************************************************************
+/ Função para tratar requisições POST no rota /api/auth/login
+/
+/ Efetua login e autentica o usuário existente gerando um token JWT que será
+/ armazenado como cookie no navegador do usuário.
 /*****************************************************************************/
 exports.login = async (req, res) => {
     
@@ -127,10 +160,10 @@ exports.login = async (req, res) => {
 };
 
 
-/*****************************************************************************/
-// Função para tratar requisições GET no rota /api/auth/logout
-//
-// Faz logout da aplicação invalidando o token no navegador do usuário.
+/******************************************************************************
+/ Função para tratar requisições GET no rota /api/auth/logout
+/
+/ Faz logout da aplicação invalidando o token no navegador do usuário.
 /*****************************************************************************/
 exports.logout = async (req, res) => {
     res.clearCookie('token', {
@@ -143,10 +176,10 @@ exports.logout = async (req, res) => {
 }
 
 
-/*****************************************************************************/
-// Função para tratar requisições POST no rota /api/auth/forgot-password
-// 
-// Envia e-mail de recuperação de senha para o usuário.
+/******************************************************************************
+/ Função para tratar requisições POST no rota /api/auth/forgot-password
+/ 
+/ Envia e-mail de recuperação de senha para o usuário.
 /*****************************************************************************/
 exports.forgotPassword = async (req, res) => {
     const { email } = req.body;
@@ -178,7 +211,7 @@ exports.forgotPassword = async (req, res) => {
                 email: user.email
             }, 
             uniqueSecret, 
-            { expiresIn: '2h' } // DEPOIS ALTERAR AQUI PARA 15 MINUTOS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            { expiresIn: '15m' }
         );
 
         // Monta o link absoluto para a página de redefinição
@@ -206,10 +239,10 @@ exports.forgotPassword = async (req, res) => {
 };
 
 
-/*****************************************************************************/
-// Função para tratar requisições POST no rota /api/auth/reset-password
-// 
-// Atualiza a senha do usuário na base de dados.
+/******************************************************************************
+/ Função para tratar requisições POST no rota /api/auth/reset-password
+/ 
+/ Atualiza a senha do usuário na base de dados.
 /*****************************************************************************/
 exports.resetPassword = async (req, res) => {
     const { token, password, confirmPassword } = req.body;
