@@ -13,6 +13,7 @@ router.get('/cadastrar', blogController.renderRegisterPage);
 router.get('/login', blogController.renderLoginPage);
 router.get('/recuperar-senha', blogController.renderForgotPasswordPage);
 router.get('/alterar-senha', blogController.renderResetPasswordPage);
+router.get('/confirmacao-de-cadastro', blogController.renderEmailVerificationPendingPage);
 
 router.get('/posts', blogController.renderPostsPage);
 router.get('/posts/:categorySlug', blogController.renderCategoryPage);

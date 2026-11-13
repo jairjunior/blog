@@ -239,6 +239,38 @@ const renderResetPasswordPage = async (req, res) => {
     }
 };
 
+/*****************************************************************************
+/ Função para tratar requisições GET no caminho '/confirmacao-de-cadastro'
+/
+/ 
+/*****************************************************************************/
+const renderEmailVerificationPendingPage = (req, res) => {
+    const sessionEmail = req.session.pendingVerificationEmail;
+    
+    // Verifica por meio da session variable se o usuário passou pelo fluxo de cadastro
+    if (!sessionEmail) {
+        return res.redirect('/');
+    }
+
+    // Captura se houve falha no envio do e-mail através da session variable específica
+    const verificationEmailFailure = Boolean(req.session.failedToSendVerificationEmail);
+
+    // Limpa as session variables para evitar que o usuário 
+    // reutilize essa visualização indefinidamente
+    delete req.session.pendingVerificationEmail;
+    delete req.session.failedToSendVerificationEmail;
+    
+    // Renderiza a página '/confirmacao-de-cadastro' personalizada
+    // com e-mail, nome do usuário e o status de erro no envio
+    const { firstName } = req.query;
+    res.render('verify-email', {
+        email: sessionEmail || '',
+        firstName: firstName || '',
+        emailSendFailed: verificationEmailFailure
+    });
+
+};
+
 
 /*****************************************************************************
 / Exporta as funções para serem utilizadas pela aplicação.
@@ -253,5 +285,6 @@ module.exports = {
     renderAboutPage,
     renderContactPage,
     renderForgotPasswordPage,
-    renderResetPasswordPage
+    renderResetPasswordPage,
+    renderEmailVerificationPendingPage
 };
