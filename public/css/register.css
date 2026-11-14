@@ -97,7 +97,7 @@ main {
     width: 100%;
     max-width: 1500px;
     display: flex;
-    flex-direction: column; /* Empilhado no mobile */
+    flex-direction: column;
     gap: 2rem;
     align-items: center;
     justify-content: center;
