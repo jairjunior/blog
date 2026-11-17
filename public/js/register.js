@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // Validação do e-mail via RegEx
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         if (!emailRegex.test(emailInput.value)) {
-            emailInput.setCustomValidity('Por favor, insira um e-mail válido (ex: nome@dominio.com).');
+            emailInput.setCustomValidity('Por favor, insira um e-mail no formato válido (ex: nome@dominio.com).');
             emailInput.reportValidity();
             return;
         } else {
@@ -86,7 +86,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#.\-_])[A-Za-z\d@$!%*?&#.\-_]{8,}$/;
         if (!passwordRegex.test(password)) {
             feedbackMessage.className = 'feedback-message error';
-            feedbackMessage.textContent = 'A senha informada não atende aos requisitos mínimos estabelecidos.';
+            feedbackMessage.textContent = 'A senha informada não atende aos requisitos mínimos de complexidade.';
             return;
         }
 
