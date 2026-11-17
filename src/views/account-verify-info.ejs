@@ -6,10 +6,8 @@
     <title>Confirme seu E-mail | jjOutOfBounds</title>
     <meta name="description" content="Instruções para ativar sua conta no jjOutOfBounds.">
 
-    <!-- Estilo da página -->
-    <link rel="stylesheet" href="/css/verify-email.css">
+    <link rel="stylesheet" href="/css/account-verify-info.css">
 
-    <!-- Fonte Outfit do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;750;800&display=swap" rel="stylesheet">
@@ -23,7 +21,7 @@
     </header>
     
     <main>
-        <div class="main-box card-hover-effect" id="verificationCard" data-email-failed="<%= typeof verificationEmailFailure !== 'undefined' && verificationEmailFailure ? 'true' : 'false' %>">
+        <div class="main-box card-hover-effect" id="verificationCard" data-email-failed="<%= (verificationEmailFailure && typeof verificationEmailFailure !== 'undefined') ? 'true' : 'false' %>">
             <!-- Ícone de destaque (Envelope/Caixa de entrada) -->
             <div class="icon-badge" aria-hidden="true">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -34,10 +32,10 @@
 
             <h2>Quase lá<%= typeof firstName !== 'undefined' && firstName ? `, ${firstName}` : '' %>!</h2>
             
-            <% if (typeof verificationEmailFailure !== 'undefined' && verificationEmailFailure) { %>
+            <% if (verificationEmailFailure && typeof verificationEmailFailure !== 'undefined') { %>
                 <!-- Alerta amigável informando a falha no envio automático -->
                 <div class="feedback-message error" role="alert" aria-live="assertive" style="margin-bottom: 1.25rem; text-align: left; padding: 0.85rem;">
-                    ⚠️ <strong>Aviso:</strong> Sua conta foi criada com sucesso, mas tivemos uma falha temporária ao despachar o e-mail de confirmação. Você pode tentar reenviar o link agora mesmo no botão abaixo. Se o problema persistir, entre em contato conosco pela <a href="/contato" style="color: inherit; text-decoration: underline; font-weight: bold;">página de suporte</a>.
+                    ⚠️ <strong>Aviso:</strong> Sua conta foi criada com sucesso, mas tivemos uma falha temporária ao enviar o e-mail de confirmação. Você pode tentar reenviar o link agora mesmo no botão abaixo. Se o problema persistir, entre em contato conosco pela <a href="/contato" style="color: inherit; text-decoration: underline; font-weight: bold;">página de suporte</a>.
                 </div>
             <% } else { %>
                 <p class="description-text">
@@ -86,7 +84,7 @@
     </main>
 
     <% if (typeof email !== 'undefined' && email) { %>
-        <script src="/js/verify-email.js"></script>
+        <script src="/js/account-verify-info.js"></script>
     <% } %>
 </body>
 </html>
