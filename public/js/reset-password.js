@@ -19,7 +19,7 @@ const closedEyeIcon = `
 ******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
     const resetPasswordForm = document.getElementById('resetPasswordForm');
-    const token = document.getElementById('token').value;
+    const resetToken = document.getElementById('resetToken').value;
     const passwordInput = document.getElementById('passwordInput');
     const confirmPasswordInput = document.getElementById('confirmPasswordInput');
     const feedbackMessage = document.getElementById('feedbackMessage');
@@ -41,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
         feedbackMessage.textContent = '';
 
         // Valida se os campos atendem às regras nativas do HTML5 (required, minlength, etc.)
-        if (!registerForm.checkValidity()) {
-            registerForm.reportValidity();
+        if (!resetPasswordForm.checkValidity()) {
+            resetPasswordForm.reportValidity();
             return;
         }
         
@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const responseHttpRequest = await fetch('/api/auth/reset-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ token, password, confirmPassword })
+                body: JSON.stringify({ resetToken, password, confirmPassword })
             });
             const responseData = await responseHttpRequest.json();
 

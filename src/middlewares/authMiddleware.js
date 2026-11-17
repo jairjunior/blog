@@ -2,8 +2,8 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 module.exports = (req, res, next) => {
-    const token = req.cookies.token;
-    if (!token) {
+    const authToken = req.cookies.authToken;
+    if (!authToken) {
         res.locals.isLoggedIn = false;
         res.locals.tokenExpired = null;
         res.locals.currentUser = null;
@@ -11,7 +11,7 @@ module.exports = (req, res, next) => {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        const decoded = jwt.verify(authToken, process.env.JWT_SECRET);
         res.locals.isLoggedIn = true;
         res.locals.tokenExpired = false;
         res.locals.currentUser = decoded;

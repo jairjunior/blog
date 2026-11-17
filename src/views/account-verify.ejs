@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Confirmação de E-mail | jjOutOfBounds</title>
+    <meta name="description" content="Confirmação de conta no blog jjOutOfBounds.">
+
+    <link rel="stylesheet" href="/css/account-verify.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;750;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="title-box">
+        <h1 class="blog-title">
+            <a href="/" aria-label="Página inicial do blog">jjOutOfBounds</a>
+        </h1>
+    </header>
+    
+    <main>
+        <% if (success) { %>
+            <div class="main-box card-hover-effect">
+                <div class="success-icon-wrapper" aria-hidden="true">🎉</div>
+                <h2>Conta Verificada!</h2>
+                <p class="description-text text-center">
+                    Olá, <strong><%= userName %></strong>! Seu e-mail foi confirmado com sucesso. Agora você tem acesso total aos comentários, quizzes interativos, reações e recursos exclusivos do <strong>jjOutOfBounds</strong>.
+                </p>
+                
+                <div id="countdownBox" class="countdown-box text-center">
+                    Você será redirecionado para a página inicial em <span id="countdownTimer">30</span> segundos...
+                </div>
+
+                <div class="action-buttons">
+                    <a href="/" class="btn-primary-custom" id="homeLink">Ir para a Página Principal Agora</a>
+                </div>
+            </div>
+        <% } else { %>
+            <div class="main-box card-hover-effect">
+                <div class="error-icon-wrapper" aria-hidden="true">⚠️</div>
+                <h2>Falha na Verificação</h2>
+                <p class="feedback-message error text-center" role="alert" aria-live="assertive">
+                    <%= messagePt %>
+                </p>
+                <p class="description-text text-center margin-top-smaller">
+                    O link pode ter expirado (validade de 24 horas) ou já ter sido utilizado.
+                </p>
+                <p class="back-to-login margin-top-bigger">
+                    <a href="/confirmar-cadastro">Solicitar um novo link de verificação</a>
+                </p>
+                <span class="text-center or-then">ou então</span>
+                <p class="back-to-login">
+                    <a href="/login">⬅ Voltar para o Log in</a>
+                </p>
+            </div>
+        <% } %>
+    </main>
+
+    <% if (success) { %>
+        <!-- Biblioteca CDN leve para confetes festivos -->
+        <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+        <script src="/js/account-verify.js"></script>
+    <% } %>
+</body>
+</html>

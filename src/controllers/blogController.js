@@ -206,11 +206,11 @@ const renderForgotPasswordPage = async (req, res) => {
 / ao site. A validação acontecerá pelo token JWT encaminhado pela URL.
 /*****************************************************************************/
 const renderResetPasswordPage = async (req, res) => {
-    const { token } = req.query;
+    const { resetToken } = req.query;
 
     try {
         // Decodifica o token
-        const decoded = jwt.decode(token);
+        const decoded = jwt.decode(resetToken);
         if (!decoded || !decoded.id) {
             throw new Error('Invalid or malformed token. Could not decode it.')
         }
@@ -222,11 +222,11 @@ const renderResetPasswordPage = async (req, res) => {
         // Recria o secret usando a senha atual
         const secretForThisUser = process.env.JWT_SECRET + user.password;
         // Agora sim, verifica o token
-        jwt.verify(token, secretForThisUser);
+        jwt.verify(resetToken, secretForThisUser);
         // Em caso de sucesso, renderiza página e envia o token
         res.render('reset-password', {
             success: true,
-            token
+            resetToken
         });
 
     } catch (error) {
@@ -234,42 +234,96 @@ const renderResetPasswordPage = async (req, res) => {
         return res.render('reset-password', {
             success: false,
             messageEn: 'The recovery link is invalid or has already expired. Please submit a new request to recover your password or contact the administrator.',
-            messagePt: 'O link de recuperação é inválido ou já expirou. Faça uma nova solicitação para recuperar a senha ou entre em contato com o administrador.'
+            messagePt: 'O link de recuperação é inválido ou já expirou. Faça uma nova solicitação para recuperar a senha.'
         });
     }
 };
 
 /*****************************************************************************
-/ Função para tratar requisições GET no caminho '/confirmacao-de-cadastro'
+/ Função para tratar requisições GET no caminho '/informacoes-para-verificar-conta'
 /
 / 
 /*****************************************************************************/
-const renderEmailVerificationPendingPage = (req, res) => {
-    const sessionEmail = req.session.pendingVerificationEmail;
-    
-    // Verifica por meio da session variable se o usuário passou pelo fluxo de cadastro
-    if (!sessionEmail) {
-        return res.redirect('/');
-    }
+const renderAccountVerifyInformationPage = (req, res) => {
+    const emailSendFailed = req.query.error === 'email_failed';
 
-    // Captura se houve falha no envio do e-mail através da session variable específica
-    const verificationEmailFailure = Boolean(req.session.failedToSendVerificationEmail);
-
-    // Limpa as session variables para evitar que o usuário 
-    // reutilize essa visualização indefinidamente
-    delete req.session.pendingVerificationEmail;
-    delete req.session.failedToSendVerificationEmail;
-    
-    // Renderiza a página '/confirmacao-de-cadastro' personalizada
-    // com e-mail, nome do usuário e o status de erro no envio
-    const { firstName } = req.query;
-    res.render('verify-email', {
-        email: sessionEmail || '',
-        firstName: firstName || '',
-        emailSendFailed: verificationEmailFailure
+    res.render('account-verify-info', {
+        user: res.locals.currentUser,
+        verificationEmailFailure: emailSendFailed,
+        currentUrl: req.originalUrl
     });
-
 };
+
+
+/*****************************************************************************
+/ Função para tratar requisições GET no caminho '/verificar-conta'
+/
+/ Valida o token de verificação enviado por e-mail, atualiza o status no banco
+/ de dados, emite um novo token de autenticação atualizado e renderiza a view.
+/*****************************************************************************/
+const renderAccountVerifyPage = async (req, res) => {
+    const { verificationToken } = req.query;
+
+    try {
+        if (!verificationToken) {
+            throw new Error('Verification token is missing.');
+        }
+
+        // Decodifica e verifica o token JWT de verificação
+        const decoded = jwt.verify(verificationToken, process.env.JWT_SECRET);
+        if (!decoded || !decoded.userId) {
+            throw new Error('Invalid or malformed verification token.');
+        }
+
+        // Busca o usuário no banco de dados
+        const user = await userModel.getUserById(decoded.userId);
+        if (!user) {
+            throw new Error('User not found in the database.');
+        }
+
+        // Atualiza o status de verificação no banco de dados se ainda não estiver verificado
+        if (!user.is_verified) {
+            await userModel.updateVerificationStatusById(user.id, true);
+        }
+
+        // Gera um novo token de autenticação (authToken) com isVerified: true 
+        // para que o banner suma imediatamente e o usuário ganhe acesso total.
+        const authToken = jwt.sign({
+                id: user.id, 
+                email: user.email,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                avatarUrl: user.avatar,
+                role: user.role,
+                isVerified: true
+            }, 
+            process.env.JWT_SECRET,
+            { expiresIn: '2h' }
+        );
+
+        // Atualiza o cookie HttpOnly
+        res.cookie('authToken', authToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000
+        });
+
+        // Renderiza a página de sucesso com os dados do usuário
+        res.render('account-verify', {
+            success: true,
+            userName: user.first_name
+        });
+
+    } catch (error) {
+        printConsoleError(error);
+        return res.render('account-verify', {
+            success: false,
+            messageEn: 'The verification link is invalid or has already expired. Please request a new verification link.',
+            messagePt: 'O link de verificação é inválido ou já expirou. Solicite um novo link de confirmação para ativar sua conta.'
+        });
+    }
+};
+
 
 
 /*****************************************************************************
@@ -286,5 +340,6 @@ module.exports = {
     renderContactPage,
     renderForgotPasswordPage,
     renderResetPasswordPage,
-    renderEmailVerificationPendingPage
+    renderAccountVerifyInformationPage,
+    renderAccountVerifyPage
 };

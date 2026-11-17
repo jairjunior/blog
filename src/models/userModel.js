@@ -67,11 +67,28 @@ const updatePasswordById = async (userId, hashedPassword) => {
 
 
 /*****************************************************************************
+/ Atualizar status de verificação do usuário pelo id
+/*****************************************************************************/
+const updateVerificationStatusById = async (userId, isVerified = true) => {
+    try {
+        const query = 'UPDATE users SET is_verified = ? WHERE id = ?';
+        const [result] = await databasePool.query(query, [isVerified, userId]);
+        return result;
+
+    } catch (error) {
+        console.error(`\n❌ ERROR in userModel.updateVerificationStatusById() when updating verification status for user with id: [${userId}].`);
+        throw error;
+    }
+}
+
+
+/*****************************************************************************
 / Exporta as funções para serem utilizadas pela aplicação fora deste arquivo.
 /*****************************************************************************/
 module.exports = {
     createUser,
     getUserById,
     getUserByEmail,
-    updatePasswordById
+    updatePasswordById,
+    updateVerificationStatusById
 };

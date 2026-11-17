@@ -12,8 +12,9 @@ const { printConsoleError, printConsoleWarning } = require('../utils/logger');
 / Cadastra um novo usuário no sistema.
 /*****************************************************************************/
 exports.register = async (req, res) => {
-
     const { email, firstName, lastName, password } = req.body;
+
+    // Verifica se todos os dados foram enviados
     if(!email || !firstName || !lastName || !password) {
         return res.status(400).json({ // HTTP 400 Bad Request
             success: false,
@@ -23,12 +24,11 @@ exports.register = async (req, res) => {
     }
 
     try {
-        // Faz hash da senha
-        // Cria novo usuário no banco de dados
+        // Faz hash da senha e cria novo usuário no banco de dados
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUserId = await userModel.createUser(email, firstName, lastName, hashedPassword);
 
-        // Cria um JWT de verificação válido por 24 horas
+        // Cria um token JWT de verificação do e-mail válido por 24 horas
         const verificationToken = jwt.sign({ 
                 userId: newUserId,
                 email: email
@@ -40,26 +40,47 @@ exports.register = async (req, res) => {
         // Monta o link absoluto para a rota de verificação
         const protocol = req.protocol;
         const host = req.get('host');
-        const verificationUrl = `${protocol}://${host}/api/auth/verify?token=${verificationToken}`;
+        const verificationUrl = `${protocol}://${host}/verificar-conta?verificationToken=${verificationToken}`;
+        let redirectUrl = '/informacoes-para-verificar-conta';
 
-        // Dispara o envio do e-mail de verificação com tratamento personalizado
-        // Se der erro no envio, salva uma flag na sessão indicando que o e-mail 
-        // falhou ao ser despachado.
+        // Dispara o envio do e-mail de verificação com tratamento personalizado.
+        // Se der erro no envio, salva uma flag na sessão indicando que o e-mail falhou
+        // ao ser despachado. Essa flag irá influenciar na renderização da view
+        // verify-email.ejs, para onde o usuário será redirecionado na sequência.
         const userName = `${firstName} ${lastName}`;
         try {
             await sendNewUserVerificationEmail(email, userName, verificationUrl);
         } catch (emailError) {
             printConsoleError(emailError);
-            req.session.failedToSendVerificationEmail = true;
+            redirectUrl = '/informacoes-para-verificar-conta?error=email_failed';
         }
 
-        // Cria session variable indicando que o e-mail ainda está pendente de verificação
-        req.session.pendingVerificationEmail = email;
+        // Recupera todas as informações do banco de dados do usuário que acabou de ser criado
+        // Cria o token JWT de autenticação, porém ainda não estará verificado
+        const authToken = jwt.sign({
+                id: newUserId, 
+                email: email,
+                first_name: firstName,
+                last_name: lastName,
+                avatarUrl: null,
+                role: 'reader',
+                isVerified: false
+            }, 
+            process.env.JWT_SECRET,
+            { expiresIn: '2h' }
+        );
+
+        // Salva o token de autenticação em um cookie HttpOnly
+        res.cookie('authToken', authToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000
+        });
 
         // Sucesso!
         res.status(201).json({ // HTTP 201 Created
             success: true,
-            redirectUrl: `/confirmacao-de-cadastro?email=${encodeURIComponent(email)}&firstName=${firstName}`,
+            redirectUrl: redirectUrl,
             messageEn: `User [${email}] registered successfully. Still needs confirmation.`,
             messagePt: `Usuário [${email}] registrado com sucesso. Ainda necessita de confirmação.`
         });
@@ -91,8 +112,9 @@ exports.register = async (req, res) => {
 / armazenado como cookie no navegador do usuário.
 /*****************************************************************************/
 exports.login = async (req, res) => {
-    
     const { email, password, redirectTo } = req.body;
+
+    // Verifica se todos os dados foram enviados
     if(!email || !password) {
         return res.status(400).json({ 
             success: false,
@@ -102,9 +124,9 @@ exports.login = async (req, res) => {
     }
 
     try{
-        const query = 'SELECT * FROM users WHERE email = ?';
-        const [result] = await databasePool.query(query, [email]);
-        if (result.length === 0) {
+        // Busca usuário no banco de dados pelo e-mail
+        const user = await userModel.getUserByEmail(email);
+        if (!user) {
             return res.status(401).json({ 
                 success: false,
                 messageEn: 'Invalid email or password.',
@@ -112,7 +134,7 @@ exports.login = async (req, res) => {
             });
         }
 
-        const [user] = result;
+        // Compara se a senha informada está correta
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             return res.status(401).json({ 
@@ -122,24 +144,28 @@ exports.login = async (req, res) => {
             });
         }
 
-        const jwtToken = jwt.sign({ 
+        // Cria token JWT de autenticação
+        const authToken = jwt.sign({
                 id: user.id, 
                 email: user.email,
                 first_name: user.first_name,
                 last_name: user.last_name,
                 avatarUrl: user.avatar,
-                role: user.role
+                role: user.role,
+                isVerified: user.is_verified
             }, 
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '2h' }
         );
 
-        res.cookie('token', jwtToken, {
+        // Salva o token JWT de autenticação em um cookie HttpOnly
+        res.cookie('authToken', authToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: 24 * 60 * 60 * 1000
         });
         
+        // Sucesso!
         const safeRedirect = redirectTo && redirectTo.startsWith('/') ? redirectTo : '/';
         return res.status(200).json({
             success: true,
@@ -163,10 +189,11 @@ exports.login = async (req, res) => {
 /******************************************************************************
 / Função para tratar requisições GET no rota /api/auth/logout
 /
-/ Faz logout da aplicação invalidando o token no navegador do usuário.
+/ Faz logout da aplicação invalidando o token de autenticação no navegador 
+/ do usuário.
 /*****************************************************************************/
 exports.logout = async (req, res) => {
-    res.clearCookie('token', {
+    res.clearCookie('authToken', {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production', // true em produção (HTTPS)
         sameSite: 'strict'
@@ -203,7 +230,8 @@ exports.forgotPassword = async (req, res) => {
         }
 
         // Cria um JWT válido por 15 minutos
-        // O uniqueSecret concatena a senha atual do usuário. Assim que a senha for trocada, o resetToken fica inválido
+        // O uniqueSecret concatena a senha atual do usuário. Assim que a senha for trocada, 
+        // o resetToken ficará inválido
         const userPasswordHash = user.password;
         const uniqueSecret = process.env.JWT_SECRET + userPasswordHash;
         const resetToken = jwt.sign({
@@ -217,7 +245,7 @@ exports.forgotPassword = async (req, res) => {
         // Monta o link absoluto para a página de redefinição
         const protocol = req.protocol;
         const host = req.get('host');
-        const resetUrl = `${protocol}://${host}/alterar-senha?token=${resetToken}`;
+        const resetUrl = `${protocol}://${host}/alterar-senha?resetToken=${resetToken}`;
 
         // Envia o e-mail com a URL
         const userName = user.first_name + ' ' + user.last_name;
@@ -245,17 +273,18 @@ exports.forgotPassword = async (req, res) => {
 / Atualiza a senha do usuário na base de dados.
 /*****************************************************************************/
 exports.resetPassword = async (req, res) => {
-    const { token, password, confirmPassword } = req.body;
+    const { resetToken, password, confirmPassword } = req.body;
 
-    if (!token || !password || !confirmPassword) {
+    // Verifica se todos os campos foram preenchidos
+    if (!resetToken || !password || !confirmPassword) {
         return res.status(400).json({
             success: false,
-            messageEn: 'Please provide the token, new password, and password confirmation.',
-            messagePt: 'Por favor, forneça o token, a nova senha e a confirmação de senha.'
+            messageEn: 'Please provide the Reset Token, new password, and password confirmation.',
+            messagePt: 'Por favor, forneça o Reset Token, a nova senha e a confirmação de senha.'
         });
     }
 
-    // Validação de confirmação de senha
+    // Confirma se as senhas digitadas coincidem
     if (password !== confirmPassword) {
         return res.status(400).json({
             success: false,
@@ -264,7 +293,7 @@ exports.resetPassword = async (req, res) => {
         });
     }
 
-    // RegEx de validação de complexidade de senha no backend
+    // RegEx de validação da complexidade de senha
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#.\-_])[A-Za-z\d@$!%*?&#.\-_]{8,}$/;
     if (!passwordRegex.test(password)) {
         return res.status(400).json({
@@ -275,16 +304,17 @@ exports.resetPassword = async (req, res) => {
     }
 
     try {
-        const decoded = jwt.decode(token);
+        // Decodifica o payload do Reset Token
+        const decoded = jwt.decode(resetToken);
         if (!decoded || !decoded.id) {
             return res.status(400).json({
                 success: false,
-                messageEn: 'Invalid or malformed token. Could not decode it.',
-                messagePt: 'Token inválido ou malformado. Não foi possível decodificá-lo.'
+                messageEn: 'Invalid or malformed Reset Token. Could not decode it.',
+                messagePt: 'Reset Token inválido ou malformado. Não foi possível decodificá-lo.'
             });
         }
 
-        // Busca o usuário pelo ID obtido no token
+        // Busca o usuário pelo ID obtido no Reset Token
         const user = await userModel.getUserById(decoded.id);
         if (!user) {
             return res.status(404).json({
@@ -294,25 +324,25 @@ exports.resetPassword = async (req, res) => {
             });
         }
 
-        // Valida a assinatura e a expiração do JWT
+        // Valida a assinatura e a expiração do Reset Token usando o secret + senha antiga
         const uniqueSecret = process.env.JWT_SECRET + user.password;
         try {
-            jwt.verify(token, uniqueSecret);
+            jwt.verify(resetToken, uniqueSecret);
         } catch (jwtError) {
             printConsoleError(jwtError);
             return res.status(400).json({
                 success: false,
-                messageEn: 'Invalid or expired token. Please request a new password reset.',
-                messagePt: 'O token para recuperação de senha é inválido ou já expirou. Solicite um novo link.'
+                messageEn: 'Invalid or expired Reset Token. Please request a new password reset.',
+                messagePt: 'O Reset Token para recuperação de senha é inválido ou já expirou. Solicite um novo link.'
             });
         }
 
-        // Criptografa a nova senha e atualiza no banco de dados
+        // Estando tudo certo, criptografa a nova senha e atualiza no banco de dados
         const hashedPassword = await bcrypt.hash(password, 10);
         await userModel.updatePasswordById(user.id, hashedPassword);
 
-        // Gera o JWT de sessão para realizar o login automático do usuário
-        const jwtToken = jwt.sign(
+        // Gera novo Token de Autenticação para realizar o login automático do usuário
+        const authToken = jwt.sign(
             { 
                 id: user.id, 
                 email: user.email,
@@ -322,16 +352,17 @@ exports.resetPassword = async (req, res) => {
                 role: user.role
             }, 
             process.env.JWT_SECRET,
-            { expiresIn: '1h' }
+            { expiresIn: '2h' }
         );
 
-        // Define o cookie HTTP-only idêntico ao processo de login
-        res.cookie('token', jwtToken, {
+        // Cria o cookie HttpOnly idêntico ao processo de login
+        res.cookie('authToken', authToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: 24 * 60 * 60 * 1000
         });
 
+        // Sucesso!
         return res.status(200).json({
             success: true,
             messageEn: 'Password reset successfully. Redirecting...',
