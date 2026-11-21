@@ -1,6 +1,6 @@
-/****************************************************************************** 
-/ Reset e Variáveis de Estilo
-******************************************************************************/
+/******************************************************************************
+/ PÁGINA DE LOGIN
+/*****************************************************************************/
 :root {
     --font-title: clamp(1.5rem, 2vw + 1rem, 2.5rem); 
     --spacing-container: clamp(16px, 5vw, 80px);
@@ -99,7 +99,7 @@ h1.blog-title a:focus-visible::after {
 
 
 /****************************************************************************** 
-/ Conteúdo
+/ Conteúdo Principal
 ******************************************************************************/
 main {
     width: 100%;
@@ -122,37 +122,35 @@ main {
 }
 .card-hover-effect:hover {
     transform: translateY(-2px);
-    box-shadow: 0 0.75rem 2rem rgb(0 0 0 / 12%);
+    box-shadow: 0 0.75rem 3rem rgb(0 0 0 / 20%);
 }
 
 /*---------------------------------------------------------------------------*/
 /* Formulário de login  */
-form {
-    margin-bottom: 1.8rem;
-}
-
 h2 {
     font-family: 'Outfit', sans-serif;
     font-size: 1.75rem;
     font-weight: 750;
     margin-bottom: 1.1rem;
 }
-
+form {
+    border-bottom: 1px solid #ccccccc0;
+}
 .form-group {
     margin-bottom: 1rem;
 }
-
 label {
     display: block;
     font-size: 0.9rem;
     font-weight: 600;
     margin-bottom: 0.4rem;
 }
-
 .required {
     color: var(--error-color);
 }
 
+/*---------------------------------------------------------------------------*/
+/* Inputs do formulário  */
 input {
     width: 100%;
     padding: 0.75rem;
@@ -259,8 +257,11 @@ button#loginSubmitBtn:focus-visible {
 
 /*---------------------------------------------------------------------------*/
 /* Links abaixo do formulário  */
+.box-divider {
+    margin: 2rem 0;
+    border-bottom: 1px solid #ccccccc0;
+}
 .recovery, .register {
-    margin-top: 0.7rem;
     text-align: center;
     font-size: 1rem;
 }
@@ -275,10 +276,11 @@ button#loginSubmitBtn:focus-visible {
     outline: none;
 }
 span.or-then {
-    font-size: 0.9rem;
     display: block;
     width: 100%;
-    margin: 0.7rem 0 0; 
+    margin: 0.7rem 0;
+    font-size: 0.9rem;
+    color: var(--text-muted);
 }
 .text-center {
     text-align: center;
