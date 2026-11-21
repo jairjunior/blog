@@ -1,5 +1,5 @@
 /******************************************************************************
-/ PÁGINA DE VERIFICAÇÃO DE CONTA
+/ PÁGINA DE VERIFICAÇÃO DO E-MAIL ASSOCIADO À CONTA DO USUÁRIO
 /*****************************************************************************/
 :root {
     --primary-blue: #2563eb;
@@ -175,8 +175,8 @@ span.or-then {
     display: block;
     width: 100%;
     margin: 0.7rem 0;
-    color: var(--text-muted);
     font-size: 0.9rem;
+    color: var(--text-muted);
 }
 
 .margin-top-smaller {
