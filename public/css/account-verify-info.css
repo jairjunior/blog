@@ -301,8 +301,8 @@ h2 {
 span.or-then {
     display: block;
     width: 100%;
-    margin: 0.5rem 0;
-    font-size: 0.85rem;
+    margin: 0.7rem 0;
+    font-size: 0.9rem;
     color: var(--text-muted);
 }
 .text-center {

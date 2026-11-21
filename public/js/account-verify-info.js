@@ -40,8 +40,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (emailFailed) {
         resendBtn.disabled = false;
     } else {
-        // Caso contrário, inicia com 30s de espera pois o e-mail acabou de ser enviado com sucesso
-        startCooldown(30);
+        // Caso contrário, inicia com 60s de espera pois o e-mail acabou de ser enviado com sucesso
+        startCooldown(60);
     }
 
     resendBtn.addEventListener('click', async () => {
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
         resendBtn.disabled = true;
 
         try {
-            const response = await fetch('/api/auth/resend-verification', {
+            const response = await fetch('/api/auth/resend-verification-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: userEmail })
@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (response.ok) {
                 feedbackMessage.className = 'feedback-message success';
                 feedbackMessage.textContent = responseData.messagePt || 'Um novo link de confirmação foi enviado para o seu e-mail!';
-                startCooldown(60); // Cooldown maior após um reenvio manual
+                startCooldown(180); // Cooldown maior (3min) após um reenvio manual
             } else {
                 throw new Error(responseData.messagePt || 'Não foi possível reenviar o e-mail.');
             }
