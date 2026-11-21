@@ -3,6 +3,7 @@ const userModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { sendNewUserVerificationEmail, sendResetPasswordEmail } = require('../services/emailService');
+const { setAuthCookie } = require('../utils/authUtils');
 const { printConsoleError, printConsoleWarning } = require('../utils/logger');
 
 
@@ -14,7 +15,7 @@ const { printConsoleError, printConsoleWarning } = require('../utils/logger');
 exports.register = async (req, res) => {
     const { email, firstName, lastName, password } = req.body;
 
-    // Verifica se todos os dados foram enviados
+    // Verifica se todos os dados foram enviados pelo formulário
     if(!email || !firstName || !lastName || !password) {
         return res.status(400).json({ // HTTP 400 Bad Request
             success: false,
@@ -28,10 +29,10 @@ exports.register = async (req, res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
         const newUserId = await userModel.createUser(email, firstName, lastName, hashedPassword);
 
-        // Cria um token JWT de verificação do e-mail válido por 24 horas
+        // Cria um Token JWT de Verificação para ser enviado por o e-mail, válido por 24 horas.
         const verificationToken = jwt.sign({ 
                 userId: newUserId,
-                email: email
+                userEmail: email
             }, 
             process.env.JWT_SECRET, 
             { expiresIn: '24h' }
@@ -44,9 +45,9 @@ exports.register = async (req, res) => {
         let redirectUrl = '/informacoes-para-verificar-conta';
 
         // Dispara o envio do e-mail de verificação com tratamento personalizado.
-        // Se der erro no envio, salva uma flag na sessão indicando que o e-mail falhou
+        // Se der erro no envio, adiciona uma query string indicando que o e-mail falhou
         // ao ser despachado. Essa flag irá influenciar na renderização da view
-        // verify-email.ejs, para onde o usuário será redirecionado na sequência.
+        // account-verify-info.ejs, para onde o usuário será redirecionado na sequência.
         const userName = `${firstName} ${lastName}`;
         try {
             await sendNewUserVerificationEmail(email, userName, verificationUrl);
@@ -55,27 +56,22 @@ exports.register = async (req, res) => {
             redirectUrl = '/informacoes-para-verificar-conta?error=email_failed';
         }
 
-        // Recupera todas as informações do banco de dados do usuário que acabou de ser criado
-        // Cria o token JWT de autenticação, porém ainda não estará verificado
-        const authToken = jwt.sign({
-                id: newUserId, 
-                email: email,
-                first_name: firstName,
-                last_name: lastName,
-                avatarUrl: null,
-                role: 'reader',
-                isVerified: false
-            }, 
-            process.env.JWT_SECRET,
-            { expiresIn: '2h' }
-        );
+        // Configura as informações do novo usuário para serem colocadas na payload
+        // do Token JWT de Autenticação. Neste momento, o usuário ainda consta como "não verificado".
+        // O objeto newUser deve ser montado de acordo com o esquema do banco de dados.
+        const newUser = {
+            id: newUserId, 
+            email: email,
+            first_name: firstName,
+            last_name: lastName,
+            avatar_url: null,
+            role: 'reader',
+            is_verified: false
+        };
 
-        // Salva o token de autenticação em um cookie HttpOnly
-        res.cookie('authToken', authToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 24 * 60 * 60 * 1000
-        });
+        // Cria Token JWT de Autenticação e 
+        // salva em um cookie no navegador do usuário
+        setAuthCookie(res, newUser);
 
         // Sucesso!
         res.status(201).json({ // HTTP 201 Created
@@ -114,7 +110,7 @@ exports.register = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password, redirectTo } = req.body;
 
-    // Verifica se todos os dados foram enviados
+    // Verifica se todos os dados foram enviados pelo formulário
     if(!email || !password) {
         return res.status(400).json({ 
             success: false,
@@ -134,7 +130,7 @@ exports.login = async (req, res) => {
             });
         }
 
-        // Compara se a senha informada está correta
+        // Verifica se a senha informada está correta
         const passwordMatch = await bcrypt.compare(password, user.password);
         if (!passwordMatch) {
             return res.status(401).json({ 
@@ -144,26 +140,9 @@ exports.login = async (req, res) => {
             });
         }
 
-        // Cria token JWT de autenticação
-        const authToken = jwt.sign({
-                id: user.id, 
-                email: user.email,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                avatarUrl: user.avatar,
-                role: user.role,
-                isVerified: user.is_verified
-            }, 
-            process.env.JWT_SECRET,
-            { expiresIn: '2h' }
-        );
-
-        // Salva o token JWT de autenticação em um cookie HttpOnly
-        res.cookie('authToken', authToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 24 * 60 * 60 * 1000
-        });
+        // Cria Token JWT de Autenticação e 
+        // salva em um cookie no navegador do usuário
+        setAuthCookie(res, user);
         
         // Sucesso!
         const safeRedirect = redirectTo && redirectTo.startsWith('/') ? redirectTo : '/';
@@ -225,18 +204,19 @@ exports.forgotPassword = async (req, res) => {
             return res.status(200).json({
                 success: true,
                 messageEn: 'If the email is registered, a link to reset your password has been sent.',
-                messagePt: 'Se o e-mail estiver cadastrado, um link para redefinir sua senha foi enviado. Verifique também sua caixa de spam.'
+                messagePt: `Se o e-mail estiver cadastrado, um link para redefinir sua senha foi enviado.\n
+                    Verifique sua caixa de entrada e também a caixa de spam (lixo eletrônico).`
             });
         }
 
-        // Cria um JWT válido por 15 minutos
-        // O uniqueSecret concatena a senha atual do usuário. Assim que a senha for trocada, 
-        // o resetToken ficará inválido
+        // Cria um Token JWT de Reset válido por 15 minutos
+        // O uniqueSecret concatena a senha atual do usuário. 
+        // Assim que a senha for trocada, o resetToken ficará inválido.
         const userPasswordHash = user.password;
         const uniqueSecret = process.env.JWT_SECRET + userPasswordHash;
         const resetToken = jwt.sign({
-                id: user.id,
-                email: user.email
+                userId: user.id,
+                userEmail: user.email
             }, 
             uniqueSecret, 
             { expiresIn: '15m' }
@@ -250,10 +230,11 @@ exports.forgotPassword = async (req, res) => {
         // Envia o e-mail com a URL
         const userName = user.first_name + ' ' + user.last_name;
         await sendResetPasswordEmail(user.email, userName, resetUrl);
-        return res.status(200).json({
+        return res.status(200).json({ 
             success: true,
             messageEn: 'If the email is registered, a link to reset your password has been sent.',
-            messagePt: 'Se o e-mail estiver cadastrado, um link para redefinir sua senha foi enviado. Verifique também sua caixa de spam.'
+            messagePt: `Se o e-mail estiver cadastrado, um link para redefinir sua senha foi enviado.\n
+                Verifique sua caixa de entrada e também a caixa de spam (lixo eletrônico).`
         });
 
     } catch (error) {
@@ -261,7 +242,7 @@ exports.forgotPassword = async (req, res) => {
         return res.status(500).json({
             success: false,
             messageEn: 'An internal error occurred while processing the request.',
-            messagePt: 'Ocorreu um erro interno ao processar a solicitação. Tente novamente mais tarde ou entre em contato com o administrador.'
+            messagePt: `Ocorreu um erro interno ao processar a solicitação.\nTente novamente mais tarde ou entre em contato com o administrador.`
         });
     }
 };
@@ -306,16 +287,16 @@ exports.resetPassword = async (req, res) => {
     try {
         // Decodifica o payload do Reset Token
         const decoded = jwt.decode(resetToken);
-        if (!decoded || !decoded.id) {
+        if (!decoded || !decoded.userId || !decoded.userEmail) {
             return res.status(400).json({
                 success: false,
-                messageEn: 'Invalid or malformed Reset Token. Could not decode it.',
-                messagePt: 'Reset Token inválido ou malformado. Não foi possível decodificá-lo.'
+                messageEn: 'Invalid or malformed Reset Token.\nCould not decode it.',
+                messagePt: 'Reset Token inválido ou malformado.\nNão foi possível decodificá-lo.'
             });
         }
 
         // Busca o usuário pelo ID obtido no Reset Token
-        const user = await userModel.getUserById(decoded.id);
+        const user = await userModel.getUserById(decoded.userId);
         if (!user) {
             return res.status(404).json({
                 success: false,
@@ -324,7 +305,7 @@ exports.resetPassword = async (req, res) => {
             });
         }
 
-        // Valida a assinatura e a expiração do Reset Token usando o secret + senha antiga
+        // Valida o Token JWT de Reset usando o secret + senha antiga
         const uniqueSecret = process.env.JWT_SECRET + user.password;
         try {
             jwt.verify(resetToken, uniqueSecret);
@@ -333,41 +314,24 @@ exports.resetPassword = async (req, res) => {
             return res.status(400).json({
                 success: false,
                 messageEn: 'Invalid or expired Reset Token. Please request a new password reset.',
-                messagePt: 'O Reset Token para recuperação de senha é inválido ou já expirou. Solicite um novo link.'
+                messagePt: `O Reset Token para recuperação de senha é inválido ou já expirou.\nSolicite um novo link.`
             });
         }
 
         // Estando tudo certo, criptografa a nova senha e atualiza no banco de dados
+        // Neste momento, o resetToken deixa de ser válido, pois a senha mudou.
         const hashedPassword = await bcrypt.hash(password, 10);
         await userModel.updatePasswordById(user.id, hashedPassword);
 
-        // Gera novo Token de Autenticação para realizar o login automático do usuário
-        const authToken = jwt.sign(
-            { 
-                id: user.id, 
-                email: user.email,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                avatarUrl: user.avatar,
-                role: user.role
-            }, 
-            process.env.JWT_SECRET,
-            { expiresIn: '2h' }
-        );
-
-        // Cria o cookie HttpOnly idêntico ao processo de login
-        res.cookie('authToken', authToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 24 * 60 * 60 * 1000
-        });
+        // Cria novo Token JWT de Autenticação e
+        // salva em um cookie no navegador do usuário
+        setAuthCookie(res, user);
 
         // Sucesso!
         return res.status(200).json({
             success: true,
-            messageEn: 'Password reset successfully. Redirecting...',
-            messagePt: 'Senha alterada com sucesso! Redirecionando...',
-            redirectUrl: '/'
+            messageEn: 'Password reset successfully.',
+            messagePt: `Senha alterada com sucesso!\nVocê será redirecionado para a página inicial em alguns segundos.`
         });
 
     } catch (error) {
@@ -375,7 +339,7 @@ exports.resetPassword = async (req, res) => {
         return res.status(500).json({
             success: false,
             messageEn: 'Internal server error. Contact the administrator.',
-            messagePt: 'Erro no servidor. Tente novamente mais tarde ou entre em contato com o administrador.'
+            messagePt: `Erro no servidor.\nTente novamente mais tarde ou entre em contato com o administrador.`
         });
     }
 };

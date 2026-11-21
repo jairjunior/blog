@@ -33,8 +33,10 @@ const registerLimiter = rateLimit({
     },
     message: {
         success: false,
-        messageEn: 'You have made too many register attempts. Please wait 1 hour before trying again.',
-        messagePt: 'Você realizou muitas tentativas de cadastro. Aguarde 1 hora para tentar novamente.'
+        messageEn: `You have made too many register attempts.\n
+            Please wait 1 hour before trying again.`,
+        messagePt: `Você realizou muitas tentativas de cadastro.
+            Aguarde 1 hora para tentar novamente.`
     }
 });
 
@@ -63,8 +65,10 @@ const loginLimiter = rateLimit({
     },
     message: {
         success: false,
-        messageEn: 'You have made too many unsuccessful login attempts. Please wait 10 minutes before trying again, or reset your password.',
-        messagePt: 'Você realizou muitas tentativas de login sem sucesso. Aguarde 10 minutos para tentar novamente ou faça o reset da sua senha.'
+        messageEn: `You have made too many unsuccessful login attempts.\n
+            Please wait 10 minutes before trying again, or reset your password.`,
+        messagePt: `Você realizou muitas tentativas de login sem sucesso.\n
+            Aguarde 10 minutos para tentar novamente ou faça o reset da sua senha.`
     }
 });
 
@@ -73,7 +77,7 @@ const loginLimiter = rateLimit({
 // Esqueceu a Senha = 1 requisição a cada 10 minutos (para cada IP + email)
 /*****************************************************************************/
 const forgotPasswordLimiter = rateLimit({
-    windowMs: 10 * 60 * 1000,
+    windowMs: 5 * 60 * 1000,
     limit: 1,
     legacyHeaders: false,
     standardHeaders: true,
@@ -92,8 +96,10 @@ const forgotPasswordLimiter = rateLimit({
     },
     message: {
         success: false,
-        messageEn: `You can only submit a password recovery request once every 10 minutes. Don't forget to check your spam folder.`,
-        messagePt: 'Você só pode realizar uma solicitação de recuperação de senha a cada 10 minutos. Não se esqueça de conferir a sua caixa de spam.'
+        messageEn: `You can only submit a password recovery request once every 5 minutes.\n
+            Don't forget to check your spam folder.`,
+        messagePt: `Você só pode realizar uma solicitação de recuperação de senha a cada 5 minutos.\n
+            Antes de repetir, verifique a sua caixa de entrada e também a caixa de spam (lixo eletrônico).`
     }
 });
 
@@ -116,8 +122,10 @@ const genericAuthLimiter = rateLimit({
     },
     message: {
         success: false,
-        messageEn: 'Too many requests from this address. Please wait 15 minutes before trying again.',
-        messagePt: 'Muitas solicitações feitas a partir deste endereço. Por favor, aguarde 15 minutos antes de tentar novamente.'
+        messageEn: `Too many requests from this address.\n
+            Please wait 15 minutes before trying again.`,
+        messagePt: `Muitas solicitações feitas a partir deste endereço.\n
+            Por favor, aguarde 15 minutos antes de tentar novamente.`
     }
 });
 
