@@ -3,6 +3,7 @@ const categoryModel = require('../models/categoryModel');
 const commentModel = require('../models/commentModel');
 const userModel = require('../models/userModel');
 const jwt = require('jsonwebtoken');
+const { setAuthCookie } = require('../utils/authUtils');
 const { printConsoleError } = require('../utils/logger');
 
 
@@ -91,9 +92,9 @@ const renderPostsPage = async (req, res) => {
 
 
 /*****************************************************************************
-/ Função para tratar requisições GET no caminho '/posts/:category'
+/ Função para tratar requisições GET no caminho '/posts/:categorySlug'
 /
-/ Renderiza a página que exibe todos os posts de uma determinada categoria
+/ Renderiza a página que exibe todos os artigos de uma determinada categoria
 / do blog utilizando template EJS.
 / Os posts são recuperados por meio do parâmetro "category" que é passado 
 / pela URL.
@@ -121,7 +122,7 @@ const renderCategoryPage = async (req, res) => {
 
 
 /*****************************************************************************
-/ Função para tratar requisições GET no caminho '/posts/:category/:slug'
+/ Função para tratar requisições GET no caminho '/posts/:categorySlug/:postSlug'
 /
 / Renderiza um post específico utilizando template EJS.
 / O conteúdo do post é recuperado por meio dos parâmetros "category" e "slug"
@@ -191,50 +192,62 @@ const renderContactPage = async (req, res) => {
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/recuperar-senha'
 /
-/ 
+/ Renderiza a página onde o usuário pode solicitar a recuperação de sua senha
+/ informando o e-mail cadastrado.
 /*****************************************************************************/
 const renderForgotPasswordPage = async (req, res) => {
     res.render('forgot-password');
 }
 
 
-
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/alterar-senha'
 /
 / Essa rota será chamada quando o usuário estiver tentando resgatar o acesso
-/ ao site. A validação acontecerá pelo token JWT encaminhado pela URL.
+/ ao site. A validação acontecerá pelo Token JWT de Reset que será
+/ encaminhado por e-mail e estará contido na URL.
 /*****************************************************************************/
 const renderResetPasswordPage = async (req, res) => {
     const { resetToken } = req.query;
 
+    // Se o Token JWT de Reset não consta na URL, redireciona para a Página Inicial
+    if (!resetToken) {
+        return res.redirect('/');
+    }
+
     try {
-        // Decodifica o token
+        // Decodifica o Token JWT de Reset e verifica o payload
+        // É necessário decodificar o token primeiro para buscar o usuário no 
+        // banco de dados, pois o personalSecret utiliza a senha atual.
         const decoded = jwt.decode(resetToken);
-        if (!decoded || !decoded.id) {
+        if (!decoded || !decoded.userId || !decoded.userEmail) {
             throw new Error('Invalid or malformed token. Could not decode it.')
         }
 
         // Busca o usuário no banco de dados
-        const user = await userModel.getUserById(decoded.id);
+        const user = await userModel.getUserById(decoded.userId);
         if (!user) throw new Error('User not found in the database.');
 
-        // Recria o secret usando a senha atual
-        const secretForThisUser = process.env.JWT_SECRET + user.password;
-        // Agora sim, verifica o token
-        jwt.verify(resetToken, secretForThisUser);
-        // Em caso de sucesso, renderiza página e envia o token
+        // Recria o secret personalizado utilizando a senha atual do usuário
+        // Verifica o Token JWT de Reset
+        const personalSecret = process.env.JWT_SECRET + user.password;
+        jwt.verify(resetToken, personalSecret);
+
+        // Se o token for válido, renderiza página repassando o resetToken
+        // Também envia o e-mail para o navegador reconhecer a nova senha atualizar
+        // noo gerenciador de senhas.
         res.render('reset-password', {
             success: true,
-            resetToken
+            resetToken,
+            email: user.email
         });
 
     } catch (error) {
         printConsoleError(error);
         return res.render('reset-password', {
             success: false,
-            messageEn: 'The recovery link is invalid or has already expired. Please submit a new request to recover your password or contact the administrator.',
-            messagePt: 'O link de recuperação é inválido ou já expirou. Faça uma nova solicitação para recuperar a senha.'
+            messageEn: 'The recovery link is invalid or has already expired.\nPlease submit a new request to recover your password or contact the administrator.',
+            messagePt: `O link de recuperação é inválido ou já expirou.\nFaça uma nova solicitação para recuperar a senha.`
         });
     }
 };
@@ -242,15 +255,33 @@ const renderResetPasswordPage = async (req, res) => {
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/informacoes-para-verificar-conta'
 /
-/ 
+/ Renderiza a página de instruções de verificação de e-mail pós-cadastro.
+/ Recupera o e-mail e o primeiro nome do usuário autenticado via cookie (authToken).
+/ Apresenta um botão de reenvio para o caso de o e-mail de verificação ter falhado.
+/ Protege a rota contra acessos anônimos e redireciona usuários já verificados.
 /*****************************************************************************/
 const renderAccountVerifyInformationPage = (req, res) => {
-    const emailSendFailed = req.query.error === 'email_failed';
+    // Verifica se é um usuário anônimo ou se o Token JWT de Autenticação 
+    // está com algum problema (expirado, inválido, malformado, etc).
+    // Caso alguma das condições seja verdadeira, redireciona para fazer o login.
+    if (!res.locals.currentUser || res.locals.tokenFailure === true) {
+        return res.redirect('/login?redirectTo=/informacoes-para-verificar-conta');
+    }
 
+    // Verifica se o e-mail do usuário já está verificado.
+    // Caso positivo, redireciona para a Página Inicial.
+    if (res.locals.currentUser.isVerified) {
+        return res.redirect('/');
+    }
+
+    // Renderiza a página caso esteja logado e com isVerified = false
+    // Verifica se houve erro no envio do e-mail de verificação.
+    // Pega o e-mail e o primeiro nome contidos na variável local 'currentUser'.
+    const emailSendFailed = req.query.error === 'email_failed';
     res.render('account-verify-info', {
-        user: res.locals.currentUser,
+        email: res.locals.currentUser.email,
+        firstName: res.locals.currentUser.firstName,
         verificationEmailFailure: emailSendFailed,
-        currentUrl: req.originalUrl
     });
 };
 
@@ -258,55 +289,44 @@ const renderAccountVerifyInformationPage = (req, res) => {
 /*****************************************************************************
 / Função para tratar requisições GET no caminho '/verificar-conta'
 /
-/ Valida o token de verificação enviado por e-mail, atualiza o status no banco
-/ de dados, emite um novo token de autenticação atualizado e renderiza a view.
+/ Valida o Token JWT de Verificação enviado por e-mail, atualiza o status no 
+/ banco de dados, emite um novo Token JWT de Autenticação atualizado e 
+/ renderiza a view.
+/ Esta rota é protegida contra usuários sem Token JWT de Verificação e 
+/ contas já verificadas.
 /*****************************************************************************/
 const renderAccountVerifyPage = async (req, res) => {
     const { verificationToken } = req.query;
-
+    
+    // Se o Token JWT de Verificação não consta na URL, redireciona para a Página Inicial
+    if (!verificationToken) {
+        return res.redirect('/');
+    }
+    
     try {
-        if (!verificationToken) {
-            throw new Error('Verification token is missing.');
-        }
-
-        // Decodifica e verifica o token JWT de verificação
+        // Decodifica o Token JWT de Verificação e verifica o payload
         const decoded = jwt.verify(verificationToken, process.env.JWT_SECRET);
-        if (!decoded || !decoded.userId) {
+        if (!decoded || !decoded.userId || !decoded.userEmail) {
             throw new Error('Invalid or malformed verification token.');
         }
 
         // Busca o usuário no banco de dados
         const user = await userModel.getUserById(decoded.userId);
-        if (!user) {
-            throw new Error('User not found in the database.');
-        }
+        if (!user) throw new Error('User not found in the database.');
 
-        // Atualiza o status de verificação no banco de dados se ainda não estiver verificado
-        if (!user.is_verified) {
+        // Se o usuário já estiver verificado, redireciona para a Página Inicial
+        // Do contrário, atualiza o status de verificação no banco de dados
+        if (user.is_verified) {
+            return res.redirect('/');
+        } else {
             await userModel.updateVerificationStatusById(user.id, true);
+            user.is_verified = true;
         }
 
-        // Gera um novo token de autenticação (authToken) com isVerified: true 
-        // para que o banner suma imediatamente e o usuário ganhe acesso total.
-        const authToken = jwt.sign({
-                id: user.id, 
-                email: user.email,
-                first_name: user.first_name,
-                last_name: user.last_name,
-                avatarUrl: user.avatar,
-                role: user.role,
-                isVerified: true
-            }, 
-            process.env.JWT_SECRET,
-            { expiresIn: '2h' }
-        );
-
-        // Atualiza o cookie HttpOnly
-        res.cookie('authToken', authToken, {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === 'production',
-            maxAge: 24 * 60 * 60 * 1000
-        });
+        // Gera um novo Token JWT de Autenticação com isVerified: true 
+        // para que o banner suma imediatamente e o usuário ganhe acesso total ao site.
+        // Salva o novo token em um cookie no navegador do usuário
+        setAuthCookie(res, user);
 
         // Renderiza a página de sucesso com os dados do usuário
         res.render('account-verify', {
