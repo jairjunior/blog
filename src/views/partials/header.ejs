@@ -2,7 +2,7 @@
         <!-- Barra de navegação superior -->
         <div class="container header-top">
             <!-- Nome / Logomarca -->
-            <h1 class="blog-title" aria-label="Página inicial do blog"><a href="/">jjOutOfBounds</a></h1>
+            <h1 class="blog-title" aria-label="Página inicial do blog"><a href="/">outOfBounds</a></h1>
 
             <!-- Conjunto de botões (Lupa, Criar Conta, Entrar, Burger) -->
             <div class="top-menu-button-wrapper">
@@ -18,10 +18,10 @@
                     <div class="user-profile-menu" id="userMenuContainer">
                         <button class="profile-toggle-btn" id="profileToggleBtn" title="Menu do usuário" aria-label="Menu do usuário" aria-expanded="false" aria-controls="profileDropdown">
                             <% if (user.avatarUrl) { %>
-                                <img src="/img/profiles/<%= user.avatarUrl %>" alt="Foto de perfil para <%= user.first_name %>" class="profile-avatar">
+                                <img src="/img/profiles/<%= user.avatarUrl %>" alt="Foto de perfil para <%= user.firstName %>" class="profile-avatar">
                             <% } else { %>
                                 <div class="profile-avatar-fallback">
-                                    <%= user.first_name ? user.first_name.charAt(0).toUpperCase() : 'U' %>
+                                    <%= user.firstName ? user.firstName.charAt(0).toUpperCase() : 'U' %>
                                 </div>
                             <% } %>
                         </button>
@@ -29,7 +29,7 @@
                         <!-- Menu Dropdown -->
                         <div class="profile-dropdown" id="profileDropdown">
                             <div class="dropdown-header">
-                                <span class="dropdown-header-name"><%= user.first_name %> <%= user.last_name %></span>
+                                <span class="dropdown-header-name"><%= user.firstName %> <%= user.lastName %></span>
                                 <span class="dropdown-header-email"><%= user.email %></span>
                             </div>
                             <div class="dropdown-divider"></div>
