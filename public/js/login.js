@@ -1,3 +1,11 @@
+// SVG de Engrenagem Animada para o estado de Carregamento
+const gearIcon = `
+    <svg class="spinner-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+    </svg>
+`;
+
 // SVG para campo de senha (olho aberto)
 const openEyeIcon = `
     <svg 
@@ -32,20 +40,23 @@ const closedEyeIcon = `
     </svg>
 `;
 
-/*****************************************************************************/
-// Função executada ao carregar a página.
-//
-// Adiciona um Event Listener para o botão de submit do formulário e outro para
-// o ícone de mostrar/ocultar senha.
-/*****************************************************************************/
+/*****************************************************************************
+* Função executada ao carregar a página.
+*
+* Adiciona um Event Listener para o botão de submit do formulário e outro para
+* o ícone de mostrar/ocultar senha.
+******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
     const loginForm = document.getElementById('loginForm');
     const feedbackMessage = document.getElementById('feedbackMessage');
     const emailInput = document.getElementById('emailInput');
     const passwordInput = document.getElementById('passwordInput');
+    const submitBtn = document.getElementById('loginSubmitBtn');
     const inputs = [emailInput, passwordInput];
     
-    // Limpa feedbackMessage quando usuário começa a digitar em qualquer um dos inputs do formulário
+    /*****************************************************************************
+    * Limpa feedbackMessage quando usuário começa a digitar em qualquer um dos inputs do formulário
+    ******************************************************************************/
     inputs.forEach( inputElement => {
         inputElement.addEventListener('input', () => {
             inputElement.setCustomValidity('');
@@ -54,7 +65,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Submissão do Formulário
+    /*****************************************************************************
+    * Submissão do formulário.
+    ******************************************************************************/
     loginForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         feedbackMessage.className = 'feedback-message';
@@ -71,7 +84,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const password = passwordInput.value;
         const redirectTo = document.getElementById('redirectTo').value;
 
-        // Realiza requisição HTTP
+        // Desabilita botão de submit e fica em estado de carregamento (Loading...)
+        const originalBtnHtml = submitBtn.innerHTML;
+        submitBtn.innerHTML = `${gearIcon} <span>Realizando Login...</span>`;
+        submitBtn.disabled = true;
+        let requestSucceeded = false;
+
+        /*****************************************************************************
+        * Realiza requisição HTTP
+        ******************************************************************************/
         try {
             const responseHttpRequest = await fetch('/api/auth/login', {
                 method: 'POST',
@@ -81,7 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const responseData = await responseHttpRequest.json();
 
             if (responseHttpRequest.ok) {
-                window.location.href = responseData.redirectUrl;
+                requestSucceeded = true;
+                window.location.href = responseData.redirectUrl || '/';
             } else {
                 throw new Error(responseData.messagePt);
             }
@@ -93,11 +115,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 error instanceof Error && error.message
                     ? error.message
                     : 'Ocorreu um erro interno ao processar a solicitação.';
+        } finally {
+            if (!requestSucceeded) {
+                submitBtn.innerHTML = originalBtnHtml;
+                submitBtn.disabled = false;
+            }
         }
     });
 
 
-    // Função para mostrar/ocultar a senha.
+    /*****************************************************************************
+    * Função para mostrar/ocultar a senha.
+    ******************************************************************************/
     const togglePasswordBtn = document.getElementById('togglePassword');
     togglePasswordBtn.addEventListener('click', () => {
         // Faz o toggle do tipo do botão (password/text)

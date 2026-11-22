@@ -8,27 +8,45 @@ const gearIcon = `
 
 // SVG para campo de senha (olho aberto)
 const openEyeIcon = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-labelledby="openEyeIconTitle">
-        <title id="openEyeIconTitle">Ocultar a senha</title>
+    <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="20" 
+        height="20" 
+        viewBox="0 0 24 24" 
+        fill="currentColor" 
+        aria-hidden="true" 
+        focusable="false"
+    >
         <path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/>
     </svg>
 `;
 
 // SVG para campo de senha (olho fechado)
 const closedEyeIcon = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-labelledby="closedEyeIconTitle" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> 
-        <title id="closedEyeIconTitle">Visualizar a senha</title> 
+    <svg 
+        xmlns="http://www.w3.org/2000/svg" 
+        width="20" 
+        height="20" 
+        viewBox="0 0 24 24" 
+        fill="currentColor" 
+        stroke="currentColor" 
+        stroke-width="2" 
+        stroke-linecap="round" 
+        stroke-linejoin="round" 
+        aria-hidden="true" 
+        focusable="false"
+    >
         <path d="M20 9C20 9 19.6797 9.66735 19 10.5144M12 14C10.392 14 9.04786 13.5878 7.94861 13M12 14C13.608 14 14.9521 13.5878 16.0514 13M12 14V17.5M4 9C4 9 4.35367 9.73682 5.10628 10.6448M7.94861 13L5 16M7.94861 13C6.6892 12.3266 5.75124 11.4228 5.10628 10.6448M16.0514 13L18.5 16M16.0514 13C17.3818 12.2887 18.3535 11.3202 19 10.5144M5.10628 10.6448L2 12M19 10.5144L22 12"/>
     </svg>
 `;
 
 /****************************************************************************** 
-/ Função executada ao carregar a página.
-/
-/ Adiciona Event Listeners nos elementos da página:
-/ 1) Em todos os inputs do formulário para limpar o campo feedbackMessage;
-/ 2) Botão de submit do formulário para cadastro de novo usuário;
-/ 3) Ícone de mostrar/ocultar senha.
+* Função executada ao carregar a página.
+*
+* Adiciona Event Listeners nos elementos da página:
+* 1) Em todos os inputs do formulário para limpar o campo feedbackMessage;
+* 2) Botão de submit do formulário para cadastro de novo usuário;
+* 3) Ícone de mostrar/ocultar senha.
 ******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
     const registerForm = document.getElementById('registerForm');
@@ -41,7 +59,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = document.getElementById('submitBtn');
     const inputs = [firstNameInput, lastNameInput, emailInput, passwordInput, confirmPasswordInput];
 
-    // Limpa feedbackMessage quando usuário começa a digitar em qualquer um dos inputs do formulário
+    /****************************************************************************** 
+    * Limpa feedbackMessage quando usuário começa a digitar em qualquer um dos 
+    * inputs do formulário.
+    ******************************************************************************/
     inputs.forEach( inputElement => {
         inputElement.addEventListener('input', () => {
             inputElement.setCustomValidity('');
@@ -50,7 +71,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Submissão do Formulário
+    /******************************************************************************
+    * Submissão do formulário.
+    ******************************************************************************/
     registerForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         feedbackMessage.className = 'feedback-message';
@@ -64,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Validação do e-mail via RegEx
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(emailInput.value)) {
+        if (!emailRegex.test(emailInput.value.trim())) {
             emailInput.setCustomValidity('Por favor, insira um e-mail no formato válido (ex: nome@dominio.com).');
             emailInput.reportValidity();
             return;
@@ -90,18 +113,21 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Botão com visual de Carregamento (Loading...)
-        const originalBtnHtml = submitBtn.innerHTML;
-        submitBtn.innerHTML = `${gearIcon} <span>Cadastrando...</span>`;
-        submitBtn.disabled = true;
-
         // Preparação dos dados para a API
         const firstName = registerForm.firstName.value.trim();
         const lastName = registerForm.lastName.value.trim();
         const email = registerForm.email.value.trim();
         const payload = {firstName, lastName, email, password};
 
-        // Realiza requisição HTTP
+        // Desabilita botão de submit e fica em estado de carregamento (Loading...)
+        const originalBtnHtml = submitBtn.innerHTML;
+        submitBtn.innerHTML = `${gearIcon} <span>Cadastrando...</span>`;
+        submitBtn.disabled = true;
+        let requestSucceeded = false;
+
+        /******************************************************************************
+        * Realiza requisição HTTP
+        ******************************************************************************/
         try {
             const responseHttpRequest = await fetch('/api/auth/register', {
                 method: 'POST',
@@ -113,22 +139,31 @@ document.addEventListener('DOMContentLoaded', () => {
             const responseData = await responseHttpRequest.json();
 
             if (responseHttpRequest.ok && responseHttpRequest.status === 201) { // HTTP 201 = Created 
+                requestSucceeded = true;
                 window.location.href = responseData.redirectUrl || '/?erro=falha-de-redirecionamento';
             } else {
                 throw new Error(responseData.messagePt);
             }
         } catch (error) {
             console.error('ERRO na requisição HTTP:\n', error);
+            feedbackMessage.setAttribute('role', 'alert');
             feedbackMessage.className = 'feedback-message error';
-            feedbackMessage.textContent = error.message || 'Ocorreu um erro interno ao processar a solicitação.';
+            feedbackMessage.textContent =
+                error instanceof Error && error.message
+                    ? error.message
+                    : 'Ocorreu um erro interno ao processar a solicitação.';
         } finally {
-            submitBtn.innerHTML = originalBtnHtml;
-            submitBtn.disabled = false;
+            if (!requestSucceeded) {
+                submitBtn.innerHTML = originalBtnHtml;
+                submitBtn.disabled = false;
+            }
         }
     });
 
 
-    // Função para mostrar/ocultar a senha.
+    /******************************************************************************
+    * Função para mostrar/ocultar a senha.
+    ******************************************************************************/
     const passwordGroups = document.querySelectorAll('div.password-wrapper');
     passwordGroups.forEach(passwordGroup => {
         const passwordInput = passwordGroup.querySelector('input[type="password"]');
@@ -138,10 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const isPassword = passwordInput.type === 'password';
                 passwordInput.type = isPassword ? 'text' : 'password';
                 togglePasswordBtn.innerHTML = isPassword ? openEyeIcon : closedEyeIcon;
-                togglePasswordBtn.setAttribute(
-                    'aria-label', 
-                    isPassword ? 'Ocultar senha' : 'Visualizar senha'
-                );
+                const label = isPassword ? 'Ocultar senha' : 'Visualizar senha';
+                togglePasswordBtn.setAttribute('aria-label', label);
+                togglePasswordBtn.setAttribute('title', label);
             });
         }
     });

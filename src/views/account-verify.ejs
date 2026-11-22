@@ -17,17 +17,17 @@
 <body>
     <header class="title-box">
         <h1 class="blog-title">
-            <a href="/" aria-label="Página inicial do blog">outOfBounds</a>
+            <a href="/" aria-label="Página inicial do outOfBounds">outOfBounds</a>
         </h1>
     </header>
     
     <main>
-        <% if (success) { %>
+        <% if (typeof success !== 'undefined' && success) { %>
             <div class="main-box card-hover-effect">
                 <div class="success-icon-wrapper" aria-hidden="true">🎉</div>
                 <h2>Conta Verificada!</h2>
                 <p class="description-text text-center">
-                    Olá, <strong><%= userName %></strong>! Seu e-mail foi confirmado com sucesso. Agora você tem acesso total aos comentários, quizzes interativos, reações e recursos exclusivos do <strong>jjOutOfBounds</strong>.
+                    Olá, <strong><%= typeof userName !== 'undefined' ? userName : '' %></strong>! Seu e-mail foi confirmado com sucesso. Agora você tem acesso total aos comentários, quizzes interativos, reações e recursos exclusivos do <strong>outOfBounds</strong>.
                 </p>
                 
                 <div id="countdownBox" class="countdown-box text-center">
@@ -43,7 +43,7 @@
                 <div class="error-icon-wrapper" aria-hidden="true">⚠️</div>
                 <h2>Falha na Verificação</h2>
                 <p class="feedback-message error text-center" role="alert" aria-live="assertive">
-                    <%= messagePt %>
+                    <%= typeof messagePt !== 'undefined' ? messagePt : '' %>
                 </p>
                 <p class="description-text text-center margin-top-smaller">
                     O link pode ter expirado (validade de 24 horas) ou já ter sido utilizado.
@@ -53,13 +53,13 @@
                 </p>
                 <span class="text-center or-then">ou então</span>
                 <p class="back-to-login">
-                    <a href="/login">⬅ Voltar para o Log in</a>
+                    <a href="/login">⬅ Voltar para o Login</a>
                 </p>
             </div>
         <% } %>
     </main>
 
-    <% if (success) { %>
+    <% if (typeof success !== 'undefined' && success) { %>
         <!-- Biblioteca CDN leve para confetes festivos -->
         <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
         <script src="/js/account-verify.js"></script>

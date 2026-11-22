@@ -274,10 +274,9 @@ h2 {
 
 /*---------------------------------------------------------------------------*/
 /* Links inferiores */
-.links-footer {
-    margin-top: 1.75rem;
-    padding-top: 1.25rem;
-    border-top: 1px solid #e2e8f0;
+.box-divider {
+    margin: 2rem 0;
+    border-bottom: 1px solid #ccccccc0;
 }
 
 .back-to-login, .back-to-homepage {

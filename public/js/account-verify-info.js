@@ -6,76 +6,101 @@ const gearIcon = `
     </svg>
 `;
 
+/****************************************************************************** 
+* Função para contorlar o reenvio do e-mail de verificação.
+******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
     const resendBtn = document.getElementById('resendBtn');
     const feedbackMessage = document.getElementById('feedbackMessage');
     const emailDisplay = document.getElementById('userEmailDisplay');
     const verificationCard = document.getElementById('verificationCard');
-
+    const userEmail = emailDisplay.dataset.email.trim();
+    const emailFailed = verificationCard?.dataset.emailFailed === 'true';
+    
     if (!resendBtn || !emailDisplay) return;
 
-    const userEmail = emailDisplay.dataset.email?.trim();
-    const emailFailed = verificationCard?.dataset.emailFailed === 'true';
-
-    // Inicia um temporizador de bloqueio (cooldown) para evitar múltiplos cliques seguidos
-    const startCooldown = (seconds) => {
-        let remaining = seconds;
-        resendBtn.disabled = true;
-        resendBtn.innerHTML = `<span>Aguarde ${remaining}s para reenviar</span>`;
-
-        const interval = setInterval(() => {
-            remaining -= 1;
-            if (remaining > 0) {
-                resendBtn.innerHTML = `<span>Aguarde ${remaining}s para reenviar</span>`;
-            } else {
-                clearInterval(interval);
-                resendBtn.disabled = false;
-                resendBtn.innerHTML = `<span class="btn-text">Reenviar e-mail de confirmação</span>`;
-            }
-        }, 1000);
-    };
-
-    // Se o e-mail falhou no envio inicial do cadastro, NÃO aplica o cooldown 
-    // e deixa o botão pronto para o usuário tentar imediatamente.
+    /******************************************************************************
+    * Se o e-mail falhou no envio inicial do cadastro, NÃO aplica o cooldown 
+    * e deixa o botão pronto para o usuário tentar imediatamente.
+    * Caso contrário, inicia com 60s de espera pois o e-mail acabou de ser enviado 
+    * com sucesso.
+    ******************************************************************************/
     if (emailFailed) {
         resendBtn.disabled = false;
     } else {
-        // Caso contrário, inicia com 60s de espera pois o e-mail acabou de ser enviado com sucesso
-        startCooldown(60);
+        startCooldown(60, resendBtn);
     }
 
+    /******************************************************************************
+    * Click no botão de reenvio do e-mail de verificação.
+    *******************************************************************************/
     resendBtn.addEventListener('click', async () => {
         if (!userEmail) return;
-
         feedbackMessage.className = 'feedback-message';
         feedbackMessage.textContent = '';
 
+        // Desabilita botão de submit e fica em estado de carregamento (Loading...)
+        const originalBtnHtml = resendBtn.innerHTML;
         resendBtn.innerHTML = `${gearIcon} <span>Reenviando...</span>`;
         resendBtn.disabled = true;
+        let resendSucceeded = false;
 
+        /******************************************************************************
+        * Realiza requisição HTTP
+        ******************************************************************************/
         try {
             const response = await fetch('/api/auth/resend-verification-email', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: userEmail })
             });
-
             const responseData = await response.json();
 
+            // Sucesso!
             if (response.ok) {
+                resendSucceeded = true;
+                feedbackMessage.setAttribute('role', 'status');
                 feedbackMessage.className = 'feedback-message success';
-                feedbackMessage.textContent = responseData.messagePt || 'Um novo link de confirmação foi enviado para o seu e-mail!';
-                startCooldown(180); // Cooldown maior (3min) após um reenvio manual
+                feedbackMessage.textContent = responseData.messagePt || 
+                    'Um novo link de confirmação foi enviado para o seu e-mail.';
+                startCooldown(180, resendBtn);
             } else {
                 throw new Error(responseData.messagePt || 'Não foi possível reenviar o e-mail.');
             }
         } catch (error) {
-            console.error('ERRO ao reenviar e-mail de verificação:\n', error);
+            console.error('ERRO na requisição HTTP:\n', error);
+            feedbackMessage.setAttribute('role', 'alert');
             feedbackMessage.className = 'feedback-message error';
-            feedbackMessage.textContent = error.message || 'Ocorreu um erro interno ao processar a solicitação.';
-            
-            resendBtn.disabled = false;
-            resendBtn.innerHTML = `<span class="btn-text">Reenviar e-mail de confirmação</span>`;
+            feedbackMessage.textContent =
+                error instanceof Error && error.message
+                    ? error.message
+                    : 'Ocorreu um erro interno ao processar a solicitação.';
+        } finally {
+            if (!resendSucceeded) {
+                resendBtn.innerHTML = originalBtnHtml;
+                resendBtn.disabled = false;
+            }
         }
     });
 });
+
+/******************************************************************************
+* Inicia um temporizador de bloqueio (cooldown) para evitar múltiplos
+* cliques seguidos no botão.
+******************************************************************************/
+function startCooldown (seconds, resendBtn) {
+    let remaining = seconds;
+    resendBtn.disabled = true;
+    resendBtn.innerHTML = `<span>Aguarde ${remaining}s para reenviar</span>`;
+
+    const interval = setInterval(() => {
+        remaining -= 1;
+        if (remaining > 0) {
+            resendBtn.innerHTML = `<span>Aguarde ${remaining}s para reenviar</span>`;
+        } else {
+            clearInterval(interval);
+            resendBtn.disabled = false;
+            resendBtn.innerHTML = `<span class="btn-text">Reenviar e-mail de confirmação</span>`;
+        }
+    }, 1000);
+};

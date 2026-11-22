@@ -6,7 +6,7 @@
     --primary-blue-hover: #1d4ed8;
     --text-main: #111827;
     --text-muted: #4b5563;
-    --border-color: #b8c0c8;
+    --border-color: #cbd5e1;
     --error-color: #e11d48;
     --success-color: #059669;
     --focus-ring: 0 0 0 3px rgba(37, 99, 235, 0.4);
@@ -125,7 +125,7 @@ h2 {
     border: 0;
     border-radius: 0.4rem;
     color: #fff;
-    background: #2457c5;
+    background: var(--primary-blue);
     font: inherit;
     font-weight: 600;
     text-decoration: none;
@@ -135,7 +135,7 @@ h2 {
 }
 
 .btn-primary-custom:hover {
-    background: #1d4ed8;
+    background: var(--primary-blue-hover);
     transform: translateY(-2px);
     box-shadow: 0 0.4rem 1rem rgba(36, 87, 197, 0.35);
 }

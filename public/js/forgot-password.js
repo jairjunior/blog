@@ -6,8 +6,10 @@ const gearIcon = `
     </svg>
 `;
 
-/****************************************************************************** 
-/ Função para enviar a solicitação de alteração de senha (recuperar senha).
+/*****************************************************************************
+* Função executada ao carregar a página.
+*
+* Envia a solicitação de alteração de senha (recuperar senha).
 ******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
     const forgotForm = document.getElementById('forgotForm');
@@ -15,14 +17,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedbackMessage = document.getElementById('feedbackMessage');
     const submitBtn = document.getElementById('submitBtn');
     
-    // Limpa feedbackMessage quando usuário começa a digitar no campo de e-mail
+    /*****************************************************************************
+    * Limpa feedbackMessage quando usuário começa a digitar no campo de e-mail
+    ******************************************************************************/
     emailInput.addEventListener('input', () => {
         emailInput.setCustomValidity('');
         feedbackMessage.className = 'feedback-message';
         feedbackMessage.textContent = '';
     });
 
-    // Submissão do Formulário
+    /*****************************************************************************
+    * Submissão do formulário.
+    ******************************************************************************/
     forgotForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         feedbackMessage.className = 'feedback-message';
@@ -36,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Validação do e-mail via RegEx
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        if (!emailRegex.test(emailInput.value)) {
+        if (!emailRegex.test(emailInput.value.trim())) {
             emailInput.setCustomValidity('Por favor, insira um e-mail válido (ex: nome@dominio.com).');
             emailInput.reportValidity();
             return;
@@ -44,12 +50,14 @@ document.addEventListener('DOMContentLoaded', () => {
             emailInput.setCustomValidity('');
         }
 
-        // Botão com visual de Carregamento (Loading...)
+        // Desabilita botão de submit e fica em estado de carregamento (Loading...)
         const originalBtnHtml = submitBtn.innerHTML;
         submitBtn.innerHTML = `${gearIcon} <span>Enviando...</span>`;
         submitBtn.disabled = true;
 
-        // Realiza requisição HTTP
+        /*****************************************************************************
+        * Realiza requisição HTTP
+        ******************************************************************************/
         try {
             const responseHttpRequest = await fetch('/api/auth/forgot-password', {
                 method: 'POST',

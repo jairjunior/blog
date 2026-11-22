@@ -7,7 +7,7 @@ const gearIcon = `
 `;
 
 /****************************************************************************** 
-/ Função para realizar a alteração de senha do usuário.
+* Função para realizar a alteração de senha do usuário.
 ******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
     const resetPasswordForm = document.getElementById('resetPasswordForm');
@@ -19,9 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const submitBtn = document.getElementById('submitBtn');
     const inputs = [passwordInput, confirmPasswordInput];
 
-    //---------------------------------------------------------------------------------------------
-    // Limpa feedbackMessage quando usuário começa a digitar em qualquer um dos inputs.
-    //---------------------------------------------------------------------------------------------
+    /******************************************************************************
+    * Limpa feedbackMessage quando usuário começa a digitar em qualquer um dos inputs.
+    *******************************************************************************/
     inputs.forEach( inputElement => {
         inputElement.addEventListener('input', () => {
             inputElement.setCustomValidity('');
@@ -30,9 +30,9 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    //---------------------------------------------------------------------------------------------
-    // Submissão do formulário.
-    //---------------------------------------------------------------------------------------------
+    /******************************************************************************
+    * Submissão do formulário.
+    *******************************************************************************/
     resetPasswordForm.addEventListener('submit', async (event) => {
         event.preventDefault();
         feedbackMessage.className = 'feedback-message';
@@ -64,13 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Botão com visual de Carregamento (Loading...)
+        // Desabilita botão de submit e fica em estado de carregamento (Loading...)
         const originalBtnHtml = submitBtn.innerHTML;
         submitBtn.innerHTML = `${gearIcon} <span>Salvando Nova Senha...</span>`;
         submitBtn.disabled = true;
+        let requestSucceeded = false;
 
-        //---------------------------------------------------------------------
-        // Realiza requisição HTTP
+        /******************************************************************************
+        * Realiza requisição HTTP
+        ******************************************************************************/
         try {
             const responseHttpRequest = await fetch('/api/auth/reset-password', {
                 method: 'POST',
@@ -81,6 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Sucesso!
             if (responseHttpRequest.ok) {
+                requestSucceeded = true;
                 // Limpa e desabilita os inputs de senha
                 // Também desabilita os botões de mostrar/ocultar senha
                 lockPasswordFields(inputs, togglePasswordButtons);
@@ -96,6 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const countdownWrapper = document.getElementById('countdownWrapper');
                 const countdownNumber = document.getElementById('countdownNumber');
                 countdownWrapper.classList.remove('hidden');
+                countdownWrapper.setAttribute('aria-hidden', 'false');
                 let segundosRestantes = 10;
                 const timer = setInterval(() => {
                     segundosRestantes--;
@@ -120,14 +124,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 error instanceof Error && error.message
                     ? error.message
                     : 'Ocorreu um erro interno ao processar a solicitação.';
-            submitBtn.innerHTML = originalBtnHtml;
-            submitBtn.disabled = false;
+        } finally {
+            if (!requestSucceeded) {
+                submitBtn.innerHTML = originalBtnHtml;
+                submitBtn.disabled = false;
+            }
         }
     });
 
-    //---------------------------------------------------------------------------------------------
-    // Função para mostrar/ocultar a senha.
-    //---------------------------------------------------------------------------------------------
+    /******************************************************************************
+    * Função para mostrar/ocultar a senha.
+    ******************************************************************************/
     const passwordGroups = document.querySelectorAll('div.password-wrapper');
     passwordGroups.forEach( passwordGroup => {
         const inputElement = passwordGroup.querySelector('input[type="password"], input[type="text"]');
@@ -154,9 +161,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /******************************************************************************
-// Limpa o campo de senha e trava a interação tanto com o input como o botão
-// de mostrar/ocultar a senha.
-******************************************************************************/
+* Limpa o campo de senha e trava a interação tanto com o input como o botão
+* de mostrar/ocultar a senha.
+*******************************************************************************/
 function lockPasswordFields(passwordInputs, toggleButtons) {
     passwordInputs.forEach(inputElement => {
         inputElement.value = '';
@@ -169,11 +176,11 @@ function lockPasswordFields(passwordInputs, toggleButtons) {
 
 
 /******************************************************************************
-// Função para retornar o SVG correto para o campo de senha do formulário.
-// Como são dois campos de senha, é preciso criar componentes distintos 
-// com ids separados para cada campo.
-// Se type = 'open' (olho aberto), então essa função deve retornar o SVG 
-// do olho fechado e vice-versa.
+* Função para retornar o SVG correto para o campo de senha do formulário.
+* Como são dois campos de senha, é preciso criar componentes distintos 
+* com ids separados para cada campo.
+* Se type = 'open' (olho aberto), então essa função deve retornar o SVG 
+* do olho fechado e vice-versa.
 ******************************************************************************/
 function createEyeIconSvg(type) {
     const isOpen = type === 'open';
