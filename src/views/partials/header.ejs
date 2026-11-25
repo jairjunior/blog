@@ -101,7 +101,7 @@
 
                     <%#  Botão de Criar Conta %>
                     <a id="topCreateAccountBtn" class="top-auth-btn" 
-                        href="/cadastrar?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" 
+                        href="/cadastrar" 
                         title="Criar conta gratuitamente" aria-label="Criar conta gratuitamente"
                     >
                         <svg 
@@ -125,7 +125,7 @@
                     
                     <%# Botão de Login  %>
                     <a id="topLoginBtn" class="top-auth-btn" 
-                        href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" 
+                        href="/login?redirectTo=<%= encodeURIComponent((typeof currentUrl !== 'undefined' && currentUrl) ? currentUrl : '/') %>" 
                         title="Entrar" aria-label="Entrar"
                     >
                         <svg 
@@ -239,7 +239,9 @@
                     <%# Botões de "Criar Conta" e "Entrar" (visível apenas em mobile para usuários não logados / não cadastrados) %>
                     <% if (!(typeof user !== 'undefined' && user)) { %>
                         <li class="mobile-menu-item">
-                            <a class="btn-mobile-signup" href="/cadastrar?redirectTo=/" title="Criar Conta">
+                            <a class="btn-mobile-signup" 
+                                href="/cadastrar"
+                                title="Criar Conta">
                                 <svg 
                                     class="btn-icon" 
                                     xmlns="http://www.w3.org/2000/svg" 
@@ -259,7 +261,10 @@
                             </a>
                         </li>
                         <li class="mobile-menu-item">
-                            <a class="btn-mobile-login" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar">
+                            <a 
+                                class="btn-mobile-login"
+                                href="/login?redirectTo=<%= encodeURIComponent((typeof currentUrl !== 'undefined' && currentUrl) ? currentUrl : '/') %>"
+                                title="Entrar">
                                 <svg 
                                     class="btn-icon" 
                                     xmlns="http://www.w3.org/2000/svg" 

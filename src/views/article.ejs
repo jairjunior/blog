@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- O servidor injeta o título exato do artigo e o resumo para SEO -->
     <title><%= article.title %> | outOfBounds</title>
     <meta name="description" content="<%= article.summary %>">
     
@@ -133,8 +132,13 @@
                 </div>
             <% } else { %>
                 <div class="auth-prompt">
-                    <p>Você precisa <a href="/login?redirectTo=<%= encodeURIComponent(currentUrl) %>">fazer login</a> 
-                        para deixar um comentário.</p>
+                    <p>
+                        Você precisa 
+                        <a href="/login?redirectTo=<%= encodeURIComponent((typeof currentUrl !== 'undefined' && currentUrl) ? currentUrl : '/') %>">
+                            fazer login
+                        </a> 
+                        para deixar um comentário.
+                    </p>
                 </div>
             <% } %>
 

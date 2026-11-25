@@ -51,7 +51,7 @@
     padding: 0.45rem 0.85rem;
     border-radius: 6px;
     min-height: 36px;
-    transition: background-color 0.2s ease;
+    transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .banner-email-verification-link:hover,

@@ -16,7 +16,7 @@ const renderHomePage = async (req, res) => {
     try {
         const NUMBER_OF_LATEST_ARTICLES = 3;
         const latestArticles = await postModel.getLatestArticles(NUMBER_OF_LATEST_ARTICLES);
-        res.render('index', { 
+        return res.render('index', { 
             latestArticles,
             user: res.locals.currentUser,
             currentUrl: req.originalUrl
@@ -44,7 +44,7 @@ const renderArticlesPage = async (req, res) => {
         const numberOfArticles = 18;
         const articles = await postModel.getLatestArticles(numberOfArticles);
         const categoryName = 'Artigos';
-        res.render('category', { 
+        return res.render('category', { 
             articles,
             categoryName,
             user: res.locals.currentUser,
@@ -82,7 +82,7 @@ const renderCategoryPage = async (req, res) => {
         }
 
         const articles = await postModel.getArticlesByCategory(categorySlug);
-        res.render('category', {
+        return res.render('category', {
             articles,
             categoryName: category.name,
             user: res.locals.currentUser,
@@ -130,7 +130,6 @@ const renderArticleBySlugs = async (req, res) => {
 
     } catch (error) {
         printConsoleError('VIEW_ERROR_RENDER_SINGLE_ARTICLE_PAGE', error);
-        console.error(error)//DEBUG
         return res.status(500).json({ // HTTP 500 Internal Server Error 
             success: false,
             messageEn: 'Internal server error. Contact the administrator.',
@@ -148,7 +147,7 @@ const renderArticleBySlugs = async (req, res) => {
  * necessidade de buscar nada no banco de dados.
  *****************************************************************************/
 const renderAboutPage = async (req, res) => {
-    res.render('about', {
+    return res.render('about', {
         user: res.locals.currentUser,
         currentUrl: req.originalUrl
     });
@@ -163,7 +162,7 @@ const renderAboutPage = async (req, res) => {
  * necessidade de buscar nada no banco de dados.
  *****************************************************************************/
 const renderContactPage = async (req, res) => {
-    res.render('contact', {
+    return res.render('contact', {
         user: res.locals.currentUser,
         currentUrl: req.originalUrl
     });
@@ -173,15 +172,11 @@ const renderContactPage = async (req, res) => {
 /******************************************************************************
  * Função para tratar requisições GET no caminho '/register'
  ******************************************************************************
- * Pega o parâmetro 'redirectTo' que é passado na URL como uma query string.
- * Esse parâmetro vai dizer para onde o usuário deve ser redirecionado após
- * efetuar o cadastro no site.
- * Esse caminho é exatamente de onde o usuário veio e é para onde ele deve 
- * voltar.
+ * Renderiza a página odne o suuário pdoe se cadastrar no sistema preenchendo o
+ * formulário que será enviando para o servidor.
  *****************************************************************************/
 const renderRegisterPage = async (req, res) => {
-    const redirectTo = req.query.redirectTo || '/';
-    res.render('register', { redirectTo });
+    return res.render('register');
 }
 
 
@@ -196,7 +191,7 @@ const renderRegisterPage = async (req, res) => {
  *****************************************************************************/
 const renderLoginPage = async (req, res) => {
     const redirectTo = req.query.redirectTo || '/';
-    res.render('login', { redirectTo });
+    return res.render('login', { redirectTo });
 }
 
 
@@ -207,7 +202,7 @@ const renderLoginPage = async (req, res) => {
  * informando o e-mail cadastrado.
  *****************************************************************************/
 const renderForgotPasswordPage = async (req, res) => {
-    res.render('forgot-password');
+    return res.render('forgot-password');
 }
 
 
@@ -254,7 +249,7 @@ const renderResetPasswordPage = async (req, res) => {
         });
 
     } catch (error) {
-        printConsoleError(error);
+        printConsoleError('VIEW_ERROR_RENDER_RESET_PASSWORD_PAGE', error);
         return res.render('reset-password', {
             success: false,
             messageEn: 'The recovery link is invalid or has already expired.\nPlease submit a new request to recover your password or contact the administrator.',
@@ -338,7 +333,7 @@ const renderAccountVerifyPage = async (req, res) => {
 
         // Renderiza a página de sucesso com os dados do usuário
         printSecurityAudit(
-            'AUDIT_ACCOUNT_VERIFIED', 
+            'AUTH_AUDIT_ACCOUNT_VERIFIED', 
             `Conta ativada com sucesso. Usuário ID: [${user.id}], E-mail: [${user.email}], IP: [${req.ip}]`
         );
         res.render('account-verify', {
@@ -347,7 +342,7 @@ const renderAccountVerifyPage = async (req, res) => {
         });
 
     } catch (error) {
-        printConsoleError(error);
+        printConsoleError('VIEW_ERROR_RENDER_ACCOUNT_VERIFY_PAGE', error);
         printConsoleWarning(
             'AUTH_WARN_VERIFY_TOKEN_INVALID',
             `Tentativa de ativação de conta com token inválido ou expirado. IP: [${req.ip}]`
@@ -359,7 +354,6 @@ const renderAccountVerifyPage = async (req, res) => {
         });
     }
 };
-
 
 
 /******************************************************************************
