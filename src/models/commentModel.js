@@ -12,7 +12,7 @@ const createComment = async (postId, userId, commentContent) => {
         return rows[0];
 
     } catch(error) {
-        console.error(`Error in postModel.createComment() when creating
+        console.error(`Error in commentModel.createComment() when creating
             comment for post with ID [${postId}]:\n`, error);
         throw error;
     }
@@ -40,7 +40,7 @@ const getComments = async (postId) => {
         return rows;
 
     } catch(error){
-        console.error(`Error in postModel.getComments() when retrieving
+        console.error(`Error in commentModel.getComments() when retrieving
             comment for post with ID [${postId}]:\n`, error);
         throw error;
     }
@@ -62,7 +62,7 @@ const getLastCommentTimeByUser = async (postId, userId) => {
         return rows;
 
     } catch(error){
-        console.error(`Error in postModel.getLastCommentByUser() when retrieving 
+        console.error(`Error in commentModel.getLastCommentByUser() when retrieving 
             last comment for post with ID [${postId}] and user with ID [${userId}]:\n`, error);
         throw error;
     }

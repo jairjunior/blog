@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- O servidor injeta o título exato do artigo e o resumo para SEO -->
     <title>Sobre | outOfBounds</title>
     <meta name="description" content="Apresentação do site e do seu autor, Jair Junior. Descreve a origem, trajetória, objetivos, temas abordados e canais de comunicação. Blog sobre Engenharia de Software, Clean Code e Desenvolvimento Fullstack por Jair Junior (JJ). Tutoriais práticos, arquitetura web e padrões da indústria.">
     
@@ -20,7 +19,7 @@
 <body>
 
     <!-- Cabeçalho Principal -->
-    <%- include('partials/header') %>
+    <%- include('partials/header', { currentUrl: currentUrl, user: user }) %>
 
     <main class="about-container">
 

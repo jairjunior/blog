@@ -1,4 +1,4 @@
-const postModel = require('../models/postModel');
+const articleModel = require('../models/articleModel');
 const categoryModel = require('../models/categoryModel');
 const commentModel = require('../models/commentModel');
 const userModel = require('../models/userModel');
@@ -15,7 +15,7 @@ const { printConsoleError, printConsoleWarning, printSecurityAudit } = require('
 const renderHomePage = async (req, res) => {
     try {
         const NUMBER_OF_LATEST_ARTICLES = 3;
-        const latestArticles = await postModel.getLatestArticles(NUMBER_OF_LATEST_ARTICLES);
+        const latestArticles = await articleModel.getLatestArticles(NUMBER_OF_LATEST_ARTICLES);
         return res.render('index', { 
             latestArticles,
             user: res.locals.currentUser,
@@ -42,7 +42,7 @@ const renderHomePage = async (req, res) => {
 const renderArticlesPage = async (req, res) => {
     try {
         const numberOfArticles = 18;
-        const articles = await postModel.getLatestArticles(numberOfArticles);
+        const articles = await articleModel.getLatestArticles(numberOfArticles);
         const categoryName = 'Artigos';
         return res.render('category', { 
             articles,
@@ -81,10 +81,11 @@ const renderCategoryPage = async (req, res) => {
             });
         }
 
-        const articles = await postModel.getArticlesByCategory(categorySlug);
+        const articles = await articleModel.getArticlesByCategory(categorySlug);
         return res.render('category', {
             articles,
             categoryName: category.name,
+            categoryDescription: category.description,
             user: res.locals.currentUser,
             currentUrl: req.originalUrl
         });
@@ -111,7 +112,7 @@ const renderArticleBySlugs = async (req, res) => {
     try {
         const { categorySlug, articleSlug } = req.params;
 
-        const article = await postModel.getArticleBySlugs(categorySlug, articleSlug);
+        const article = await articleModel.getArticleBySlugs(categorySlug, articleSlug);
         if(!article){
             return res.status(404).json({ // HTTP 404 Not Found
                 success: false,

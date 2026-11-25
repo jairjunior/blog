@@ -30,7 +30,7 @@ const getLatestArticles = async (numberOfArticles) => {
         return rows;
 
     } catch (error) {
-        console.error(`Error in postModel.getLatestArticles() when retrieving latest articles.`);
+        console.error(`Error in articleModel.getLatestArticles() when retrieving latest articles.`);
         throw error;
     }
 
@@ -57,7 +57,7 @@ const getArticlesByCategory = async (categorySlug) => {
         return rows;
 
     } catch(error) {
-        console.error(`Error in postModel.getArticlesByCategory() when retrieving articles from category [${categorySlug}].`);
+        console.error(`Error in articleModel.getArticlesByCategory() when retrieving articles from category [${categorySlug}].`);
         throw error;
     }
 };
@@ -90,7 +90,7 @@ const getArticleBySlugs = async (categorySlug, articleSlug) => {
         return rows[0];
 
     } catch(error) {
-        console.error(`Error in postModel.getArticleBySlugs() when retrieving the post [${categorySlug}/${articleSlug}].`);
+        console.error(`Error in articleModel.getArticleBySlugs() when retrieving the post [${categorySlug}/${articleSlug}].`);
         throw error;
     }
 };
@@ -113,7 +113,7 @@ const getArticleIdBySlugs = async (categorySlug, articleSlug) => {
         return rows[0];
 
     } catch(error) {
-        console.error(`Error in postModel.getArticleIdBySlugs() when retrieving ID of the post [${categorySlug}/${articleSlug}].`);
+        console.error(`Error in articleModel.getArticleIdBySlugs() when retrieving ID of the post [${categorySlug}/${articleSlug}].`);
         throw error;
     }
 

@@ -1,5 +1,5 @@
 const commentModel = require('../models/commentModel');
-const postModel = require('../models/postModel');
+const articleModel = require('../models/articleModel');
 
 
 /*****************************************************************************
@@ -48,7 +48,7 @@ const postComment = async (req, res) => {
         const { categorySlug, articleSlug } = req.params;
         const userId = res.locals.currentUser.id;
 
-        const { id: postId } = await postModel.getArticleIdBySlugs(categorySlug, articleSlug);
+        const { id: postId } = await articleModel.getArticleIdBySlugs(categorySlug, articleSlug);
         if(!postId){
             return res.status(404).json({ 
                 success: false,
