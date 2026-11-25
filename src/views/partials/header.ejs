@@ -2,7 +2,7 @@
         <!-- Barra de navegação superior -->
         <div class="container header-top">
             <!-- Nome / Logomarca -->
-            <h1 class="blog-title" aria-label="Página inicial do blog"><a href="/">outOfBounds</a></h1>
+            <h1 class="blog-title" aria-label="Página inicial do site"><a href="/">outOfBounds</a></h1>
 
             <!-- Conjunto de botões (Lupa, Criar Conta, Entrar, Burger) -->
             <div class="top-menu-button-wrapper">
@@ -97,7 +97,7 @@
                 <ul>
                     <!-- Links para Artigos, Sobre, Contato, Newsletter -->
                     <li>
-                        <a href="/posts" class="top-navbar-link">
+                        <a href="/artigos" class="top-navbar-link">
                             <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -216,7 +216,7 @@
                         <div class="search-pill-list">
                             <% if (locals.trendingSearches && trendingSearches.length > 0) { %>
                                 <% trendingSearches.forEach(term => { %>
-                                    <a href="/posts/busca?q=<%= encodeURIComponent(term) %>" class="search-pill"><%= term %></a>
+                                    <a href="/artigos/busca?q=<%= encodeURIComponent(term) %>" class="search-pill"><%= term %></a>
                                 <% }) %>
                             <% } else { %>
                                 <span class="search-empty-text">Nenhuma busca popular no momento.</span>
@@ -230,7 +230,7 @@
                         <div class="search-pill-list">
                             <% if (locals.popularTags && popularTags.length > 0) { %>
                                 <% popularTags.forEach(tag => { %>
-                                    <a href="/posts/tag/<%= tag.slug %>" class="search-pill tag-pill">#<%= tag.name %></a>
+                                    <a href="/artigos/tag/<%= tag.slug %>" class="search-pill tag-pill">#<%= tag.name %></a>
                                 <% }) %>
                             <% } else { %>
                                 <span class="search-empty-text">Em breve novas tags.</span>
@@ -245,15 +245,15 @@
                             <% if (locals.siteCategories && siteCategories.length > 0) { %>
                                 <% siteCategories.forEach(cat => { %>
                                     <li>
-                                        <a href="/posts/<%= cat.slug %>" class="search-category-link"><%= cat.name %></a>
+                                        <a href="/artigos/<%= cat.slug %>" class="search-category-link"><%= cat.name %></a>
                                     </li>
                                 <% }) %>
                             <% } else { %>
-                                <li><a href="/posts/engenharia-de-software" class="search-category-link">Engenharia de Software</a></li>
-                                <li><a href="/posts/inteligencia-artificial" class="search-category-link">Inteligência Artificial</a></li>
-                                <li><a href="/posts/ciberseguranca" class="search-category-link">Cibersegurança</a></li>
-                                <li><a href="/posts/cloud-devops" class="search-category-link">Cloud & DevOps</a></li>
-                                <li><a href="/posts/noticias-tech" class="search-category-link">Notícias Tech</a></li>
+                                <li><a href="/artigos/engenharia-de-software" class="search-category-link">Engenharia de Software</a></li>
+                                <li><a href="/artigos/ciberseguranca" class="search-category-link">Cibersegurança</a></li>
+                                <li><a href="/artigos/infra-e-cloud" class="search-category-link">Infra & Cloud</a></li>
+                                <li><a href="/artigos/inteligencia-artificial" class="search-category-link">Inteligência Artificial</a></li>
+                                <li><a href="/artigos/devsecops-e-observabilidade" class="search-category-link">DevSecOps e Observabilidade</a></li>
                             <% } %>
                         </ul>
                     </div>
@@ -266,11 +266,11 @@
         <nav class="category-navbar container">
             <ul>
                 <li><a href="/">Home</a></li>
-                <li><a href="/posts/engenharia-de-software">Engenharia de Software</a></li>
-                <li><a href="/posts/inteligencia-artificial">Inteligência Artificial</a></li>
-                <li><a href="/posts/ciberseguranca">Cibersegurança</a></li>
-                <li><a href="/posts/cloud-devops">Cloud & DevOps</a></li>
-                <li><a href="/posts/noticias-tech">Notícias Tech</a></li>
+                <li><a href="/artigos/engenharia-de-software">Engenharia de Software</a></li>
+                <li><a href="/artigos/ciberseguranca">Cibersegurança</a></li>
+                <li><a href="/artigos/infra-e-cloud">Infra & Cloud</a></li>
+                <li><a href="/artigos/inteligencia-artificial">Inteligência Artificial</a></li>
+                <li><a href="/artigos/devsecops-e-observabilidade">DevSecOps e Observabilidade</a></li>
             </ul>
         </nav>
 

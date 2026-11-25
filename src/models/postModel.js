@@ -3,16 +3,16 @@ const databasePool = require('../config/database');
 /* O campo "status" da tabela post pode assumir os seguintes valores:
  * "published": O post está finalizado, aprovado e liberado para o público
  * "draft": O artigo ainda está sendo escrito ou revisado pelo autor.
- * "archived": Para posts antigos que você não quer mais exibir publicamente,
+ * "archived": Para articles antigos que você não quer mais exibir publicamente,
  *             mas também não quer deletar do banco de dados.
- * "scheduled": Para posts que vão ao ar automaticamente em uma data futura
+ * "scheduled": Para articles que vão ao ar automaticamente em uma data futura
  *              (trabalhando em conjunto com o campo published_at) - Opcional.
 */
 
 /*****************************************************************************
-/ Buscar todos os últimos posts publicados
+/ Buscar todos os últimos articles publicados
 /*****************************************************************************/
-const getLatestPosts = async (numberOfPosts) => {
+const getLatestArticles = async (numberOfArticles) => {
 
     try {
         const query = `
@@ -26,11 +26,11 @@ const getLatestPosts = async (numberOfPosts) => {
             WHERE p.status = 'published'
             ORDER BY p.published_at DESC
             LIMIT ?`;
-        const [rows] = await databasePool.query(query, [numberOfPosts]);
+        const [rows] = await databasePool.query(query, [numberOfArticles]);
         return rows;
 
     } catch (error) {
-        console.error(`Error in postModel.getLatestPosts() when retrieving latest posts.`);
+        console.error(`Error in postModel.getLatestArticles() when retrieving latest articles.`);
         throw error;
     }
 
@@ -38,9 +38,9 @@ const getLatestPosts = async (numberOfPosts) => {
 
 
 /*****************************************************************************
-/ Buscar todos os posts de uma categoria específica
+/ Buscar todos os artigos de uma categoria específica
 /*****************************************************************************/
-const getPostsByCategory = async (categorySlug) => {
+const getArticlesByCategory = async (categorySlug) => {
     try {
         const query = `
             SELECT 
@@ -57,7 +57,7 @@ const getPostsByCategory = async (categorySlug) => {
         return rows;
 
     } catch(error) {
-        console.error(`Error in postModel.getPostsByCategory() when retrieving posts from category [${categorySlug}].`);
+        console.error(`Error in postModel.getArticlesByCategory() when retrieving articles from category [${categorySlug}].`);
         throw error;
     }
 };
@@ -66,7 +66,7 @@ const getPostsByCategory = async (categorySlug) => {
 /*****************************************************************************
 / Busca post individual pelas suas slugs (Categoria + Título).
 /*****************************************************************************/
-const getPostBySlugs = async (categorySlug, postSlug) => {
+const getArticleBySlugs = async (categorySlug, articleSlug) => {
     try {
         const query = `
             SELECT 
@@ -76,7 +76,7 @@ const getPostBySlugs = async (categorySlug, postSlug) => {
                 a.display_name  AS author_name, 
                 a.bio           AS author_bio,
                 a.created_at    AS author_created_at,
-                u.avatar        AS author_avatar
+                u.avatar_url    AS author_avatar
             FROM posts p
             INNER JOIN categories c ON p.category_id = c.id
             INNER JOIN authors a ON p.author_id = a.user_id
@@ -86,11 +86,11 @@ const getPostBySlugs = async (categorySlug, postSlug) => {
                 AND p.status = 'published'
             LIMIT 1;
         `;
-        const [rows] = await databasePool.query(query, [categorySlug, postSlug]);
+        const [rows] = await databasePool.query(query, [categorySlug, articleSlug]);
         return rows[0];
 
     } catch(error) {
-        console.error(`Error in postModel.getPostBySlugs() when retrieving the post [${categorySlug}/${postSlug}].`);
+        console.error(`Error in postModel.getArticleBySlugs() when retrieving the post [${categorySlug}/${articleSlug}].`);
         throw error;
     }
 };
@@ -99,7 +99,7 @@ const getPostBySlugs = async (categorySlug, postSlug) => {
 /*****************************************************************************
 / Busca apenas o ID de um post pelas suas slugs (Categoria + Título).
 /*****************************************************************************/
-const getPostIdBySlugs = async (categorySlug, postSlug) => {
+const getArticleIdBySlugs = async (categorySlug, articleSlug) => {
     try {
         const query = `
             SELECT 
@@ -109,11 +109,11 @@ const getPostIdBySlugs = async (categorySlug, postSlug) => {
             WHERE c.slug = ? AND p.slug = ? 
             LIMIT 1;
         `;
-        const [rows] = await databasePool.query(query, [categorySlug, postSlug]);
+        const [rows] = await databasePool.query(query, [categorySlug, articleSlug]);
         return rows[0];
 
     } catch(error) {
-        console.error(`Error in postModel.getPostIdBySlugs() when retrieving ID of the post [${categorySlug}/${postSlug}].`);
+        console.error(`Error in postModel.getArticleIdBySlugs() when retrieving ID of the post [${categorySlug}/${articleSlug}].`);
         throw error;
     }
 
@@ -124,8 +124,8 @@ const getPostIdBySlugs = async (categorySlug, postSlug) => {
 / Exporta as funções para serem utilizadas pela aplicação fora deste arquivo.
 /*****************************************************************************/
 module.exports = {
-    getLatestPosts,
-    getPostsByCategory,
-    getPostBySlugs,
-    getPostIdBySlugs
+    getLatestArticles,
+    getArticlesByCategory,
+    getArticleBySlugs,
+    getArticleIdBySlugs
 };

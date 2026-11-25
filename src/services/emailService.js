@@ -22,10 +22,10 @@ async function sendContactEmail({ name, email, subject, message }) {
         from: `"${name}" <${process.env.EMAIL_USER}>`,
         replyTo: email,
         to: process.env.EMAIL_USER,
-        subject: `[jjOutOfBounds] Formulário: ${subject}`,
+        subject: `[outOfBounds] Formulário: ${subject}`,
         text: `Nome: ${name}\nE-mail: ${email}\n\nMensagem:\n${message}`,
         html: `
-            <h3>Nova mensagem recebida em jjOutOfBounds</h3>
+            <h3>Nova mensagem recebida em outOfBounds</h3>
             <p><strong>Nome:</strong> ${name}</p>
             <p><strong>E-mail:</strong> ${email}</p>
             <p><strong>Assunto:</strong> ${subject}</p>
@@ -44,14 +44,14 @@ async function sendContactEmail({ name, email, subject, message }) {
 /*****************************************************************************/
 async function sendNewUserVerificationEmail(email, userName, verificationUrl){
     const mailOptions = {
-        from: `"jjOutOfBounds" <${process.env.EMAIL_USER}>`,
+        from: `"outOfBounds" <${process.env.EMAIL_USER}>`,
         to: email,
-        subject: 'Confirmação de Cadastro - jjOutOfBounds',
+        subject: 'Confirmação de Cadastro - outOfBounds',
         html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #111827;">
-                <h2 style="color: #2563eb;">Bem-vindo(a) ao jjOutOfBounds!</h2>
+                <h2 style="color: #2563eb;">Bem-vindo(a) ao outOfBounds!</h2>
                 <p>Olá, prezado(a) ${userName || 'leitor(a)'}!</p>
-                <p>Recebemos o seu cadastro no blog <a href="https://blog.jairjr.com.br"><strong>jjOutOfBounds</strong></a>. Para ativar a sua conta e liberar o acesso completo aos recursos, por favor confirme o seu e-mail clicando no botão abaixo:</p>
+                <p>Recebemos o seu cadastro no site <a href="https://www.outofbounds.com.br"><strong>outOfBounds</strong></a>. Para ativar a sua conta e liberar o acesso completo aos recursos, por favor confirme o seu e-mail clicando no botão abaixo:</p>
                 <p style="text-align: center; margin: 30px 0;">
                     <a href="${verificationUrl}" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Confirmar Meu E-mail</a>
                 </p>
@@ -74,14 +74,14 @@ async function sendNewUserVerificationEmail(email, userName, verificationUrl){
 /*****************************************************************************/
 async function sendResetPasswordEmail(email, userName, resetUrl) {
     const mailOptions = {
-        from: `"jjOutOfBounds" <${process.env.EMAIL_USER}>`,
+        from: `"outOfBounds" <${process.env.EMAIL_USER}>`,
         to: email,
-        subject: 'Redefinição de Senha - jjOutOfBounds',
+        subject: 'Redefinição de Senha - outOfBounds',
         html: `
             <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; color: #111827;">
                 <h2 style="color: #2563eb;">Solicitação de Redefinição de Senha</h2>
                 <p>Olá, prezado(a) ${userName || 'leitor(a)'}!</p>
-                <p>Recebemos uma solicitação para redefinir a senha da sua conta no blog <a href="https://blog.jairjr.com.br"><strong>jjOutOfBounds</strong></a>.</p>
+                <p>Recebemos uma solicitação para redefinir a senha da sua conta no site <a href="https://www.outofbounds.com.br"><strong>outOfBounds</strong></a>.</p>
                 <p>Para escolher uma nova senha, clique no botão abaixo:</p>
                 <p style="text-align: center; margin: 30px 0;">
                     <a href="${resetUrl}" style="background-color: #2563eb; color: #ffffff; padding: 12px 24px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block;">Redefinir Minha Senha</a>

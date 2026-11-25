@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home | jjOutOfBounds</title>
-    <meta name="description" content="Página principal do blog jjOutOfBounds, com os principais artigos sobre engenharia de software, inteligência artificial, cibersegurança, cloud & DevOps e também notícias do universo da tecnologia da informação.">
+    <title>Home | outOfBounds</title>
+    <meta name="description" content="Página principal do site outOfBounds, com os principais artigos sobre engenharia de software, inteligência artificial, cibersegurança, cloud & DevOps e também notícias do universo da tecnologia da informação.">
     
     <!-- Link para o arquivo CSS estático -->
     <link rel="stylesheet" href="/css/main.css">
@@ -32,13 +32,13 @@
             </ol>
         </nav>
 
-        <!-- Seção para mostrar os posts da categoria -->
-        <section class="posts-section">
+        <!-- Seção para mostrar os artigos da categoria -->
+        <section class="articles-section">
             <h2>Últimas Postagens</h2>
 
-            <div class="posts-grid">
-                <% if (latestPosts && latestPosts.length > 0) { %>
-                    <% latestPosts.forEach(post => { %>
+            <div class="articles-grid">
+                <% if (latestArticles && latestArticles.length > 0) { %>
+                    <% latestArticles.forEach(post => { %>
                         <article class="post-card">
                             <% if (post.cover_image) { %>
                                 <img src="/img/<%= post.cover_image %>" alt="Imagem representativa do post <%= post.title %>" class="post-cover">
@@ -47,15 +47,15 @@
                                 <span class="post-date">
                                     <%= new Date(post.published_at).toLocaleDateString('pt-BR') %>
                                 </span>
-                                <h3><a href="/posts/<%= post.category_slug %>/<%= post.slug %>"><%= post.title %></a></h3>
+                                <h3><a href="/artigos/<%= post.category_slug %>/<%= post.slug %>"><%= post.title %></a></h3>
                                 <p class="post-summary"><%= post.summary || 'Leia o artigo completo...' %></p>
                                 <p class="post-author">Por <%= post.author_name %></p>
-                                <a href="/posts/<%= post.category_slug %>/<%= post.slug %>" class="read-more">Ler artigo &rarr;</a>
+                                <a href="/artigos/<%= post.category_slug %>/<%= post.slug %>" class="read-more">Ler artigo &rarr;</a>
                             </div>
                         </article>
                     <% }) %>
                 <% } else { %>
-                    <p class="no-posts">Nenhum post encontrado no momento.</p>
+                    <p class="no-articles">Nenhum post encontrado no momento.</p>
                 <% } %>
             </div>
         </section>

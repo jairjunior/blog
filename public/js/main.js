@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener("DOMContentLoaded", () => {
     const currentPath = window.location.pathname;
     const segments = currentPath.split('/');
-    const targetIndex = segments.indexOf('posts');
+    const targetIndex = segments.indexOf('artigos');
     if (targetIndex !== -1) {
         var urlCategory;
         if (segments[targetIndex + 1]) {
@@ -141,7 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const navLinks = document.querySelectorAll(".category-navbar li a");
         navLinks.forEach(link => {
             const linkHref = link.getAttribute("href");
-            if (linkHref === `/posts${urlCategory}` ) {
+            if (linkHref === `/artigos${urlCategory}` ) {
                 link.closest(".category-navbar li").classList.add("active");
             }
         });

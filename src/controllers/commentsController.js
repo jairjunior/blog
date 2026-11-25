@@ -4,9 +4,9 @@ const postModel = require('../models/postModel');
 
 /*****************************************************************************
 / Função para tratar requisições POST no caminho 
-/ '/posts/:categorySlug/:postSlug/comments'
+/ '/artigos/:categorySlug/:articleSlug/comments'
 / 
-/ Registra um novo comentário no post especificado na URL.
+/ Registra um novo comentário no artigo especificado na URL.
 / Verifica se o token está válido, senão, solicita novo login do usuário.
 / Também utiliza a função validateCommentFrequency() para verificar se o 
 / usuário está tentando comentar repetidamente, evitando spam de comentários.
@@ -20,11 +20,18 @@ const postComment = async (req, res) => {
             messagePt: 'Token expirado. Por favor, realize o login novamente para submeter seu comentário.'
         });
     }
-    if(res.locals.isLoggedIn === false){
+    if(!res.locals.currentUser){
         return res.status(401).json({
             success: false,
             messageEn: 'You need to be logged in to comment.',
             messagePt: 'Você precisa estar logado para comentar.'
+        });
+    }
+    if(res.locals.currentUser.isVerified === false){
+        return res.status(401).json({
+            success: false,
+            messageEn: 'You need to verify your email to comment.',
+            messagePt: 'Você precisa verificar o seu e-mail para comentar.'
         });
     }
 
@@ -38,10 +45,10 @@ const postComment = async (req, res) => {
     }
 
     try{
-        const { categorySlug, postSlug } = req.params;
+        const { categorySlug, articleSlug } = req.params;
         const userId = res.locals.currentUser.id;
 
-        const { id: postId } = await postModel.getPostIdBySlugs(categorySlug, postSlug);
+        const { id: postId } = await postModel.getArticleIdBySlugs(categorySlug, articleSlug);
         if(!postId){
             return res.status(404).json({ 
                 success: false,

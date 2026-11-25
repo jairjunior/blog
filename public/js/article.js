@@ -4,7 +4,7 @@ var savedCommentDraft = "";
 
 
 /****************************************************************************** 
-/ Salva um novo comentário no post.
+/ Salva um novo comentário no artigo.
 /
 / Se o servidor retornar 401, é sinal de que o token está expirado. 
 / Assim, o modal de login é aberto para o usuário logar novamente.

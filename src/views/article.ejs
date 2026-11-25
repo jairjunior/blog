@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- O servidor injeta o título exato do post e o resumo para SEO -->
-    <title><%= post.title %> | jjOutOfBounds</title>
-    <meta name="description" content="<%= post.summary %>">
+    <!-- O servidor injeta o título exato do artigo e o resumo para SEO -->
+    <title><%= article.title %> | outOfBounds</title>
+    <meta name="description" content="<%= article.summary %>">
     
-    <!-- CSS principal do site e estilo específico do post -->
+    <!-- CSS principal do site e estilo específico do artigo -->
     <link rel="stylesheet" href="/css/main.css">
-    <link rel="stylesheet" href="/css/post.css">
+    <link rel="stylesheet" href="/css/article.css">
 
     <!-- Importação da fonte Outfit do Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,49 +33,49 @@
                 </li>
                 <li class="breadcrumb-separator">/</li>
                 <li class="breadcrumb-item">
-                    <a href="/posts">Artigos</a>
+                    <a href="/artigos">Artigos</a>
                 </li>
                 <li class="breadcrumb-separator">/</li>
                 <li class="breadcrumb-item">
-                    <a href="/posts/<%= post.category_slug %>">
-                        <%= post.category_name %>
+                    <a href="/artigos/<%= article.category_slug %>">
+                        <%= article.category_name %>
                     </a>
                 </li>
                 <li class="breadcrumb-separator">/</li>
                 <li class="breadcrumb-item active" aria-current="page">
-                    <%= post.title %>
+                    <%= article.title %>
                 </li>
             </ol>
         </nav>
 
-        <!-- Conteúdo do post -->
+        <!-- Conteúdo do artigo -->
         <article class="single-post">
             
             <!-- Imagem de Capa Centralizada (exibida apenas se existir) -->
-            <% if (post.cover_image) { %>
+            <% if (article.cover_image) { %>
                 <div class="post-cover-wrapper">
-                    <img src="/img/<%= post.cover_image %>" alt="Imagem de capa para o artigo <%= post.title %>" class="post-cover-featured">
+                    <img src="/img/<%= article.cover_image %>" alt="Imagem de capa para o artigo <%= article.title %>" class="post-cover-featured">
                 </div>
             <% } %>
 
             <!-- Cabeçalho do Artigo -->
             <header class="post-header">
-                <h1 class="post-single-title"><%= post.title %></h1>
+                <h1 class="post-single-title"><%= article.title %></h1>
                 
                 <div class="post-meta">
                     <span class="post-meta-item">
-                        📅 Publicado em <%= new Date(post.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }) %>
+                        📅 Publicado em <%= new Date(article.published_at).toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' }) %>
                     </span>
                     <span class="post-meta-divider">•</span>
                     <span class="post-meta-item">
-                        ✍️ Por <strong><%= post.author_name || 'Autor Desconhecido' %></strong>
+                        ✍️ Por <strong><%= article.author_name || 'Autor Desconhecido' %></strong>
                     </span>
                 </div>
             </header>
 
             <!-- Conteúdo Principal Injetado pelo Servidor -->
             <div class="post-body">
-                <%- post.content %> 
+                <%- article.content %> 
             </div>
 
         </article>
@@ -86,21 +86,21 @@
             <h2>Sobre o autor</h2>
             <div class="author-box">
                 <div class="author-avatar-wrapper">
-                    <img class="author-avatar" src="/img/profiles/<%= post.author_avatar %>" alt="Foto de perfil do autor <%= post.author_name %>">
+                    <img class="author-avatar" src="/img/profiles/<%= article.author_avatar %>" alt="Foto de perfil do autor <%= article.author_name %>">
                 </div>
                 <div class="author-info">
-                    <h3 class="author-name"><%= post.author_name %></h3>
-                    <p class="author-member-since">Membro desde <%= new Date(post.author_created_at).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }) %></p>
-                    <p class="author-bio"><%= post.author_bio %></p>
+                    <h3 class="author-name"><%= article.author_name %></h3>
+                    <p class="author-member-since">Membro desde <%= new Date(article.author_created_at).toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' }) %></p>
+                    <p class="author-bio"><%= article.author_bio %></p>
                 </div>
             </div>
         </section>
 
 
-        <!-- Seção de comentários do post -->
+        <!-- Seção de comentários do artigo -->
         <section class="comments-section" id="comments">
             <h2>Comentários</h2>
-            <% if (isLoggedIn) { %>
+            <% if (user && user.isVerified === true) { %>
                 <form id="commentForm" class="comment-form">
                     <div class="form-group">
                         <label for="commentTextArea" class="sr-only">Escreva seu comentário</label>
@@ -125,6 +125,11 @@
                         </button>
                     </div>
                 </form>
+            <% } else if (user && user.isVerified === false) { %>
+                <div class="auth-prompt">
+                    <p>Você precisa <a href="/informacoes-para-verificar-conta">verificar a sua conta</a> 
+                        para deixar um comentário.</p>
+                </div>
             <% } else { %>
                 <div class="auth-prompt">
                     <p>Você precisa <a href="/login?redirectTo=<%= encodeURIComponent(currentUrl) %>">fazer login</a> 
@@ -135,24 +140,24 @@
             <!-- Lista de Comentários -->
             <div class="comments-list">
                 <% if (comments && comments.length > 0) { %>
-                <% comments.forEach(function(comment) { %>
-                    <div class="comment-item">
-                        <img
-                            class="comment-avatar"
-                            src="/img/profiles/<%= comment.avatar || 'default-avatar.jpeg' %>" 
-                            alt="Avatar do usuário <%= comment.author_name %>"
-                        />
-                        <div class="comment-body">
-                            <div class="comment-meta">
-                                <span class="comment-author"><%= comment.user_name %></span>
-                                <span class="comment-date"><%= comment.created_at %></span>
+                    <% comments.forEach(function(comment) { %>
+                        <div class="comment-item">
+                            <img
+                                class="comment-avatar"
+                                src="/img/profiles/<%= comment.avatar || 'default-avatar.jpeg' %>" 
+                                alt="Avatar do usuário <%= comment.author_name %>"
+                            />
+                            <div class="comment-body">
+                                <div class="comment-meta">
+                                    <span class="comment-author"><%= comment.user_name %></span>
+                                    <span class="comment-date"><%= comment.created_at %></span>
+                                </div>
+                                <p class="comment-text"><%= comment.content %></p>
                             </div>
-                            <p class="comment-text"><%= comment.content %></p>
                         </div>
-                    </div>
-                <% }); %>
+                    <% }); %>
                 <% } else { %>
-                    <p class="no-comments">Ainda não existem comentários neste post. Seja o primeiro a comentar!</p>
+                    <p class="no-comments">Ainda não existem comentários neste artigo. Seja o primeiro a comentar!</p>
                 <% } %>
             </div>
         </section>
@@ -184,7 +189,7 @@
     </div>
 
     <script src="/js/main.js"></script>
-    <script src="/js/post.js"></script>
+    <script src="/js/article.js"></script>
 
 </body>
 </html>
