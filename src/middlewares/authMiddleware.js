@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
-const { printConsoleError, printConsoleWarning } = require('../utils/logger');
+const { printConsoleWarning } = require('../utils/logger');
 
 module.exports = (req, res, next) => {
     const authToken = req.cookies.authToken ? req.cookies.authToken : null;
@@ -22,7 +22,10 @@ module.exports = (req, res, next) => {
     // Se der erro, verifica se o token está expirado e imprime 
     // mensagem correspondente no console
     } catch (error) {
-        printConsoleError(error);
+        printConsoleWarning(
+            'AUTH_WARN_TOKEN_TAMPERED_OR_EXPIRED',
+            `Falha na verificação do authToken. IP: [${req.ip || 'N/A'}]. Motivo: ${error.message}`
+        );
         res.locals.currentUser = null;
         res.locals.tokenFailure = true;
     }

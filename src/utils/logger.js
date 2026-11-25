@@ -1,60 +1,100 @@
 const stackTrace = require('stacktrace-parser');
 
-/*****************************************************************************
-/ Função para imprimir Erros no console do servidor.
-/*****************************************************************************/
-function printConsoleError(error){
-    const {className, functionName, lineNumber} = getFunctionCallerInfo();
+/******************************************************************************
+ * Função interna para formatação centralizada de logs no console.
+ * 
+ * Sanitiza as entradas, removendo \r e \n das strings antes da impressão.
+ *****************************************************************************/
+function writeLog({ level, icon, stream, header, content }) {
+    const { className, functionName, lineNumber } = getFunctionCallerInfo();
     const timestamp = getTimestamp();
-
-    console.error(`\n-----------------------------------------------------------ERROR ----------------------------------------------------------`);
-    console.error(`❌ [${timestamp}] ERROR in ${className}.${functionName}() at line ${lineNumber}.`);
-    console.error(error);
-    console.error(`---------------------------------------------------------------------------------------------------------------------------`);
+    const output = stream === 'stderr' ? console.error : console.log;
+    const safeContent = sanitizeForLog(typeof content === 'string' ? content : String(content));
+    output(`\n------------------------------------------------------ ${header} ------------------------------------------------------`);
+    output(`${icon} [${timestamp}] ${sanitizeForLog(level)} in ${className}.${functionName}() at line ${lineNumber}.`);
+    output(safeContent);
+    output(`---------------------------------------------------------------------------------------------------------------------------`);
 }
 
 
-/*****************************************************************************
-/ Função para imprimir Warnings no console do servidor.
-/*****************************************************************************/
-function printConsoleWarning(warning){   
-    const {className, functionName, lineNumber} = getFunctionCallerInfo();
-    const timestamp = getTimestamp();
-
-    console.error(`\n----------------------------------------------------------WARNING----------------------------------------------------------`);
-    console.error(`⚠️  [${timestamp}] WARNING in ${className}.${functionName}() at line ${lineNumber}.`);
-    console.error('MESSAGE: ', warning);
-    console.error(`---------------------------------------------------------------------------------------------------------------------------`);
+/******************************************************************************
+ * Função para imprimir Erros no console do servidor.
+ *****************************************************************************/
+function printConsoleError(event = 'SYS_ERROR', error) {
+    writeLog({
+        level: event,
+        icon: '❌ ',
+        stream: 'stderr',
+        header: 'ERROR',
+        content: error
+    });
 }
 
 
-/*****************************************************************************/
-// Função auxiliar para imprimir no console quando um usuário/IP é bloqueado.
-// Via de regra, será utilizada pelo pacote express-rate-limit.
-/*****************************************************************************/
-function printRateLimitBlock(email, clientIp, originalUrl){
-    const {className, functionName, lineNumber} = getFunctionCallerInfo();
-    const timestamp = getTimestamp();
-
-    console.error(`\n------------------------------------------------------------------------------------------------------------------------`);
-    console.error(`🚨 [${timestamp}] RATE LIMIT EXCEED in ${className}.${functionName}() at line ${lineNumber}.`);
-    console.error(`MESSAGE: Block triggered for email: [${email}] originating from IP/Network: [${clientIp}] on route: [${originalUrl}]`);
-    console.error(`------------------------------------------------------------------------------------------------------------------------`);
+/******************************************************************************
+ * Função para imprimir Blocks no console do servidor.
+ *****************************************************************************/
+function printRateLimitBlock(event, message) {
+    writeLog({
+        level: event,
+        icon: '🚨 ',
+        stream: 'stderr',
+        header: 'BLOCK',
+        content: `MESSAGE: ${message}`
+    });
 }
 
 
-/*****************************************************************************/
-// Função auxiliar que dados da função que lançou o erro.
-/*****************************************************************************/
+/******************************************************************************
+ * Função para imprimir Warnings no console do servidor.
+ *****************************************************************************/
+function printConsoleWarning(event, message) {
+    writeLog({
+        level: event,
+        icon: '⚠️ ',
+        stream: 'stderr',
+        header: 'WARNING',
+        content: `MESSAGE: ${message}`
+    });
+}
+
+
+/******************************************************************************
+ * Função para imprimir registros de Auditoria de Segurança no console 
+ * do servidor.
+ *****************************************************************************/
+function printSecurityAudit(event, message) {
+    writeLog({
+        level: event,
+        icon: '🛡️ ',
+        stream: 'stdout',
+        header: 'SECURITY AUDIT',
+        content: `MESSAGE: ${message}`
+    });
+}
+
+
+/******************************************************************************
+ * Função auxiliar para sanitizar as strings que serão imprimidas no console.
+ *****************************************************************************/
+function sanitizeForLog(value) {
+    if (typeof value !== 'string') return value;
+    return value.replace(/[\r\n]/g, ' ');
+}
+
+
+/******************************************************************************
+ * Função auxiliar que obtém dados da função que lançou o erro.
+ *****************************************************************************/
 function getFunctionCallerInfo(){
     const myError = new Error();
     const stack = stackTrace.parse(myError.stack);
-    //console.error('Stacktrace:\n', stack)//DEBUG
-    const callerLine = stack[2];
+    //console.error('Stacktrace:\n', stack)
+    const callerLine = stack[3];
     const functionName = callerLine.methodName.split('.').at(-1) || 'anonymous';
     const lineNumber = callerLine.lineNumber || '?';
-    var pathName = callerLine.file || 'unknown';
-    var className = undefined;
+    let pathName = callerLine.file || 'unknown';
+    let className = 'unknown';
 
     if(pathName !== 'unknown'){
         const pathNameParts = pathName.split('/');
@@ -65,24 +105,21 @@ function getFunctionCallerInfo(){
     return {className, functionName, lineNumber};
 }
 
-/*****************************************************************************/
-// Função auxiliar que retorna a data e hora atuais.
-/*****************************************************************************/
+
+/******************************************************************************
+ * Função auxiliar que retorna a data e hora atuais.
+ *****************************************************************************/
 function getTimestamp() {
-    const now = new Date();
-    return now.toLocaleString('pt-BR', {
-        timeZone: 'America/Sao_Paulo',
-        dateStyle: 'short',
-        timeStyle: 'medium'
-    });
+    return new Date().toISOString();
 }
 
 
-/*****************************************************************************/
-// Exporta funções para serem utilizadas em outros arquivos.
-/*****************************************************************************/
+/******************************************************************************
+ * Exporta funções para serem utilizadas em outros arquivos.
+ *****************************************************************************/
 module.exports = {
     printConsoleError,
     printConsoleWarning,
+    printSecurityAudit,
     printRateLimitBlock
 };

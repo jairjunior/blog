@@ -6,16 +6,16 @@ const { printRateLimitBlock } = require('../utils/logger');
 
 
 /******************************************************************************
-/ Configuração do Rate Limit para as rotas de autenticação.
-/ Opções:
-/ -Janela de tempo: XX minutos (em milissegundos)
-/ -Limite máximo: Cada IP pode fazer no máximo XX requisições por janela
-/ -Retorna os headers informativos de limite (RateLimit-*)
-/ -Desativa os headers antigos (X-RateLimit-*)
-/ -Ignora requisições bem sucedidas (status < 400)
-/*****************************************************************************/
-// Cadastro Novo Usuário = 3 requisições a cada 1 hora (para cada IP)
-/*****************************************************************************/
+ * Configuração do Rate Limit para as rotas de autenticação.
+ * Opções:
+ * -Janela de tempo: XX minutos (em milissegundos)
+ * -Limite máximo: Cada IP pode fazer no máximo XX requisições por janela
+ * -Retorna os headers informativos de limite (RateLimit-*)
+ * -Desativa os headers antigos (X-RateLimit-*)
+ * -Ignora requisições bem sucedidas (status < 400)
+ ******************************************************************************
+ * Cadastro Novo Usuário = 3 requisições a cada 1 hora (para cada IP)
+ *****************************************************************************/
 const registerLimiter = rateLimit({
     windowMs: 60 * 60 * 1000,
     limit: 3,
@@ -26,10 +26,13 @@ const registerLimiter = rateLimit({
     handler: (req, res, _, options) => {
         const email = req.body.email || 'Unknown email';
         const clientIp = ipKeyGenerator(req.ip, 56);
-        printRateLimitBlock(email, clientIp, req.originalUrl);
+        printRateLimitBlock(
+            'AUTH_BLOCK_REGISTER',
+            `Bloqueio por Rate Limit para e-mail: [${email}], IP: [${clientIp}], rota: [${req.originalUrl}]`
+        );
 
         options.standardHeaders ? res.setHeader('Retry-After', options.windowMs / 1000) : null;
-        res.status(options.statusCode).send(options.message);
+        return res.status(options.statusCode).send(options.message);
     },
     message: {
         success: false,
@@ -41,9 +44,9 @@ const registerLimiter = rateLimit({
 });
 
 
-/*****************************************************************************/
-// Login = 5 requisições a cada 10 minutos (para cada IP + email)
-/*****************************************************************************/
+/******************************************************************************
+ * Login = 5 requisições a cada 10 minutos (para cada IP + email)
+ *****************************************************************************/
 const loginLimiter = rateLimit({
     windowMs: 10 * 60 * 1000,
     limit: 5,
@@ -58,10 +61,13 @@ const loginLimiter = rateLimit({
     handler: (req, res, _, options) => {
         const email = req.body.email || 'Unknown email';
         const clientIp = ipKeyGenerator(req.ip, 56);
-        printRateLimitBlock(email, clientIp, req.originalUrl);
+        printRateLimitBlock(
+            'AUTH_BLOCK_LOGIN',
+            `Bloqueio por Rate Limit para e-mail: [${email}], IP: [${clientIp}], rota: [${req.originalUrl}]`
+        );
 
         options.standardHeaders ? res.setHeader('Retry-After', options.windowMs / 1000) : null;
-        res.status(options.statusCode).send(options.message);
+        return res.status(options.statusCode).send(options.message);
     },
     message: {
         success: false,
@@ -73,14 +79,15 @@ const loginLimiter = rateLimit({
 });
 
 
-/*****************************************************************************/
-// Esqueceu a Senha = 1 requisição a cada 10 minutos (para cada IP + email)
-/*****************************************************************************/
+/******************************************************************************
+ * Esqueceu a Senha = 1 requisição a cada 10 minutos (para cada IP + email)
+ *****************************************************************************/
 const forgotPasswordLimiter = rateLimit({
     windowMs: 5 * 60 * 1000,
     limit: 1,
     legacyHeaders: false,
     standardHeaders: true,
+    skipSuccessfulRequests: false,
     keyGenerator: (req) => {
         const email = req.body.email ? req.body.email.toLowerCase().trim() : '';
         const clientIp = ipKeyGenerator(req.ip, 56);
@@ -89,10 +96,13 @@ const forgotPasswordLimiter = rateLimit({
     handler: (req, res, _, options) => {
         const email = req.body.email || 'Unknown email';
         const clientIp = ipKeyGenerator(req.ip, 56);
-        printRateLimitBlock(email, clientIp, req.originalUrl);
+        printRateLimitBlock(
+            'AUTH_BLOCK_FORGOT_PASSWORD',
+            `Bloqueio por Rate Limit para e-mail: [${email}], IP: [${clientIp}], rota: [${req.originalUrl}]`
+        );
 
         options.standardHeaders ? res.setHeader('Retry-After', options.windowMs / 1000) : null;
-        res.status(options.statusCode).send(options.message);
+        return res.status(options.statusCode).send(options.message);
     },
     message: {
         success: false,
@@ -104,21 +114,31 @@ const forgotPasswordLimiter = rateLimit({
 });
 
 
-/*****************************************************************************/
-// Resetar Senha = 3 requisição a cada 15 minutos
-/*****************************************************************************/
+/******************************************************************************
+ * Resetar Senha ou Reenviar e-mail de confirmação = 3 requisições a cada 
+ * 15 minutos
+ *****************************************************************************/
 const genericAuthLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     limit: 3,
     legacyHeaders: false,
     standardHeaders: true,
+    skipSuccessfulRequests: true,
     handler: (req, res, _, options) => {
         const email = req.body.email || 'Unknown email';
         const clientIp = ipKeyGenerator(req.ip, 56);
-        printRateLimitBlock(email, clientIp, req.originalUrl);
+        const routeEventMap = {
+            '/api/auth/reset-password':              'AUTH_BLOCK_RESET_PASSWORD',
+            '/api/auth/resend-verification-email':   'AUTH_BLOCK_RESEND_EMAIL',
+        };
+        const event = routeEventMap[req.originalUrl] || 'AUTH_BLOCK_GENERIC';
+        printRateLimitBlock(
+            event,
+            `Bloqueio por Rate Limit para e-mail: [${email}], IP: [${clientIp}], rota: [${req.originalUrl}]`
+        );
 
         options.standardHeaders ? res.setHeader('Retry-After', options.windowMs / 1000) : null;
-        res.status(options.statusCode).send(options.message);
+        return res.status(options.statusCode).send(options.message);
     },
     message: {
         success: false,
@@ -130,13 +150,14 @@ const genericAuthLimiter = rateLimit({
 });
 
 
-/*****************************************************************************/
-// Rotas de autenticação do site
-/*****************************************************************************/
+/******************************************************************************
+ * Rotas de autenticação do site
+ *****************************************************************************/
 router.post('/register', registerLimiter, authController.register);
 router.post('/login', loginLimiter, authController.login);
 router.post('/forgot-password', forgotPasswordLimiter, authController.forgotPassword);
 router.post('/reset-password', genericAuthLimiter, authController.resetPassword);
+router.post('/resend-verification-email', genericAuthLimiter, authController.resendVerificationEmail);
 router.get('/logout', authController.logout);
 
 
