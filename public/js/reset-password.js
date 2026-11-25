@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const responseHttpRequest = await fetch('/api/auth/reset-password', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ resetToken, password, confirmPassword })
+                body: JSON.stringify({ resetToken, password })
             });
             const responseData = await responseHttpRequest.json();
 

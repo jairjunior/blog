@@ -25,7 +25,7 @@ const getUserById = async (userId) => {
     try {
         const query = 'SELECT * FROM users WHERE id = ?';
         const [rows] = await databasePool.query(query, [userId]);
-        return rows[0];
+        return rows[0] || null;
 
     } catch (error) {
         console.error(`\n❌ ERROR in userModel.getUserById() when retrieving user by id: [${userId}].`);
@@ -41,7 +41,7 @@ const getUserByEmail = async (email) => {
     try {
         const query = 'SELECT * FROM users WHERE email = ?';
         const [rows] = await databasePool.query(query, [email]);
-        return rows[0];
+        return rows[0] || null;
 
     } catch (error) {
         console.error(`\n❌ ERROR in userModel.getUserByEmail() when retrieving user by email [${email}].`);

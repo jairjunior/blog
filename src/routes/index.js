@@ -10,8 +10,8 @@ router.use('/api/comments', require('./commentsRoutes.js'));
 router.use('/api/contact', require('./contactRoutes.js'));
 
 
-// Rotas do Blog para renderizar paginas EJS
-router.use('/', require('./blogRoutes.js'));
+// Rota para renderizar as views das páginas com  EJS
+router.use('/', require('./viewsRoutes.js'));
 
 
 module.exports = router;

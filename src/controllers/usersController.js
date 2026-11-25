@@ -18,7 +18,7 @@ exports.getAllUsers = async (req, res) => {
 
     try {
         const [users] = await databasePool.query('SELECT * FROM users');
-        res.status(200).json({
+         return res.status(200).json({
             success: true,
             message: 'Users retrieved successfully.',
             data: users
@@ -26,7 +26,7 @@ exports.getAllUsers = async (req, res) => {
 
     } catch (error) {
         console.error('ERROR in usersController.getAllUsers():\n', error);
-        res.status(500).json({ 
+         return res.status(500).json({ 
             success: false, 
             message: 'Database error. Contact the administrator.'
         });
@@ -46,7 +46,7 @@ exports.getProfile = async (req, res) => {
     try {
         const query = 'SELECT id, first_name, last_name, email, role, created_at, modified_at FROM users WHERE id = ?';
         const [user] = await databasePool.query(query, [userId]);
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: 'User profile retrieved successfully.',
             data: user
@@ -54,7 +54,7 @@ exports.getProfile = async (req, res) => {
 
     } catch (error) {
         console.error('ERROR in usersController.getProfile():\n', error);
-        res.status(500).json({ 
+        return res.status(500).json({ 
             success: false,
             message: 'Database error. Contact the administrator.'
         });
@@ -87,7 +87,7 @@ exports.getUserById = async (req, res) => {
 
     } catch (error) {
         console.error('ERROR in usersController.getUserById():\n', error);
-        res.status(500).json({ 
+        return res.status(500).json({ 
             success: false,
             message: 'Database error. Contact the administrator.'
         });
@@ -120,14 +120,14 @@ exports.updateUser = async (req, res) => {
     try {
         const query = 'UPDATE users SET first_name = ?, last_name = ?, email = ? WHERE id = ?';
         await databasePool.query(query, [first_name, last_name, email, userId]);
-        res.status(200).json({
+        return res.status(200).json({
             success: true,
             message: 'User updated successfully.'
         });
 
     } catch (error) {
         console.error('ERROR in usersController.updateUser():\n', error);
-        res.status(500).json({ 
+        return res.status(500).json({ 
             success: false,
             message: 'Database error. Contact the administrator.'
         });
