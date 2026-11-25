@@ -510,8 +510,8 @@ exports.resendVerificationEmail = async (req, res) => {
         );
         return res.status(200).json({ // HTTP 200 OK
             success: true,
-            messageEn: 'If the email is unverified, a new link has been sent.',
-                messagePt: 'Se o e-mail estiver pendente de ativação, um novo link de confirmação foi enviado.'
+            messageEn: 'A new verification link has been sent to the registered email address.',
+            messagePt: 'Um novo link de verificação foi enviado para o e-mail cadastrado.'
         });
 
     /*-----------------------------------------------------------------------*/

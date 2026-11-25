@@ -44,9 +44,11 @@ const renderArticlesPage = async (req, res) => {
         const numberOfArticles = 18;
         const articles = await articleModel.getLatestArticles(numberOfArticles);
         const categoryName = 'Artigos';
+        const categoryDescription = 'Todos os artigos do site outOfBounds estarão listados nesta página.';
         return res.render('category', { 
             articles,
             categoryName,
+            categoryDescription,
             user: res.locals.currentUser,
             currentUrl: req.originalUrl
         });

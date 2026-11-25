@@ -43,7 +43,7 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #b45309;
+    background-color: #bd580a;
     color: #ffffff;
     font-size: 0.8125rem;
     font-weight: 600;
@@ -56,10 +56,10 @@
 
 .banner-email-verification-link:hover,
 .banner-email-verification-link:focus-visible {
-    background-color: #92400e;
+    background-color: #a5480e;
     transform: translateY(-1px);
-    box-shadow: 0 0.2rem 0.5rem rgba(233, 66, 66, 0.5);
-    outline: 2px solid #78360f57;
+    box-shadow: 0 0.2rem 0.5rem rgba(114, 14, 14, 0.5);
+    outline: 1px solid #78360f57;
     outline-offset: 0px;
 }
 
