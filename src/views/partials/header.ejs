@@ -1,22 +1,60 @@
     <header class="site-header">
-        <!-- Barra de navegação superior -->
+        
+        <%# Banner persistente para usuário logado que ainda não verificou o e-mail %>
+        <% if (typeof user !== 'undefined' && user && user.isVerified === false) { %>
+            <div class="banner-email-verification" role="status">
+                <div class="container banner-email-verification-content">
+                    <p class="banner-email-verification-text">
+                        <svg 
+                            class="banner-email-verification-icon" 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            stroke-width="2" 
+                            stroke-linecap="round" 
+                            stroke-linejoin="round" 
+                            aria-hidden="true" 
+                            focusable="false"
+                        >
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <line x1="12" y1="8" x2="12" y2="12"></line>
+                            <line x1="12" y1="16" x2="12.01" y2="16"></line>
+                        </svg>
+                        <span>
+                            Sua conta ainda não foi ativada. Verifique o e-mail enviado para <strong><%= user.email %></strong> para curtir artigos, comentar e acessar todos os recursos.
+                        </span>
+                    </p>
+                    <a href="/informacoes-para-verificar-conta" class="banner-email-verification-link">
+                        Ativar conta / Reenviar e-mail
+                    </a>
+                </div>
+            </div>
+        <% } %>
+
+        <%# Barra de navegação superior %>
         <div class="container header-top">
-            <!-- Nome / Logomarca -->
+            
+            <%# Nome / Logomarca do site %>
             <h1 class="blog-title" aria-label="Página inicial do site"><a href="/">outOfBounds</a></h1>
 
-            <!-- Conjunto de botões (Lupa, Criar Conta, Entrar, Burger) -->
+            <%# Conjunto de botões (Lupa, Criar Conta, Entrar, Burger) %>
             <div class="top-menu-button-wrapper">
 
-                <!-- USUÁRIO LOGADO -->
-                <% if (user) { %>
-                    <!-- Botão da Lupa  -->
+                <%# USUÁRIO LOGADO %>
+                <% if (typeof user !== 'undefined' && user) { %>
+                    
+                    <%# Botão da Lupa  %>
                     <button id="topSearchBtnLoggedUser" class="top-search-btn" title="Pesquisar">
                         <span class="top-search-btn-icon">&#x1F50D;</span>
                     </button>
 
-                    <!-- Foto de perfil redonda -->
+                    <%# Foto de perfil redonda %>
                     <div class="user-profile-menu" id="userMenuContainer">
-                        <button class="profile-toggle-btn" id="profileToggleBtn" title="Menu do usuário" aria-label="Menu do usuário" aria-expanded="false" aria-controls="profileDropdown">
+                        <button class="profile-toggle-btn" id="profileToggleBtn" 
+                            title="Menu do usuário" aria-label="Menu do usuário" 
+                            aria-expanded="false" aria-controls="profileDropdown"
+                        >
                             <% if (user.avatarUrl) { %>
                                 <img src="/img/profiles/<%= user.avatarUrl %>" alt="Foto de perfil para <%= user.firstName %>" class="profile-avatar">
                             <% } else { %>
@@ -26,7 +64,7 @@
                             <% } %>
                         </button>
 
-                        <!-- Menu Dropdown -->
+                        <%# Menu Dropdown %>
                         <div class="profile-dropdown" id="profileDropdown">
                             <div class="dropdown-header">
                                 <span class="dropdown-header-name"><%= user.firstName %> <%= user.lastName %></span>
@@ -53,16 +91,30 @@
                         </div>
                     </div>
                 
-                <!-- USUÁRIO NÃO LOGADO -->
+                <%# USUÁRIO NÃO LOGADO %>
                 <% } else { %>
-                    <!-- Botão da Lupa  -->
+
+                    <%# Botão da Lupa  %>
                     <button id="topSearchBtnNoUser" class="top-search-btn" title="Pesquisar" aria-label="Pesquisar em todo o site">
                         <span class="top-search-btn-icon">&#x1F50D;</span>
                     </button>
 
-                    <!--  Botão de Criar Conta-->
-                    <a id="topCreateAccountBtn" class="top-auth-btn" href="/cadastrar?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Criar Conta gratuitamente" aria-label="Criar Conta gratuitamente">
-                        <svg id="topCreateAccountBtnIcon" class="top-auth-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <%#  Botão de Criar Conta %>
+                    <a id="topCreateAccountBtn" class="top-auth-btn" 
+                        href="/cadastrar?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" 
+                        title="Criar conta gratuitamente" aria-label="Criar conta gratuitamente"
+                    >
+                        <svg 
+                            id="topCreateAccountBtnIcon" 
+                            class="top-auth-btn-icon" 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            stroke-width="2" 
+                            stroke-linecap="round" 
+                            stroke-linejoin="round"
+                        >
                             <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
                             <circle cx="8.5" cy="7" r="4"></circle>
                             <line x1="20" y1="8" x2="20" y2="14"></line>
@@ -71,9 +123,22 @@
                         <span>Criar Conta</span>
                     </a>
                     
-                    <!-- Botão de Login  -->
-                    <a id="topLoginBtn" class="top-auth-btn" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar" aria-label="Entrar">
-                        <svg id="topLoginBtnIcon" class="top-auth-btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <%# Botão de Login  %>
+                    <a id="topLoginBtn" class="top-auth-btn" 
+                        href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" 
+                        title="Entrar" aria-label="Entrar"
+                    >
+                        <svg 
+                            id="topLoginBtnIcon" 
+                            class="top-auth-btn-icon" 
+                            xmlns="http://www.w3.org/2000/svg" 
+                            viewBox="0 0 24 24" 
+                            fill="none" 
+                            stroke="currentColor" 
+                            stroke-width="2" 
+                            stroke-linecap="round" 
+                            stroke-linejoin="round"
+                        >
                             <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
                             <polyline points="10 17 15 12 10 7"></polyline>
                             <line x1="15" y1="12" x2="3" y2="12"></line>
@@ -82,7 +147,7 @@
                     </a>
                 <% } %>
     
-                <!-- Botão Hamburger (visível apenas em mobile) -->
+                <%# Botão Hamburger (visível apenas em mobile) %>
                 <button class="hamburger-btn" aria-label="Abrir Menu" aria-expanded="false" title="Menu principal">
                     <span class="hamburger-bar"></span>
                     <span class="hamburger-bar"></span>
@@ -92,13 +157,22 @@
             </div>
 
 
-            <!-- Menu Principal (em mobile aparece na lateral) -->
+            <%# Menu Principal (em mobile aparece na lateral) %>
             <nav class="top-navbar">
                 <ul>
-                    <!-- Links para Artigos, Sobre, Contato, Newsletter -->
+                    <%# Links para Artigos, Sobre, Contato, Newsletter %>
                     <li>
                         <a href="/artigos" class="top-navbar-link">
-                            <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg 
+                                class="top-navbar-link-icon" 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 24 24" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                stroke-width="2" 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round"
+                            >
                                 <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                                 <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                             </svg>
@@ -107,7 +181,16 @@
                     </li>
                     <li>
                         <a href="/sobre" class="top-navbar-link">
-                            <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg 
+                                class="top-navbar-link-icon" 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 24 24" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                stroke-width="2" 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round"
+                            >
                                 <circle cx="12" cy="12" r="10"></circle>
                                 <line x1="12" y1="16" x2="12" y2="12"></line>
                                 <line x1="12" y1="8" x2="12.01" y2="8"></line>
@@ -117,7 +200,16 @@
                     </li>
                     <li>
                         <a href="/contato" class="top-navbar-link">
-                            <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg 
+                                class="top-navbar-link-icon" 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 24 24" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                stroke-width="2" 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round"
+                            >
                                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                                 <polyline points="22,6 12,13 2,6"></polyline>
                             </svg>
@@ -126,7 +218,16 @@
                     </li>
                     <li>
                         <a href="#" class="top-navbar-link">
-                            <svg class="top-navbar-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <svg 
+                                class="top-navbar-link-icon" 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 24 24" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                stroke-width="2" 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round"
+                            >
                                 <path d="M4 11a9 9 0 0 1 9 9"></path>
                                 <path d="M4 4a16 16 0 0 1 16 16"></path>
                                 <circle cx="5" cy="19" r="1"></circle>
@@ -134,29 +235,51 @@
                             <span>Newsletter</span>
                         </a>
                     </li>
-                    <!-- Botões de "Criar Conta" e "Entrar" (visível apenas em mobile) -->
-                    <li class="mobile-menu-item">
-                        <a class="btn-mobile-signup" href="/cadastrar?redirectTo=/" title="Criar Conta">
-                            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                <circle cx="8.5" cy="7" r="4"></circle>
-                                <line x1="20" y1="8" x2="20" y2="14"></line>
-                                <line x1="23" y1="11" x2="17" y2="11"></line>
-                            </svg>
-                            Criar Conta
-                        </a>
-                    </li>
-                    <li class="mobile-menu-item">
-                        <a class="btn-mobile-login" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar">
-                            <svg class="btn-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
-                                <polyline points="10 17 15 12 10 7"></polyline>
-                                <line x1="15" y1="12" x2="3" y2="12"></line>
-                            </svg>
-                            Entrar
-                        </a>
-                    </li>
-                    <!-- Barra de pesquisa do menu lateral (visível apenas em mobile) -->
+
+                    <%# Botões de "Criar Conta" e "Entrar" (visível apenas em mobile para usuários não logados / não cadastrados) %>
+                    <% if (!(typeof user !== 'undefined' && user)) { %>
+                        <li class="mobile-menu-item">
+                            <a class="btn-mobile-signup" href="/cadastrar?redirectTo=/" title="Criar Conta">
+                                <svg 
+                                    class="btn-icon" 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    viewBox="0 0 24 24" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    stroke-width="2" 
+                                    stroke-linecap="round" 
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="8.5" cy="7" r="4"></circle>
+                                    <line x1="20" y1="8" x2="20" y2="14"></line>
+                                    <line x1="23" y1="11" x2="17" y2="11"></line>
+                                </svg>
+                                Criar Conta
+                            </a>
+                        </li>
+                        <li class="mobile-menu-item">
+                            <a class="btn-mobile-login" href="/login?redirectTo=<%= encodeURIComponent(currentUrl || '/') %>" title="Entrar">
+                                <svg 
+                                    class="btn-icon" 
+                                    xmlns="http://www.w3.org/2000/svg" 
+                                    viewBox="0 0 24 24" 
+                                    fill="none" 
+                                    stroke="currentColor" 
+                                    stroke-width="2" 
+                                    stroke-linecap="round" 
+                                    stroke-linejoin="round"
+                                >
+                                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path>
+                                    <polyline points="10 17 15 12 10 7"></polyline>
+                                    <line x1="15" y1="12" x2="3" y2="12"></line>
+                                </svg>
+                                Entrar
+                            </a>
+                        </li>
+                    <% } %>
+
+                    <%# Barra de pesquisa do menu lateral (visível apenas em mobile) %>
                     <li class="mobile-menu-item search-menu-item">
                         <span>ou então:</span>
                         <form action="/search" method="GET" class="search-menu-form" id="menuSearchForm">
@@ -179,13 +302,13 @@
         </div>
 
 
-        <!-- Modal de Busca Global -->
+        <%# Modal de Busca Global %>
         <div class="search-modal-overlay" id="searchModal" aria-hidden="true">
             <div class="search-modal-container">
-                <!-- Botão de Fechar o Modal -->
+                <%# Botão de Fechar o Modal %>
                 <button class="search-close-btn" id="searchCloseBtn" aria-label="Fechar busca">&times;</button>
 
-                <!-- Formulário e Campo de Pesquisa -->
+                <%# Formulário e Campo de Pesquisa %>
                 <h3>Buscar em todo o site:</h3>
                 <form action="/search" method="GET" class="search-modal-form" id="searchModalForm">
                     <div class="search-input-wrapper">
@@ -200,7 +323,16 @@
                         >
                         <button type="submit" class="search-submit-btn" aria-label="Realizar pesquisa">
                             <span class="search-submit-text">Buscar</span>
-                            <svg class="search-submit-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                            <svg 
+                                class="search-submit-icon" 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                viewBox="0 0 24 24" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                stroke-width="2.5" 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round"
+                            >
                                 <circle cx="11" cy="11" r="8"></circle>
                                 <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                             </svg>
@@ -208,9 +340,9 @@
                     </div>
                 </form>
 
-                <!-- Seção das Três Colunas Dinâmicas -->
+                <%# Seção das Três Colunas Dinâmicas %>
                 <div class="search-columns-grid">
-                    <!-- Coluna 1: Mais Buscados -->
+                    <%# Coluna 1: Mais Buscados %>
                     <div class="search-column">
                         <h3 class="search-col-title">Mais Buscados</h3>
                         <div class="search-pill-list">
@@ -224,7 +356,7 @@
                         </div>
                     </div>
 
-                    <!-- Coluna 2: Principais Tags -->
+                    <%# Coluna 2: Principais Tags %>
                     <div class="search-column">
                         <h3 class="search-col-title">Tags Populares</h3>
                         <div class="search-pill-list">
@@ -238,7 +370,7 @@
                         </div>
                     </div>
 
-                    <!-- Coluna 3: Categorias -->
+                    <%# Coluna 3: Categorias %>
                     <div class="search-column">
                         <h3 class="search-col-title">Categorias</h3>
                         <ul class="search-category-list">
@@ -262,7 +394,7 @@
         </div>
 
 
-        <!-- Menu Horizontal de Categorias -->
+        <%# Menu Horizontal de Categorias %>
         <nav class="category-navbar container">
             <ul>
                 <li><a href="/">Home</a></li>

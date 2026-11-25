@@ -1,0 +1,85 @@
+/* ==========================================================================
+   Banner Persistente de Verificação de E-mail
+   ========================================================================== */
+.banner-email-verification {
+    background-color: #fef3c7;
+    border-bottom: 1px solid #f59e0b;
+    color: #78350f;
+    font-size: 0.875rem;
+    line-height: 1.45;
+    width: 100%;
+    padding: 0.7rem 0;
+}
+
+.banner-email-verification-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.625rem;
+}
+
+.banner-email-verification-text {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+.banner-email-verification-icon {
+    flex-shrink: 0;
+    width: 1.125rem;
+    height: 1.125rem;
+    margin-top: 0.125rem;
+    color: #b45309;
+}
+
+.banner-email-verification-text strong {
+    font-weight: 700;
+    word-break: break-word;
+}
+
+.banner-email-verification-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #b45309;
+    color: #ffffff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    padding: 0.45rem 0.85rem;
+    border-radius: 6px;
+    min-height: 36px;
+    transition: background-color 0.2s ease;
+}
+
+.banner-email-verification-link:hover,
+.banner-email-verification-link:focus-visible {
+    background-color: #92400e;
+    transform: translateY(-1px);
+    box-shadow: 0 0.2rem 0.5rem rgba(233, 66, 66, 0.5);
+    outline: 2px solid #78360f57;
+    outline-offset: 0px;
+}
+
+/* Ajuste para telas maiores (Tablet e Desktop) */
+@media (min-width: 768px) {
+    .banner-email-verification-content {
+        flex-direction: row;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .banner-email-verification-text {
+        align-items: center;
+    }
+
+    .banner-email-verification-icon {
+        margin-top: 0;
+    }
+
+    .banner-email-verification-link {
+        flex-shrink: 0;
+    }
+}
