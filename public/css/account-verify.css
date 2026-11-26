@@ -154,6 +154,11 @@ h2 {
     border: 1px solid #fecdd3;
 }
 
+.box-divider {
+    margin: 2rem 0;
+    border-bottom: 1px solid #ccccccc0;
+}
+
 .back-to-login {
     margin-top: 1rem;
     font-size: 1rem;

@@ -22,24 +22,51 @@
     </header>
     
     <main>
-        <div class="main-box card-hover-effect" id="verificationCard" data-email-failed="<%= (typeof verificationEmailFailure !== 'undefined' && verificationEmailFailure) ? 'true' : 'false' %>">
+        <div 
+            class="main-box card-hover-effect" 
+            id="verificationCard" 
+            data-email-failed="<%= (typeof verificationEmailFailed !== 'undefined' && verificationEmailFailed) ? 'true' : 'false' %>"
+            data-first-visit="<%= (typeof isFirstVisitAfterRegister !== 'undefined' && isFirstVisitAfterRegister) ? 'true' : 'false' %>"
+        >
 
             <div class="icon-badge" aria-hidden="true">
-                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    width="32" 
+                    height="32" 
+                    viewBox="0 0 24 24" 
+                    fill="none" 
+                    stroke="currentColor" 
+                    stroke-width="2" 
+                    stroke-linecap="round" 
+                    stroke-linejoin="round"
+                >
                     <rect width="20" height="16" x="2" y="4" rx="2"/>
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                 </svg>
             </div>
 
-            <h2>Quase lá<%= typeof firstName !== 'undefined' && firstName ? `, ${firstName}` : '' %>!</h2>
-            
-            <% if (typeof verificationEmailFailure !== 'undefined' && verificationEmailFailure) { %>
-                <div class="feedback-message error" role="alert" aria-live="assertive" style="margin-bottom: 1.25rem; text-align: left; padding: 0.85rem;">
-                    ⚠️ <strong>Aviso:</strong> Sua conta foi criada com sucesso, mas tivemos uma falha temporária ao enviar o e-mail de confirmação. Você pode tentar reenviar o link agora mesmo no botão abaixo. Se o problema persistir, entre em contato conosco pela <a href="/contato" style="color: inherit; text-decoration: underline; font-weight: bold;">página de suporte</a>.
-                </div>
+            <% if (typeof isFirstVisitAfterRegister !== 'undefined' && isFirstVisitAfterRegister) { %>
+                <h2>Quase lá<%= typeof firstName !== 'undefined' && firstName ? `, ${firstName}` : '' %>!</h2>
             <% } else { %>
+                <h2>Confirme seu e-mail<%= typeof firstName !== 'undefined' && firstName ? `, ${firstName}` : '' %></h2>
+            <% } %>
+
+            
+            <% if (typeof verificationEmailFailed !== 'undefined' && verificationEmailFailed) { %>
+                <div class="feedback-message error" role="alert">
+                    <span class="feedback-error-icon">⚠️</span>
+                    <p><strong>Aviso:</strong> Sua conta foi criada com sucesso, mas tivemos uma falha temporária 
+                        ao enviar o e-mail de confirmação. Você pode tentar reenviar o link agora mesmo no botão abaixo.</p>
+                    <p>Se o problema persistir, entre em contato conosco pela <a href="/contato">página de suporte</a>.</p>
+                </div>
+            <% } else if (typeof isFirstVisitAfterRegister !== 'undefined' && isFirstVisitAfterRegister) { %>
                 <p class="description-text">
                     Enviamos um link de confirmação para o endereço:
+                </p>
+            <% } else { %>
+                <p class="description-text">
+                    Sua conta ainda está pendente de ativação. Solicite um novo link de confirmação para o endereço:
                 </p>
             <% } %>
 
@@ -51,8 +78,8 @@
                 <p><strong>Próximos passos:</strong></p>
                 <ol>
                     <li>Abra sua caixa de entrada e procure pelo e-mail do <strong>outOfBounds</strong>.</li>
-                    <li>Clique no botão ou link de ativação dentro da mensagem.</li>
-                    <li>Pronto! Após confirmar, você já poderá fazer login normalmente.</li>
+                    <li>Clique no botão ou link de ativação contido na mensagem.</li>
+                    <li>Pronto! Após confirmar, você já terá acesso a todos os recursos do site.</li>
                 </ol>
             </div>
 
@@ -60,7 +87,7 @@
                 💡 Não encontrou? Verifique sua pasta de <strong>Spam</strong> ou <strong>Lixo Eletrônico</strong>. O link expira em <strong>24 horas</strong>.
             </p>
 
-            <p id="feedbackMessage" class="feedback-message"></p>
+            <p id="feedbackMessage" class="feedback-message hidden"></p>
 
             <% if (typeof email !== 'undefined' && email) { %>
                 <button type="button" id="resendBtn" class="btn-secondary">

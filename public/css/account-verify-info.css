@@ -203,30 +203,40 @@ h2 {
 /* Campo de feedback */
 .feedback-message {
     font-size: 0.875rem;
-    margin: 0.75rem 0;
+    padding: 0.75rem;
     line-height: 1.4;
     border-radius: 0.4rem;
-    padding: 0;
-    text-align: left;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 .feedback-message.success {
     color: var(--success-color);
     background: #ecfdf5;
     border: 1px solid #a7f3d0;
-    padding: 0.75rem;
 }
 .feedback-message.error {
     color: var(--error-color);
     background: #fff1f2;
     border: 1px solid #fecdd3;
-    padding: 0.75rem;
+}
+.feedback-message span.feedback-error-icon {
+    font-size: 1.3rem;
+}
+.feedback-message p {
+    margin-top: 0.5rem;
+}
+.feedback-message p a {
+    color: inherit; text-decoration: underline; font-weight: bold;
 }
 
 /*---------------------------------------------------------------------------*/
 /* Botão Secundário (Reenviar E-mail) */
 .btn-secondary {
     width: 100%;
-    margin-top: 0.5rem;
+    margin-top: 1.25rem;
     padding: 0.75rem;
     background: #eff6ff;
     color: var(--primary-blue);
@@ -306,4 +316,8 @@ span.or-then {
 }
 .text-center {
     text-align: center;
+}
+
+.hidden {
+    display: none !important;
 }

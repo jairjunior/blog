@@ -279,18 +279,28 @@ const renderAccountVerifyInformationPage = (req, res) => {
 
     // Verifica se o e-mail do usuário já está verificado.
     // Caso positivo, redireciona para a Página Inicial.
-    if (res.locals.currentUser.isVerified) {
+    if (res.locals.currentUser.isVerified === true) {
         return res.redirect('/');
+    }
+
+    // Lê e invalida imediatamente o cookie efêmero de transição pós-cadastro
+    const isFirstVisitAfterRegister = Boolean(req.cookies && req.cookies.verifyContext === 'registered');
+    if (req.cookies?.verifyContext) {
+        res.clearCookie('verifyContext', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict'
+        });
     }
 
     // Renderiza a página caso esteja logado e com isVerified = false
     // Verifica se houve erro no envio do e-mail de verificação.
     // Pega o e-mail e o primeiro nome contidos na variável local 'currentUser'.
-    const emailSendFailed = req.query.error === 'email_failed';
-    res.render('account-verify-info', {
+    return res.render('account-verify-info', {
         email: res.locals.currentUser.email,
         firstName: res.locals.currentUser.firstName,
-        verificationEmailFailure: emailSendFailed,
+        verificationEmailFailed: req.query.error === 'email_failed',
+        isFirstVisitAfterRegister
     });
 };
 

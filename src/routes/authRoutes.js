@@ -119,7 +119,7 @@ const forgotPasswordLimiter = rateLimit({
  * 15 minutos
  *****************************************************************************/
 const genericAuthLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000,
+    windowMs: 10 * 60 * 1000,
     limit: 3,
     legacyHeaders: false,
     standardHeaders: true,
@@ -136,16 +136,45 @@ const genericAuthLimiter = rateLimit({
             event,
             `Bloqueio por Rate Limit para e-mail: [${email}], IP: [${clientIp}], rota: [${req.originalUrl}]`
         );
-
         options.standardHeaders ? res.setHeader('Retry-After', options.windowMs / 1000) : null;
         return res.status(options.statusCode).send(options.message);
     },
     message: {
         success: false,
         messageEn: `Too many requests from this address.\n
-            Please wait 15 minutes before trying again.`,
+            Please wait 10 minutes before trying again.`,
         messagePt: `Muitas solicitações feitas a partir deste endereço.\n
-            Por favor, aguarde 15 minutos antes de tentar novamente.`
+            Por favor, aguarde 10 minutos antes de tentar novamente.`
+    }
+});
+
+
+/******************************************************************************
+ * Resetar Senha ou Reenviar e-mail de confirmação = 3 requisições a cada 
+ * 10 minutos
+ *****************************************************************************/
+const verificationEmailLimiter = rateLimit({
+    windowMs: 10 * 60 * 1000,
+    limit: 3,
+    legacyHeaders: false,
+    standardHeaders: true,
+    skipSuccessfulRequests: false,
+    handler: (req, res, _, options) => {
+        const email = req.body.email || 'Unknown email';
+        const clientIp = ipKeyGenerator(req.ip, 56);
+        printRateLimitBlock(
+            'AUTH_BLOCK_RESEND_VERIFICATION_EMAIL',
+            `Bloqueio por Rate Limit para e-mail: [${email}], IP: [${clientIp}], rota: [${req.originalUrl}]`
+        );
+        options.standardHeaders ? res.setHeader('Retry-After', options.windowMs / 1000) : null;
+        return res.status(options.statusCode).send(options.message);
+    },
+    message: {
+        success: false,
+        messageEn: `Too many requests from this address.\n
+            Please wait 10 minutes before trying again.`,
+        messagePt: `Muitas solicitações feitas a partir deste endereço.\n
+            Por favor, aguarde 10 minutos antes de tentar novamente.`
     }
 });
 
@@ -157,7 +186,7 @@ router.post('/register', registerLimiter, authController.register);
 router.post('/login', loginLimiter, authController.login);
 router.post('/forgot-password', forgotPasswordLimiter, authController.forgotPassword);
 router.post('/reset-password', genericAuthLimiter, authController.resetPassword);
-router.post('/resend-verification-email', genericAuthLimiter, authController.resendVerificationEmail);
+router.post('/resend-verification-email', verificationEmailLimiter, authController.resendVerificationEmail);
 router.get('/logout', authController.logout);
 
 

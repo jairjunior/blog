@@ -14,21 +14,24 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedbackMessage = document.getElementById('feedbackMessage');
     const emailDisplay = document.getElementById('userEmailDisplay');
     const verificationCard = document.getElementById('verificationCard');
-    const userEmail = emailDisplay.dataset.email.trim();
-    const emailFailed = verificationCard?.dataset.emailFailed === 'true';
     
     if (!resendBtn || !emailDisplay) return;
 
-    /******************************************************************************
-    * Se o e-mail falhou no envio inicial do cadastro, NÃO aplica o cooldown 
-    * e deixa o botão pronto para o usuário tentar imediatamente.
-    * Caso contrário, inicia com 60s de espera pois o e-mail acabou de ser enviado 
-    * com sucesso.
-    ******************************************************************************/
-    if (emailFailed) {
-        resendBtn.disabled = false;
-    } else {
+    const userEmail = emailDisplay.dataset.email.trim();
+    const emailFailed = verificationCard?.dataset.emailFailed === 'true';
+    const isFirstVisit = verificationCard?.dataset.firstVisit === 'true';
+
+    // Escalonamento progressivo após cada clique bem-sucedido: 180s -> 180s -> 300s (fixo)
+    const cooldownSteps = [120, 180, 300];
+    let resendAttempts = 0;
+
+    // Apenas no primeiro acesso pós-cadastro e sem falha no envio do e-mail, 
+    // o botão inicia bloqueado por 60s.
+    // Em retornos posteriores ou em caso de falha no envio inicial, já começa habilitado.
+    if (isFirstVisit && !emailFailed) {
         startCooldown(60, resendBtn);
+    } else {
+        resendBtn.disabled = false;
     }
 
     /******************************************************************************
@@ -36,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     *******************************************************************************/
     resendBtn.addEventListener('click', async () => {
         if (!userEmail) return;
-        feedbackMessage.className = 'feedback-message';
+        feedbackMessage.className = 'feedback-message hidden';
         feedbackMessage.textContent = '';
 
         // Desabilita botão de submit e fica em estado de carregamento (Loading...)
@@ -63,7 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 feedbackMessage.className = 'feedback-message success';
                 feedbackMessage.textContent = responseData.messagePt || 
                     'Um novo link de confirmação foi enviado para o seu e-mail.';
-                startCooldown(180, resendBtn);
+                
+                const stepIndex = Math.min(resendAttempts, cooldownSteps.length - 1);
+                const nextCooldown = cooldownSteps[stepIndex];
+                resendAttempts += 1;
+
+                startCooldown(nextCooldown, resendBtn);
             } else {
                 throw new Error(responseData.messagePt || 'Não foi possível reenviar o e-mail.');
             }

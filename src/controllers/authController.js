@@ -97,6 +97,14 @@ exports.register = async (req, res) => {
         // salva em um cookie no navegador do usuário
         setAuthCookie(res, newUser);
 
+        // Cookie efêmero de transição para sinalizar primeiro acesso pós-cadastro
+        res.cookie('verifyContext', 'registered', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 2 * 60 * 1000
+        });
+
         // Sucesso!
         printSecurityAudit(
             'AUTH_AUDIT_USER_CREATED', 
