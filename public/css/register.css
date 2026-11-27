@@ -86,6 +86,14 @@ h1.blog-title a:focus-visible::after {
     transform-origin: left;
 }
 
+/*---------------------------------------------------------------------------*/
+/* Título em telas maiores  */
+@media (min-width: 640px) { 
+    h1.blog-title {
+        font-size: clamp(3.3rem, 3vw, 4.5rem);
+    }
+}
+
 /****************************************************************************** 
 / Layout Principal
 ******************************************************************************/
@@ -253,7 +261,7 @@ input:focus-visible {
 }
 
 /*---------------------------------------------------------------------------*/
-/* Campo de senha  */
+/* Conjunto de input + botão de visualizar/ocultar senha  */
 .password-wrapper {
     position: relative;
     display: flex;
@@ -262,7 +270,7 @@ input:focus-visible {
 .password-wrapper input {
     padding-right: 45px;
 }
-.password-wrapper button.toggle-password {
+button.btn-toggle-password {
     position: absolute;
     right: 9px;
     background: transparent;
@@ -277,20 +285,13 @@ input:focus-visible {
     border-radius: 0.3rem;
     transition: background-color 0.2s ease-in;
 }
-.password-wrapper button.toggle-password:hover {
+button.btn-toggle-password:hover {
     background-color: #1d4fd80e;
 }
-
 .input-hint {
     font-size: 0.85rem;
     color: var(--text-muted);
     margin-top: 0.3rem;
-}
-.input-hint code {
-    background: #f3f4f6;
-    padding: 0.1rem 0.3rem;
-    border-radius: 0.2rem;
-    color: var(--primary-blue);
 }
 
 /*---------------------------------------------------------------------------*/
@@ -327,10 +328,10 @@ input:focus-visible {
 
 /*---------------------------------------------------------------------------*/
 /* Botão Submit do formulário */
-.btn-submit {
+button.btn-submit {
     width: 100%;
     margin-top: 1rem;
-    padding: 0.85rem;
+    padding: 0.9rem;
     border: 0;
     border-radius: 0.5rem;
     color: #fff;
@@ -342,31 +343,25 @@ input:focus-visible {
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
     transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
-
-.btn-submit:hover {
+button.btn-submit:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.4);
+    box-shadow: 0 6px 18px rgba(36, 87, 197, 0.35);
 }
-
-.btn-submit:active {
+button.btn-submit:active {
     transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(36, 87, 197, 0.2);
 }
-
-.btn-submit:focus-visible {
+button.btn-submit:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);
 }
-
-.btn-submit:disabled {
+button.btn-submit:disabled {
     opacity: 0.7;
     cursor: not-allowed;
-    transform: none;
 }
-
-.btn-submit svg {
+button.btn-submit svg {
     width: 20px;
     height: 20px;
     stroke: currentColor;
@@ -407,7 +402,7 @@ input:focus-visible {
 
 .card-hover-effect:hover {
     transform: translateY(-4px) scale(1.01);
-    box-shadow: 0 12px 30px -10px rgba(0, 0, 0, 0.12);
+    box-shadow: 0 0.75rem 3rem rgb(0 0 0 / 20%);
 }
 
 /****************************************************************************** 

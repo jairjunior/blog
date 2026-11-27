@@ -31,10 +31,13 @@ body {
     font-family: system-ui, -apple-system, sans-serif;
 }
 
+/****************************************************************************** 
+/ Título / Logotipo
+******************************************************************************/
 .title-box {
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
     margin-bottom: 2rem;
 }
 
@@ -60,6 +63,35 @@ h1.blog-title a:focus-visible {
     outline: none;
 }
 
+/* Efeito: Linha decorativa animada sob o texto */
+.blog-title a::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    bottom: -4px;
+    left: 0;
+    background-color: var(--primary-blue);
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.35s cubic-bezier(0.65, 0.05, 0.36, 1);
+}
+
+/* Quando passa o mouse, a linha desliza elegantemente da esquerda para a direita */
+h1.blog-title a:hover::after,
+h1.blog-title a:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+}
+
+/*---------------------------------------------------------------------------*/
+/* Título em telas maiores  */
+@media (min-width: 640px) { 
+    h1.blog-title {
+        font-size: clamp(3.3rem, 3vw, 4.5rem);
+    }
+}
+
 main {
     width: 100%;
     display: flex;
@@ -69,7 +101,7 @@ main {
 }
 
 .main-box {
-    width: min(100%, 28rem);
+    width: min(100%, 520px);
     margin: 0;
     padding: 2.5rem 2rem;
     background: #fff;
@@ -107,7 +139,9 @@ h2 {
     margin-bottom: 1.5rem;
 }
 
-.countdown-box {
+/*---------------------------------------------------------------------------*/
+/* Contador regressivo para redirecionamento  */
+.countdown-wrapper {
     background: #eff6ff;
     color: var(--primary-blue);
     font-size: 0.9rem;
@@ -117,9 +151,30 @@ h2 {
     margin-bottom: 1.5rem;
     border: 1px solid #bfdbfe;
 }
+.countdown-wrapper p {
+    font-size: 0.9rem;
+}
+.countdown-wrapper span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 1.8rem;
+    padding: 0.1rem 0.45rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums; /* Evita que a largura "trema" de 10 para 9 */
+    background-color: color-mix(in srgb, rgba(59, 130, 246, 0.22) 70%, transparent);
+    color: #1D4ED8;
+}
 
-.btn-primary-custom {
-    display: block;
+/*---------------------------------------------------------------------------*/
+/* Botão de Voltar parav a Página Inicial */
+.btn-return-home {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: flex-end;
+    gap: 0.6rem;
     width: 100%;
     padding: 0.8rem;
     border: 0;
@@ -133,12 +188,30 @@ h2 {
     text-align: center;
     transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
-
-.btn-primary-custom:hover {
+.btn-return-home:hover {
     background: var(--primary-blue-hover);
     transform: translateY(-2px);
-    box-shadow: 0 0.4rem 1rem rgba(36, 87, 197, 0.35);
+    box-shadow: 0 6px 18px rgba(36, 87, 197, 0.35);
 }
+.btn-return-home:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 10px rgba(36, 87, 197, 0.2);
+}
+.btn-return-home:focus-visible {
+    outline: none;
+    box-shadow: var(--focus-ring);
+}
+
+
+
+
+
+
+
+
+
+
+
 
 .feedback-message {
     font-size: 0.95rem;

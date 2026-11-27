@@ -91,7 +91,7 @@ h1.blog-title a:focus-visible::after {
 
 /*---------------------------------------------------------------------------*/
 /* Título em telas maiores  */
-@media (min-width: 768px) { 
+@media (min-width: 640px) { 
     h1.blog-title {
         font-size: clamp(3.3rem, 3vw, 4.5rem);
     }
@@ -110,7 +110,7 @@ main {
 }
 
 .main-box {
-    width: min(100%, 26rem);
+    width: min(100%, 500px);
     margin: 0;
     padding: 2rem;
     background: #fff;
@@ -132,9 +132,6 @@ h2 {
     font-size: 1.75rem;
     font-weight: 750;
     margin-bottom: 1.1rem;
-}
-form {
-    border-bottom: 1px solid #ccccccc0;
 }
 .form-group {
     margin-bottom: 1rem;
@@ -172,7 +169,7 @@ input:focus-visible {
 }
 
 /*---------------------------------------------------------------------------*/
-/* Campo de senha  */
+/* Conjunto de input + botão de visualizar/ocultar senha  */
 .password-wrapper {
     position: relative;
     display: flex;
@@ -181,7 +178,7 @@ input:focus-visible {
 .password-wrapper input {
     padding-right: 45px;
 }
-.password-wrapper button#togglePassword {
+button.btn-toggle-password {
     position: absolute;
     right: 9px;
     background: transparent;
@@ -196,7 +193,7 @@ input:focus-visible {
     border-radius: 0.3rem;
     transition: background-color 0.2s ease-in;
 }
-.password-wrapper button#togglePassword:hover {
+button.btn-toggle-password:hover {
     background-color: #1d4fd80e;
 }
 
@@ -224,14 +221,14 @@ input:focus-visible {
 
 /*---------------------------------------------------------------------------*/
 /* Botão de submit  */
-button#loginSubmitBtn {
+button.btn-submit {
     width: 100%;
     margin-top: 1.5rem;
     padding: 0.8rem;
     border: 0;
     border-radius: 0.4rem;
     color: #fff;
-    background: #2563eb;
+    background: var(--primary-blue);
     font: inherit;
     font-weight: 600;
     cursor: pointer;
@@ -241,20 +238,20 @@ button#loginSubmitBtn {
     gap: 0.5rem;
     transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
-button#loginSubmitBtn:hover {
-    background: #1d4ed8;
+button.btn-submit:hover {
+    background: var(--primary-blue-hover);
     transform: translateY(-2px);
-    box-shadow: 0 0.4rem 1rem rgba(36, 87, 197, 0.35);
+    box-shadow: 0 6px 18px rgba(36, 87, 197, 0.35);
 }
-button#loginSubmitBtn:active {
+button.btn-submit:active {
     transform: translateY(0);
-    box-shadow: 0 0.2rem 0.5rem rgba(36, 87, 197, 0.2);
+    box-shadow: 0 3px 10px rgba(36, 87, 197, 0.2);
 }
-button#loginSubmitBtn:focus-visible {
+button.btn-submit:focus-visible {
     outline: none;
     box-shadow: var(--focus-ring);
 }
-button#loginSubmitBtn:disabled {
+button.btn-submit:disabled {
     opacity: 0.7;
     cursor: not-allowed;
 }

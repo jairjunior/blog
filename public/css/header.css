@@ -39,7 +39,7 @@
     word-break: break-word;
 }
 
-.banner-email-verification-link {
+.btn-banner-email-verification {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -54,14 +54,21 @@
     transition: background-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
-.banner-email-verification-link:hover,
-.banner-email-verification-link:focus-visible {
+.btn-banner-email-verification:hover {
     background-color: #a5480e;
-    transform: translateY(-1px);
-    box-shadow: 0 0.2rem 0.5rem rgba(114, 14, 14, 0.5);
-    outline: 1px solid #78360f57;
-    outline-offset: 0px;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(88, 11, 11, 0.3);
 }
+.btn-banner-email-verification:active {
+    transform: translateY(0);
+    box-shadow: 0 3px 3px rgba(88, 11, 11, 0.2);
+}
+.btn-banner-email-verification:focus-visible {
+    outline: none;
+    box-shadow: #bd580a59;
+}
+
+
 
 /* Ajuste para telas maiores (Tablet e Desktop) */
 @media (min-width: 768px) {

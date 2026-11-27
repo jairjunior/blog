@@ -1228,7 +1228,7 @@ h1 {
     gap: 40px;
 }
 
-.post-card {
+.article-card {
     background: #ffffff;
     border-radius: 8px;
     overflow: hidden;
@@ -1238,46 +1238,46 @@ h1 {
     flex-direction: column;
 }
 
-.post-card:hover {
+.article-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
 }
 
-.post-cover {
+.article-cover {
     width: 100%;
     height: 200px;
     object-fit: cover;
 }
 
-.post-info {
+.article-info {
     padding: 20px;
     display: flex;
     flex-direction: column;
     flex: 1;
 }
 
-.post-date {
+.article-date {
     font-size: 0.85rem;
     color: #6b7280;
     margin-bottom: 8px;
 }
 
-.post-info h3 {
+.article-info h3 {
     font-size: 1.25rem;
     margin-bottom: 10px;
 }
 
-.post-info h3 a {
+.article-info h3 a {
     text-decoration: none;
     color: #111827;
     transition: color 0.2s;
 }
 
-.post-info h3 a:hover {
+.article-info h3 a:hover {
     color: #2563eb;
 }
 
-.post-summary {
+.article-summary {
     font-size: 0.95rem;
     color: #4b5563;
     margin-bottom: 20px;
@@ -1296,7 +1296,7 @@ h1 {
     text-decoration: underline;
 }
 
-.post-author {
+.article-author {
     font-size: 0.9rem;
 }
 
