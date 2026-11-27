@@ -299,8 +299,7 @@ exports.forgotPassword = async (req, res) => {
             return res.status(200).json({ // HTTP 200 OK
                 success: true,
                 messageEn: 'If the email is registered, a link to reset your password has been sent.',
-                messagePt: `Se o e-mail estiver cadastrado, um link para redefinir sua senha foi enviado.\n
-                    Verifique sua caixa de entrada e também a caixa de spam (lixo eletrônico).`
+                messagePt: 'Se o e-mail estiver cadastrado, um link para redefinir sua senha foi enviado. Verifique sua caixa de entrada e também a caixa de spam (lixo eletrônico).'
             });
         }
 
@@ -332,8 +331,7 @@ exports.forgotPassword = async (req, res) => {
         return res.status(200).json({ // HTTP 200 OK
             success: true,
             messageEn: 'If the email is registered, a link to reset your password has been sent.',
-            messagePt: `Se o e-mail estiver cadastrado, um link para redefinir sua senha foi enviado.\n
-                Verifique sua caixa de entrada e também a caixa de spam (lixo eletrônico).`
+            messagePt: 'Se o e-mail estiver cadastrado, um link para redefinir sua senha foi enviado. Verifique sua caixa de entrada e também a caixa de spam (lixo eletrônico).'
         });
 
     /*-----------------------------------------------------------------------*/

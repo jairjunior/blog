@@ -2,6 +2,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
 const authMiddleware = require('./src/middlewares/authMiddleware');
+const { printConsoleError } = require('./src/utils/logger');
 require('dotenv').config();
 
 
@@ -48,6 +49,26 @@ app.use(authMiddleware);
 // Rotas da aplicação
 const routes = require('./src/routes');
 app.use('/', routes);
+
+
+// Middleware de Código HTTP 404 (rota não encontrada)
+app.use( (_, res) => {
+    return res.status(404).render('error', {
+        statusCode: 404
+    });
+});
+
+
+// Middleware de Código HTTP 500 (tratamento de erros global)
+app.use( (error, _, res, next) => {
+    printConsoleError('APP_UNHANDLED_ERROR', error);
+    if (res.headersSent) {
+        return next(error);
+    }
+    return res.status(500).render('error', {
+        statusCode: 500
+    });
+});
 
 
 // Inicia o servidor

@@ -1,7 +1,7 @@
 const databasePool = require('../config/database');
 
 /*****************************************************************************
-/ Cria um comentário atrelado a um determinado post
+/ Cria um comentário atrelado a um determinado artigo
 /*****************************************************************************/
 const createComment = async (postId, userId, commentContent) => {
     try {
@@ -13,14 +13,14 @@ const createComment = async (postId, userId, commentContent) => {
 
     } catch(error) {
         console.error(`Error in commentModel.createComment() when creating
-            comment for post with ID [${postId}]:\n`, error);
+            comment for article with ID [${postId}]:\n`, error);
         throw error;
     }
 }
 
 
 /*****************************************************************************
-/ Cria um comentário atrelado a um determinado post
+/ Cria um comentário atrelado a um determinado artigo
 /*****************************************************************************/
 const getComments = async (postId) => {
     try {
@@ -41,7 +41,7 @@ const getComments = async (postId) => {
 
     } catch(error){
         console.error(`Error in commentModel.getComments() when retrieving
-            comment for post with ID [${postId}]:\n`, error);
+            comment for article with ID [${postId}]:\n`, error);
         throw error;
     }
 }
@@ -63,7 +63,7 @@ const getLastCommentTimeByUser = async (postId, userId) => {
 
     } catch(error){
         console.error(`Error in commentModel.getLastCommentByUser() when retrieving 
-            last comment for post with ID [${postId}] and user with ID [${userId}]:\n`, error);
+            last comment for article with ID [${postId}] and user with ID [${userId}]:\n`, error);
         throw error;
     }
 }

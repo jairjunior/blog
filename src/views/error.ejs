@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <%
+        const safeStatusCode = (typeof statusCode !== 'undefined' && Number(statusCode)) ? Number(statusCode) : 500;
+        const isNotFound = safeStatusCode === 404;
+        const pageTitle = isNotFound
+            ? 'Erro 404 — Página Perdida no Espaço | outOfBounds'
+            : `Erro ${safeStatusCode} — Curto-Circuito no Servidor | outOfBounds`;
+        const metaDesc = isNotFound
+            ? 'A página solicitada saiu da órbita do outOfBounds.'
+            : 'Ocorreu uma instabilidade temporária nos servidores do outOfBounds.';
+    %>
+    <title><%= pageTitle %></title>
+    <meta name="description" content="<%= metaDesc %>">
+    <meta name="robots" content="noindex, nofollow">
+
+    <link rel="stylesheet" href="/css/error.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <header class="title-box">
+        <h1 class="blog-title">
+            <a href="/" aria-label="Página inicial do site outOfBounds">outOfBounds</a>
+        </h1>
+    </header>
+
+    <main class="error-main">
+        <section class="error-card" aria-labelledby="errorHeading">
+            <span class="status-pill" aria-label="Código de status HTTP <%= safeStatusCode %>">
+                HTTP <%= safeStatusCode %>
+            </span>
+
+            <% if (isNotFound) { %>
+                <!-- Ilustração SVG Animada: Astronauta à deriva no espaço (404) -->
+                <div class="illustration-wrapper" aria-hidden="true">
+                    <svg class="scene-svg" viewBox="0 0 260 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Estrelas / partículas azuis -->
+                        <circle class="star star-1" cx="34" cy="36" r="2.4" fill="#2563EB"/>
+                        <circle class="star star-2" cx="222" cy="44" r="2.6" fill="#3B82F6"/>
+                        <circle class="star star-3" cx="52" cy="148" r="2" fill="#60A5FA"/>
+                        <circle class="star star-4" cx="212" cy="142" r="2.2" fill="#2563EB"/>
+                        <path class="star star-2" d="M196 24L198 29L203 31L198 33L196 38L194 33L189 31L194 29L196 24Z" fill="#2563EB"/>
+
+                        <!-- Planeta distante -->
+                        <circle cx="48" cy="82" r="14" fill="#DBEAFE" stroke="#2563EB" stroke-width="2"/>
+                        <ellipse cx="48" cy="82" rx="23" ry="5" transform="rotate(-18 48 82)" stroke="#3B82F6" stroke-width="1.8"/>
+
+                        <!-- Cabo solto -->
+                        <path class="tether-line" d="M168 122C194 134 214 114 236 124" stroke="#94A3B8" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="5 5"/>
+
+                        <!-- Grupo do Astronauta Flutuando -->
+                        <g class="astronaut-float">
+                            <!-- Mochila JetPack -->
+                            <rect x="103" y="76" width="54" height="44" rx="10" fill="#CBD5E1" stroke="#334155" stroke-width="2.2"/>
+                            <!-- Corpo / Traje -->
+                            <rect x="110" y="74" width="40" height="48" rx="14" fill="#EFF6FF" stroke="#1E293B" stroke-width="2.4"/>
+                            <!-- Painel no peito -->
+                            <rect x="121" y="88" width="18" height="12" rx="3" fill="#1E293B"/>
+                            <circle cx="126" cy="94" r="2" fill="#EF4444"/>
+                            <circle cx="134" cy="94" r="2" fill="#38BDF8"/>
+
+                            <!-- Braços -->
+                            <path d="M110 84C95 78 88 88 94 98" stroke="#1E293B" stroke-width="11" stroke-linecap="round"/>
+                            <path d="M110 84C95 78 88 88 94 98" stroke="#EFF6FF" stroke-width="6.5" stroke-linecap="round"/>
+                            <path d="M150 84C165 74 174 84 168 95" stroke="#1E293B" stroke-width="11" stroke-linecap="round"/>
+                            <path d="M150 84C165 74 174 84 168 95" stroke="#EFF6FF" stroke-width="6.5" stroke-linecap="round"/>
+
+                            <!-- Pernas -->
+                            <path d="M120 120L113 144" stroke="#1E293B" stroke-width="12" stroke-linecap="round"/>
+                            <path d="M120 120L113 144" stroke="#EFF6FF" stroke-width="7.5" stroke-linecap="round"/>
+                            <path d="M140 120L149 142" stroke="#1E293B" stroke-width="12" stroke-linecap="round"/>
+                            <path d="M140 120L149 142" stroke="#EFF6FF" stroke-width="7.5" stroke-linecap="round"/>
+
+                            <!-- Capacete -->
+                            <circle cx="130" cy="54" r="24" fill="#EFF6FF" stroke="#1E293B" stroke-width="2.5"/>
+                            <!-- Visor -->
+                            <rect x="113" y="42" width="34" height="22" rx="11" fill="#1E3A8A" stroke="#2563EB" stroke-width="2"/>
+                            <!-- Reflexo no visor -->
+                            <path d="M119 47C123 45 128 45 132 47" stroke="#93C5FD" stroke-width="2" stroke-linecap="round"/>
+                            <!-- Sinal de interrogação acima do capacete -->
+                            <text x="155" y="34" fill="#2563EB" font-family="Outfit, sans-serif" font-weight="800" font-size="18">?</text>
+                        </g>
+                    </svg>
+                </div>
+
+                <h2 id="errorHeading" class="error-title">
+                    <%= (typeof errorTitle !== 'undefined' && errorTitle) ? errorTitle : '404: Ponteiro Nulo no Espaço!' %>
+                </h2>
+                <p class="error-message">
+                    <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+                        <%= errorMessage %>
+                    <% } else { %>
+                        Você atingiu um endereço fora dos limites 
+                        <span class="right-little-padding">(</span>literalmente <em class="code-phrase">out of bounds</em>).</br>
+                        Essa rota não existe, foi movida ou nunca saiu do ambiente de homologação.
+                    <% } %>
+                </p>
+            <% } else { %>
+                <!-- Ilustração SVG Animada: Robô em curto-circuito (500) -->
+                <div class="illustration-wrapper" aria-hidden="true">
+                    <svg class="scene-svg" viewBox="0 0 260 190" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Engrenagem girando ao fundo -->
+                        <g class="gear-spin">
+                            <circle cx="56" cy="54" r="14" stroke="#94A3B8" stroke-width="4" stroke-dasharray="5 4"/>
+                            <circle cx="56" cy="54" r="6" fill="#EFF6FF" stroke="#475569" stroke-width="2"/>
+                        </g>
+
+                        <!-- Faíscas elétricas -->
+                        <path class="spark spark-1" d="M188 46L198 38L194 49L205 47L191 58" stroke="#EAB308" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+                        <path class="spark spark-2" d="M72 112L61 107L66 116L56 117L69 124" stroke="#EA580C" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>
+
+                        <!-- Fumaça subindo -->
+                        <circle class="smoke smoke-1" cx="152" cy="30" r="5" fill="#94A3B8"/>
+                        <circle class="smoke smoke-2" cx="164" cy="22" r="7" fill="#64748B"/>
+
+                        <!-- Grupo do Robô com Glitch/Tremor -->
+                        <g class="robot-glitch">
+                            <!-- Antena torta -->
+                            <path d="M130 42L130 28L142 22" stroke="#475569" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                            <circle class="antenna-bulb" cx="144" cy="21" r="4.5" fill="#DC2626"/>
+
+                            <!-- Cabeça do Robô -->
+                            <rect x="92" y="42" width="76" height="52" rx="12" fill="#E2E8F0" stroke="#1E293B" stroke-width="2.5"/>
+                            <!-- Orelhas/Conectores -->
+                            <rect x="83" y="58" width="9" height="20" rx="4" fill="#94A3B8" stroke="#1E293B" stroke-width="1.8"/>
+                            <rect x="168" y="58" width="9" height="20" rx="4" fill="#94A3B8" stroke="#1E293B" stroke-width="1.8"/>
+
+                            <!-- Olho esquerdo (OK) -->
+                            <circle cx="114" cy="64" r="8" fill="#1E3A8A" stroke="#2563EB" stroke-width="2"/>
+                            <circle cx="114" cy="64" r="3" fill="#93C5FD"/>
+
+                            <!-- Olho direito (X em pane) -->
+                            <path d="M141 58L151 68M151 58L141 68" stroke="#DC2626" stroke-width="3" stroke-linecap="round"/>
+
+                            <!-- Boca em zigue-zague (bug) -->
+                            <path d="M112 81L119 77L126 83L133 77L140 83L147 78" stroke="#D97706" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+
+                            <!-- Tronco do Robô -->
+                            <rect x="98" y="100" width="64" height="46" rx="10" fill="#CBD5E1" stroke="#1E293B" stroke-width="2.5"/>
+                            <!-- Porta do peito aberta / alerta -->
+                            <rect x="112" y="111" width="36" height="24" rx="4" fill="#FEF2F2" stroke="#DC2626" stroke-width="2"/>
+                            <text x="130" y="127" text-anchor="middle" fill="#DC2626" font-family="monospace" font-weight="700" font-size="11">ERR!</text>
+
+                            <!-- Braços -->
+                            <path d="M98 110L78 124" stroke="#1E293B" stroke-width="7" stroke-linecap="round"/>
+                            <path d="M162 110L182 102" stroke="#1E293B" stroke-width="7" stroke-linecap="round"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <h2 id="errorHeading" class="error-title">
+                    <%= (typeof errorTitle !== 'undefined' && errorTitle) ? errorTitle : '500: Nosso Servidor Tomou um Segfault!' %>
+                </h2>
+                <p class="error-message">
+                    <% if (typeof errorMessage !== 'undefined' && errorMessage) { %>
+                        ? errorMessage
+                    <% } else { %>
+                        Não foi você, foi a gente. Um bit rebelde causou pane nos nossos circuitos, mas nossos logs já dispararam o alarme.</br>
+                        Tente novamente em instantes!
+                    <% } %>
+                </p>
+            <% } %>
+
+            <div class="btn-wrapper">
+                <a href="/" class="btn-home">
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="20" 
+                        height="20" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        stroke-width="2.2" 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round" 
+                        aria-hidden="true" 
+                        focusable="false"
+                    >
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>Voltar para a Página Inicial</span>
+                </a>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

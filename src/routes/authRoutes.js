@@ -36,10 +36,8 @@ const registerLimiter = rateLimit({
     },
     message: {
         success: false,
-        messageEn: `You have made too many register attempts.\n
-            Please wait 1 hour before trying again.`,
-        messagePt: `Você realizou muitas tentativas de cadastro.
-            Aguarde 1 hora para tentar novamente.`
+        messageEn: `You have made too many register attempts.\nPlease wait 1 hour before trying again.`,
+        messagePt: `Você realizou muitas tentativas de cadastro.\nAguarde 1 hora para tentar novamente.`
     }
 });
 
@@ -71,10 +69,8 @@ const loginLimiter = rateLimit({
     },
     message: {
         success: false,
-        messageEn: `You have made too many unsuccessful login attempts.\n
-            Please wait 10 minutes before trying again, or reset your password.`,
-        messagePt: `Você realizou muitas tentativas de login sem sucesso.\n
-            Aguarde 10 minutos para tentar novamente ou faça o reset da sua senha.`
+        messageEn: `You have made too many unsuccessful login attempts.\nPlease wait 10 minutes before trying again, or reset your password.`,
+        messagePt: `Você realizou muitas tentativas de login sem sucesso.\nAguarde 10 minutos para tentar novamente ou faça o reset da sua senha.`
     }
 });
 
@@ -106,10 +102,8 @@ const forgotPasswordLimiter = rateLimit({
     },
     message: {
         success: false,
-        messageEn: `You can only submit a password recovery request once every 5 minutes.\n
-            Don't forget to check your spam folder.`,
-        messagePt: `Você só pode realizar uma solicitação de recuperação de senha a cada 5 minutos.\n
-            Antes de repetir, verifique a sua caixa de entrada e também a caixa de spam (lixo eletrônico).`
+        messageEn: `You can only submit a password recovery request once every 5 minutes.\nDon't forget to check your spam folder.`,
+        messagePt: `Você só pode realizar uma solicitação de recuperação de senha a cada 5 minutos.\nAntes de repetir, verifique a sua caixa de entrada e também a caixa de spam (lixo eletrônico).`
     }
 });
 
@@ -141,10 +135,8 @@ const genericAuthLimiter = rateLimit({
     },
     message: {
         success: false,
-        messageEn: `Too many requests from this address.\n
-            Please wait 10 minutes before trying again.`,
-        messagePt: `Muitas solicitações feitas a partir deste endereço.\n
-            Por favor, aguarde 10 minutos antes de tentar novamente.`
+        messageEn: `Too many requests from this address.\nPlease wait 10 minutes before trying again.`,
+        messagePt: `Muitas solicitações feitas a partir deste endereço.\nPor favor, aguarde 10 minutos antes de tentar novamente.`
     }
 });
 
@@ -171,10 +163,8 @@ const verificationEmailLimiter = rateLimit({
     },
     message: {
         success: false,
-        messageEn: `Too many requests from this address.\n
-            Please wait 10 minutes before trying again.`,
-        messagePt: `Muitas solicitações feitas a partir deste endereço.\n
-            Por favor, aguarde 10 minutos antes de tentar novamente.`
+        messageEn: `Too many requests from this address.\nPlease wait 10 minutes before trying again.`,
+        messagePt: `Muitas solicitações feitas a partir deste endereço.\nPor favor, aguarde 10 minutos antes de tentar novamente.`
     }
 });
 

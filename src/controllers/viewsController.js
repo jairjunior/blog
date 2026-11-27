@@ -24,9 +24,8 @@ const renderHomePage = async (req, res) => {
 
     } catch (error) {
         printConsoleError('VIEW_ERROR_RENDER_HOME_PAGE', error);
-        return res.status(500).json({ 
-            success: false,
-            message: 'Internal server error. Contact the administrator.'
+        return res.status(500).render('error', {
+            statusCode: 500
         });
     }
 }
@@ -38,6 +37,9 @@ const renderHomePage = async (req, res) => {
  * Renderiza a página que exibe todos os artigos do site utilizando template EJS.
  * Por padrão, os artigos serão renderizados do mais recente para o mais antigo.
  * Para modificar esse comportamento, utiliza-se a query string "filter" na URL.
+ * 
+ * Como essa view utiliza a template "category", é necessário passar manualmente
+ * as variáveis categoryName e categoryDescription para a renderização não quebrar.
  *****************************************************************************/
 const renderArticlesPage = async (req, res) => {
     try {
@@ -45,6 +47,7 @@ const renderArticlesPage = async (req, res) => {
         const articles = await articleModel.getLatestArticles(numberOfArticles);
         const categoryName = 'Artigos';
         const categoryDescription = 'Todos os artigos do site outOfBounds estarão listados nesta página.';
+        //testeDeErro500();//DEBUG - Gera propositalmente um erro 500, pois essaa função não existe.
         return res.render('category', { 
             articles,
             categoryName,
@@ -55,9 +58,8 @@ const renderArticlesPage = async (req, res) => {
 
     } catch (error) {
         printConsoleError('VIEW_ERROR_RENDER_ARTICLES_PAGE', error);
-        return res.status(500).json({ 
-            success: false,
-            message: 'Internal server error. Contact the administrator.'
+        return res.status(500).render('error', {
+            statusCode: 500
         });
     }
 }
@@ -76,10 +78,11 @@ const renderCategoryPage = async (req, res) => {
         const categorySlug = req.params.categorySlug;
         const category = await categoryModel.getCategoryBySlug(categorySlug);
         if(!category){
-            return res.status(404).json({ // HTTP 404 Not Found
-                success: false,
-                messageEn: 'Category not found.',
-                messagePt: 'Categoria não encontrada.'
+            return res.status(404).render('error', {
+                statusCode: 404,
+                errorTitle: '404: Categoria Fora de Órbita!',
+                errorMessage: `Não encontramos essa categoria no nosso catálogo. 
+                    Talvez ela tenha sido renomeada ou nunca tenha existido neste universo.`
             });
         }
 
@@ -94,10 +97,8 @@ const renderCategoryPage = async (req, res) => {
 
     } catch (error) {
         printConsoleError('VIEW_ERROR_RENDER_CATEGORY_PAGE', error);
-        return res.status(500).json({ // HTTP 500 Internal Server Error 
-            success: false,
-            messageEn: 'Internal server error. Contact the administrator.',
-            messagePt: 'Erro no servidor. Entre em contato com o administrador.'
+        return res.status(500).render('error', {
+            statusCode: 500
         });
     }
 }
@@ -116,10 +117,11 @@ const renderArticleBySlugs = async (req, res) => {
 
         const article = await articleModel.getArticleBySlugs(categorySlug, articleSlug);
         if(!article){
-            return res.status(404).json({ // HTTP 404 Not Found
-                success: false,
-                messageEn: 'Post not found.',
-                messagePt: 'Post não encontrado.'
+            return res.status(404).render('error', {
+                statusCode: 404,
+                errorTitle: '404: Artigo Perdido no Espaço!',
+                errorMessage: `O artigo que você procura não foi encontrado neste endereço. 
+                    Ele pode ter sido movido ou o link contém algum caractere fora do lugar.`
             });
         }
         
@@ -133,10 +135,8 @@ const renderArticleBySlugs = async (req, res) => {
 
     } catch (error) {
         printConsoleError('VIEW_ERROR_RENDER_SINGLE_ARTICLE_PAGE', error);
-        return res.status(500).json({ // HTTP 500 Internal Server Error 
-            success: false,
-            messageEn: 'Internal server error. Contact the administrator.',
-            messagePt: 'Erro no servidor. Entre em contato com o administrador.'
+        return res.status(500).render('error', {
+            statusCode: 500
         });
     }
 }
@@ -188,12 +188,23 @@ const renderRegisterPage = async (req, res) => {
  ******************************************************************************
  * Pega o parâmetro 'redirectTo' que é passado na URL como uma query string.
  * Esse parâmetro vai dizer para onde o usuário deve ser redirecionado após
- * efetuar o login com sucesso.
- * Esse caminho é exatamente de onde o usuário veio e é para onde ele deve 
- * voltar.
+ * efetuar o login com sucesso. Esse caminho é exatamente de onde o usuário 
+ * veio e é para onde ele deve voltar.
  *****************************************************************************/
 const renderLoginPage = async (req, res) => {
-    const redirectTo = req.query.redirectTo || '/';
+    
+    // Se o usuário já estiver logado, redireciona para a Página Inicial
+    if (res.locals.currentUser) {
+        return res.redirect('/');
+    }
+    
+    // Sanitiza a query string evitando Open redirect
+    const rawRedirect = req.query.redirectTo;
+    const isSafeUrl = typeof rawRedirect === 'string' &&
+        rawRedirect.startsWith('/') &&
+        !rawRedirect.startsWith('//') &&
+        !rawRedirect.includes('\\');
+    const redirectTo = isSafeUrl ? rawRedirect : '/';
     return res.render('login', { redirectTo });
 }
 
@@ -256,7 +267,7 @@ const renderResetPasswordPage = async (req, res) => {
         return res.render('reset-password', {
             success: false,
             messageEn: 'The recovery link is invalid or has already expired.\nPlease submit a new request to recover your password or contact the administrator.',
-            messagePt: `O link de recuperação é inválido ou já expirou.\nFaça uma nova solicitação para recuperar a senha.`
+            messagePt: 'O link de recuperação é inválido ou já expirou.\nFaça uma nova solicitação para recuperar a senha.\n'
         });
     }
 };
@@ -317,26 +328,32 @@ const renderAccountVerifyInformationPage = (req, res) => {
 const renderAccountVerifyPage = async (req, res) => {
     const { verificationToken } = req.query;
     
-    // Se o Token JWT de Verificação não consta na URL, redireciona para a Página Inicial
+    // Se o Token JWT de Verificação não consta na URL, redireciona para a Página Inicial.
     if (!verificationToken) {
         return res.redirect('/');
     }
     
     try {
-        // Decodifica o Token JWT de Verificação e verifica o payload
+        // Decodifica o Token JWT de Verificação e verifica o payload.
         const decoded = jwt.verify(verificationToken, process.env.JWT_SECRET);
         if (!decoded || !decoded.userId || !decoded.userEmail) {
             throw new Error('Invalid or malformed verification token.');
         }
 
-        // Busca o usuário no banco de dados
+        // Busca o usuário no banco de dados.
         const user = await userModel.getUserById(decoded.userId);
         if (!user) throw new Error('User not found in the database.');
 
         // Se o usuário ainda não estiver verificado, atualiza o status de verificação no banco de dados
+        // Atualiza também a variável user neste escopo para gerar o cookie de autenticação
+        // Registra o log de auditoria
         if (!user.is_verified) {
             await userModel.updateVerificationStatusById(user.id, true);
             user.is_verified = true;
+            printSecurityAudit(
+                'AUTH_AUDIT_ACCOUNT_VERIFIED', 
+                `Conta ativada com sucesso. Usuário ID: [${user.id}], E-mail: [${user.email}], IP: [${req.ip}]`
+            );
         }
 
         // Gera um novo Token JWT de Autenticação com isVerified: true 
@@ -345,10 +362,6 @@ const renderAccountVerifyPage = async (req, res) => {
         setAuthCookie(res, user);
 
         // Renderiza a página de sucesso com os dados do usuário
-        printSecurityAudit(
-            'AUTH_AUDIT_ACCOUNT_VERIFIED', 
-            `Conta ativada com sucesso. Usuário ID: [${user.id}], E-mail: [${user.email}], IP: [${req.ip}]`
-        );
         res.render('account-verify', {
             success: true,
             userName: user.first_name

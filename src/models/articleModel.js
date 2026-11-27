@@ -1,7 +1,7 @@
 const databasePool = require('../config/database');
 
-/* O campo "status" da tabela post pode assumir os seguintes valores:
- * "published": O post está finalizado, aprovado e liberado para o público
+/* O campo "status" da tabela posts pode assumir os seguintes valores:
+ * "published": O artigo está finalizado, aprovado e liberado para o público
  * "draft": O artigo ainda está sendo escrito ou revisado pelo autor.
  * "archived": Para articles antigos que você não quer mais exibir publicamente,
  *             mas também não quer deletar do banco de dados.
@@ -64,7 +64,7 @@ const getArticlesByCategory = async (categorySlug) => {
 
 
 /*****************************************************************************
-/ Busca post individual pelas suas slugs (Categoria + Título).
+/ Busca artigo individual pelas suas slugs (Categoria + Título).
 /*****************************************************************************/
 const getArticleBySlugs = async (categorySlug, articleSlug) => {
     try {
@@ -90,14 +90,14 @@ const getArticleBySlugs = async (categorySlug, articleSlug) => {
         return rows[0];
 
     } catch(error) {
-        console.error(`Error in articleModel.getArticleBySlugs() when retrieving the post [${categorySlug}/${articleSlug}].`);
+        console.error(`Error in articleModel.getArticleBySlugs() when retrieving the article [${categorySlug}/${articleSlug}].`);
         throw error;
     }
 };
 
 
 /*****************************************************************************
-/ Busca apenas o ID de um post pelas suas slugs (Categoria + Título).
+/ Busca o ID de um artigo pelas suas slugs (Categoria + Título).
 /*****************************************************************************/
 const getArticleIdBySlugs = async (categorySlug, articleSlug) => {
     try {
@@ -113,7 +113,7 @@ const getArticleIdBySlugs = async (categorySlug, articleSlug) => {
         return rows[0];
 
     } catch(error) {
-        console.error(`Error in articleModel.getArticleIdBySlugs() when retrieving ID of the post [${categorySlug}/${articleSlug}].`);
+        console.error(`Error in articleModel.getArticleIdBySlugs() when retrieving ID of the article [${categorySlug}/${articleSlug}].`);
         throw error;
     }
 
