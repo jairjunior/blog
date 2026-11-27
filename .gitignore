@@ -3,3 +3,4 @@ public/img/*
 !public/img/.gitkeep
 .env
 docs/*
+*-bkp.*
