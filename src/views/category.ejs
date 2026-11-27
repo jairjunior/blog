@@ -53,22 +53,22 @@
 
         <!-- Seção para mostrar os artigos da categoria -->
         <section class="articles-section">
-            <h2>Últimas Postagens</h2>
+            <h2>Últimos Artigos</h2>
 
             <div class="articles-grid">
                 <% if (articles && articles.length > 0) { %>
                     <% articles.forEach(article => { %>
-                        <article class="post-card">
+                        <article class="article-card">
                             <% if (article.cover_image) { %>
-                                <img src="/img/<%= article.cover_image %>" alt="Imagem representativa do artigo <%= article.title %>" class="post-cover">
+                                <img src="/img/<%= article.cover_image %>" alt="Imagem representativa do artigo <%= article.title %>" class="article-cover">
                             <% } %>
-                            <div class="post-info">
-                                <span class="post-date">
+                            <div class="article-info">
+                                <span class="article-date">
                                     <%= new Date(article.published_at).toLocaleDateString('pt-BR') %>
                                 </span>
                                 <h3><a href="/artigos/<%= article.category_slug %>/<%= article.slug %>"><%= article.title %></a></h3>
-                                <p class="post-summary"><%= article.summary || 'Leia o artigo completo...' %></p>
-                                <p class="post-author">Por <%= article.author_name %></p>
+                                <p class="article-summary"><%= article.summary || 'Leia o artigo completo...' %></p>
+                                <p class="article-author">Por <%= article.author_name %></p>
                                 <a href="/artigos/<%= article.category_slug %>/<%= article.slug %>" class="read-more">Ler artigo &rarr;</a>
                             </div>
                         </article>

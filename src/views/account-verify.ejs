@@ -17,7 +17,7 @@
 <body>
     <header class="title-box">
         <h1 class="blog-title">
-            <a href="/" aria-label="Página inicial do outOfBounds">outOfBounds</a>
+            <a href="/" aria-label="Página inicial do site outOfBounds">outOfBounds</a>
         </h1>
     </header>
     
@@ -26,26 +26,44 @@
             <div class="main-box card-hover-effect">
                 <div class="success-icon-wrapper" aria-hidden="true">🎉</div>
                 <h2>Conta Verificada!</h2>
-                <p class="description-text text-center">
-                    Olá, <strong><%= typeof userName !== 'undefined' ? userName : '' %></strong>! Seu e-mail foi confirmado com sucesso. Agora você tem acesso total aos comentários, quizzes interativos, reações e recursos exclusivos do <strong>outOfBounds</strong>.
+                <p class="description-text">
+                    Olá, <strong><%= typeof userName !== 'undefined' ? userName : '' %></strong>! 
+                    Seu e-mail foi confirmado com sucesso. Agora você tem acesso total aos comentários, 
+                    quizzes interativos, reações e recursos exclusivos do <strong>outOfBounds</strong>.
                 </p>
                 
-                <div id="countdownBox" class="countdown-box text-center">
-                    Você será redirecionado para a página inicial em <span id="countdownTimer">30</span> segundos...
+                <div class="countdown-wrapper">
+                    <p>Você será redirecionado para a página inicial em <span id="countdownNumber"></span> segundos...</p>
                 </div>
 
-                <div class="action-buttons">
-                    <a href="/" class="btn-primary-custom" id="homeLink">Ir para a Página Principal Agora</a>
-                </div>
+                <a href="/" id="homeLink" class="btn-return-home">
+                    <svg 
+                        xmlns="http://www.w3.org/2000/svg" 
+                        width="20" 
+                        height="20" 
+                        viewBox="0 0 24 24" 
+                        fill="none" 
+                        stroke="currentColor" 
+                        stroke-width="2.2" 
+                        stroke-linecap="round" 
+                        stroke-linejoin="round" 
+                        aria-hidden="true" 
+                        focusable="false"
+                    >
+                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    <span>Ir para a Página Principal Agora</span>
+                </a>
             </div>
         <% } else { %>
             <div class="main-box card-hover-effect">
                 <div class="error-icon-wrapper" aria-hidden="true">⚠️</div>
                 <h2>Falha na Verificação</h2>
-                <p class="feedback-message error text-center" role="alert" aria-live="assertive">
+                <p class="feedback-message error" role="alert" aria-live="assertive">
                     <%= typeof messagePt !== 'undefined' ? messagePt : '' %>
                 </p>
-                <p class="description-text text-center margin-top-smaller">
+                <p class="description-text margin-top-smaller">
                     O link pode ter expirado (validade de 24 horas) ou já ter sido utilizado.
                 </p>
 
@@ -54,7 +72,7 @@
                 <p class="back-to-login margin-top-bigger">
                     <a href="/informacoes-para-verificar-conta">Solicitar um novo link de verificação</a>
                 </p>
-                <span class="text-center or-then">ou então</span>
+                <span class="or-then">ou então</span>
                 <p class="back-to-login">
                     <a href="/login">⬅ Voltar para o Login</a>
                 </p>
