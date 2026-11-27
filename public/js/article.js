@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const pathName = window.location.pathname;
 
             try {
-                const httpResponse = await postHttpRequest(`${pathName}/comments`, {commentContent});
+                const httpResponse = await httpPostRequest(`${pathName}/comments`, {commentContent});
                 const responseData = await httpResponse.json();
                 const feedbackMessage = document.getElementById('commentFeedbackMessage');
                 if (httpResponse.ok) { // Comentário postado com sucesso
@@ -58,11 +58,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const password = document.getElementById('modalPassword').value;
 
             try{
-                const loginHttpResponse = await postHttpRequest('/api/auth/login', {email, password});
+                const loginHttpResponse = await httpPostRequest('/api/auth/login', {email, password});
                 const loginResponseData = await loginHttpResponse.json();
                 if (loginHttpResponse.ok) { // Login efetuado com sucesso
                     const pathName = window.location.pathname;
-                    const retryHttpResponse = await postHttpRequest(`${pathName}/comments`,{ commentContent: savedCommentDraft });
+                    const retryHttpResponse = await httpPostRequest(`${pathName}/comments`,{ commentContent: savedCommentDraft });
                     const retryResponseData = await retryHttpResponse.json();
                     if (retryHttpResponse.ok) { // Comentário postado com sucesso
                         closeReauthModal();
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /****************************************************************************** 
 / Faz requisição POST com fetch e registrar o comentário.
 ******************************************************************************/
-async function postHttpRequest(url, content){
+async function httpPostRequest(url, content){
     return await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

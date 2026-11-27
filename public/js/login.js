@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const feedbackMessage = document.getElementById('feedbackMessage');
     const emailInput = document.getElementById('emailInput');
     const passwordInput = document.getElementById('passwordInput');
-    const submitBtn = document.getElementById('loginSubmitBtn');
+    const submitBtn = document.getElementById('submitBtn');
     const inputs = [emailInput, passwordInput];
     
     /*****************************************************************************

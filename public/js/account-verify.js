@@ -24,15 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Countdown de 30 segundos para redirecionamento automático
     let countdownSeconds = 30;
-    const countdownTimerElement = document.getElementById('countdownTimer');
+    const countdownNumber = document.getElementById('countdownNumber');
+    countdownNumber.textContent = countdownSeconds;
 
-    if (countdownTimerElement) {
-        const countdownInterval = setInterval(() => {
+    if (countdownNumber) {
+        const timer = setInterval(() => {
             countdownSeconds--;
-            countdownTimerElement.textContent = countdownSeconds;
+            countdownNumber.textContent = countdownSeconds;
 
             if (countdownSeconds <= 0) {
-                clearInterval(countdownInterval);
+                clearInterval(timer);
                 window.location.href = '/';
             }
         }, 1000);

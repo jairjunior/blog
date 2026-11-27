@@ -167,7 +167,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordGroups = document.querySelectorAll('div.password-wrapper');
     passwordGroups.forEach(passwordGroup => {
         const passwordInput = passwordGroup.querySelector('input[type="password"]');
-        const togglePasswordBtn = passwordGroup.querySelector('button.toggle-password');
+        const togglePasswordBtn = passwordGroup.querySelector('button.btn-toggle-password');
         if (passwordInput && togglePasswordBtn) {
             togglePasswordBtn.addEventListener('click', () => {
                 const isPassword = passwordInput.type === 'password';

@@ -11,7 +11,7 @@ const gearIcon = `
 ******************************************************************************/
 document.addEventListener('DOMContentLoaded', () => {
     const resetPasswordForm = document.getElementById('resetPasswordForm');
-    const togglePasswordButtons = document.querySelectorAll('button.toggle-password');
+    const togglePasswordButtons = document.querySelectorAll('button.btn-toggle-password');
     const resetToken = document.getElementById('resetToken').value;
     const passwordInput = document.getElementById('passwordInput');
     const confirmPasswordInput = document.getElementById('confirmPasswordInput');
@@ -96,21 +96,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 submitBtn.innerHTML = originalBtnHtml;
                 
                 // Mostra contador regressivo para redirecionamento
+                let countdownSeconds = 20;
                 const countdownWrapper = document.getElementById('countdownWrapper');
                 const countdownNumber = document.getElementById('countdownNumber');
+                countdownNumber.textContent = countdownSeconds;
                 countdownWrapper.classList.remove('hidden');
                 countdownWrapper.setAttribute('aria-hidden', 'false');
-                let segundosRestantes = 10;
-                const timer = setInterval(() => {
-                    segundosRestantes--;
-                    if (countdownNumber) {
-                        countdownNumber.textContent = segundosRestantes;
-                    }
-                    if (segundosRestantes <= 0) {
-                        clearInterval(timer);
-                        window.location.href = '/';
-                    }
-                }, 1000);
+                if (countdownNumber) {
+                    const timer = setInterval(() => {
+                        countdownSeconds--;
+                        countdownNumber.textContent = countdownSeconds;
+
+                        if (countdownSeconds <= 0) {
+                            clearInterval(timer);
+                            window.location.href = '/';
+                        }
+                    }, 1000);
+                }
             } else {
                 throw new Error(responseData.messagePt);
             }
@@ -138,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const passwordGroups = document.querySelectorAll('div.password-wrapper');
     passwordGroups.forEach( passwordGroup => {
         const inputElement = passwordGroup.querySelector('input[type="password"], input[type="text"]');
-        const toggleBtn = passwordGroup.querySelector('button.toggle-password');
+        const toggleBtn = passwordGroup.querySelector('button.btn-toggle-password');
         
         if (!inputElement || !toggleBtn) return;
 
@@ -161,8 +163,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 /******************************************************************************
-* Limpa o campo de senha e trava a interação tanto com o input como o botão
-* de mostrar/ocultar a senha.
+* Limpa o campo de senha e trava a interação tanto com o input de senha, 
+* inclusive com o botão de mostrar/ocultar a senha.
 *******************************************************************************/
 function lockPasswordFields(passwordInputs, toggleButtons) {
     passwordInputs.forEach(inputElement => {

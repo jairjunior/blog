@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Desabilita botão de submit e fica em estado de carregamento (Loading...)
         const originalBtnHtml = resendBtn.innerHTML;
-        resendBtn.innerHTML = `${gearIcon} <span>Reenviando...</span>`;
+        resendBtn.innerHTML = `${gearIcon} Reenviando...`;
         resendBtn.disabled = true;
         let resendSucceeded = false;
 
@@ -64,17 +64,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 resendSucceeded = true;
                 feedbackMessage.setAttribute('role', 'status');
                 feedbackMessage.className = 'feedback-message success';
-                feedbackMessage.textContent = responseData.messagePt || 
-                    'Um novo link de confirmação foi enviado para o seu e-mail.';
+                feedbackMessage.textContent = responseData.messagePt || 'Um novo link de confirmação foi enviado para o seu e-mail.';
                 
                 const stepIndex = Math.min(resendAttempts, cooldownSteps.length - 1);
                 const nextCooldown = cooldownSteps[stepIndex];
                 resendAttempts += 1;
-
                 startCooldown(nextCooldown, resendBtn);
             } else {
                 throw new Error(responseData.messagePt || 'Não foi possível reenviar o e-mail.');
             }
+
         } catch (error) {
             console.error('ERRO na requisição HTTP:\n', error);
             feedbackMessage.setAttribute('role', 'alert');
@@ -99,16 +98,16 @@ document.addEventListener('DOMContentLoaded', () => {
 function startCooldown (seconds, resendBtn) {
     let remaining = seconds;
     resendBtn.disabled = true;
-    resendBtn.innerHTML = `<span>Aguarde ${remaining}s para reenviar</span>`;
+    resendBtn.innerHTML = `Aguarde<span>${remaining}</span>segundos para reenviar`;
 
     const interval = setInterval(() => {
         remaining -= 1;
         if (remaining > 0) {
-            resendBtn.innerHTML = `<span>Aguarde ${remaining}s para reenviar</span>`;
+            resendBtn.innerHTML = `Aguarde<span>${remaining}</span>segundos para reenviar`;
         } else {
             clearInterval(interval);
             resendBtn.disabled = false;
-            resendBtn.innerHTML = `<span class="btn-text">Reenviar e-mail de confirmação</span>`;
+            resendBtn.innerHTML = `Reenviar e-mail de confirmação`;
         }
     }, 1000);
 };

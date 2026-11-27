@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (responseHttpRequest.ok) {
                 feedbackMessage.setAttribute('role', 'status');
                 feedbackMessage.className = 'feedback-message success';
-                feedbackMessage.textContent = responseData.messagePt || 'Se o e-mail estiver cadastrado, um link para redefinir sua senha foi enviado. Verifique também sua caixa de spam.';
+                feedbackMessage.textContent = responseData.messagePt || 'Se o e-mail estiver cadastrado, um link para redefinir sua senha foi enviado. Verifique sua caixa de entrada e também a caixa de spam (lixo eletrônico).';
                 emailInput.value = '';
             } else {
                 throw new Error(responseData.messagePt);

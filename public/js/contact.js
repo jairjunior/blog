@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
 
             const responseData = await responseHttpRequest.json();
-            if (responseHttpRequest.ok && responseData.success) {
+            if (responseHttpRequest.ok) {
                 openModal(modal, responseData.messagePt, true);
                 form.reset();
             } else {
